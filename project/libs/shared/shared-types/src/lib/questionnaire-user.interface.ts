@@ -1,11 +1,13 @@
 import { LevelTraining } from "./level-traning.enum";
+import { TrainingTime } from "./training-time.enum";
 import { TrainingType } from "./training-type.enum";
 
-export interface TrainerAddInfo {
+export interface QuestionnaireUser {
   userId?: string;
   levelTraining: LevelTraining;
   trainingType: TrainingType[];
-  certificates: string;
-  successTrainer: string;
-  isPersonal: boolean;
+  trainingTime: TrainingTime;
+  caloriesReset: number;
+  caloriesSpend: number;
+  isReady: boolean;
 }

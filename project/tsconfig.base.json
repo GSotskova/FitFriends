@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@project/shared/shared-dto": ["libs/shared/shared-dto/src/index.ts"],
       "@project/shared/shared-types": ["libs/shared/shared-types/src/index.ts"]
     }
   },

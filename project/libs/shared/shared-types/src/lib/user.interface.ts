@@ -9,9 +9,9 @@ export interface User {
   avatar?: string;
   passwordHash: string;
   sex: UserSex;
-  birthDate: Date;
+  dateBirth: Date;
   role: UserRole;
   description: string;
   location: StationMetro;
-  backgroundImg: string
+  backgroundImg?: string
 }
