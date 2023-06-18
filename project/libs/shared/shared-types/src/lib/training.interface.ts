@@ -11,11 +11,11 @@ export interface Training {
   trainingType: TrainingType;
   trainingTime: TrainingTime;
   price: number;
-  caloriesCount: number;
+  caloriesReset: number;
   descriptionTraining: string;
   sex: UserSex;
   videoTraning: string;
-  rating: string;
-  trainerId: string;
+  rating: number;
+  coachId: string;
   isSpecialOffer: boolean;
 }
