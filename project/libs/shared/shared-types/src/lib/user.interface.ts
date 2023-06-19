@@ -4,7 +4,7 @@ import {UserSex} from './user-sex.enum';
 
 export interface User {
   userId?: string;
-  name: string;
+  userName: string;
   email: string;
   avatar?: string;
   passwordHash: string;

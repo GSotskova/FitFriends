@@ -3,13 +3,13 @@ import { ArrayMaxSize, IsISO8601, IsInt, IsString, Max, MaxLength, Min, MinLengt
 import { LevelTraining, StationMetro, TrainingTime, TrainingType, UserRole, UserSex } from "@project/shared/shared-types";
 import { CaloriesReset, MAX_LENGTH_DESCRIPTION, MAX_TRAINING_COUNT, MIN_LENGTH_DESCRIPTION, CaloriesSpend, SuccessCoach } from "./dto.constants";
 
-export class CreateUserDto  {
+export class EditUserDto  {
   @ApiProperty({
     description: 'User name',
     example: 'Иван',
   })
   @IsString()
-  public name?: string;
+  public userName?: string;
 
   @ApiProperty({
     description: 'User gender',

@@ -3,7 +3,7 @@ import { PaymentOption } from "@project/shared/shared-types";
 import { IsInt, Max, Min } from "class-validator";
 import { TrainingCount } from "./dto.constants";
 
-export class CreateOrderPersonalDto {
+export class CreateOrderDto {
 
   @ApiProperty({
     description: 'Order type'
