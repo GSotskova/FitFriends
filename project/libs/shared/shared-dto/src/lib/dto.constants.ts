@@ -6,6 +6,7 @@ export const enum CaloriesReset {
   MinCount = 1000,
   MaxCount = 5000
 }
+
 export const enum CaloriesSpend {
   MinCount = 1000,
   MaxCount = 5000
@@ -30,7 +31,12 @@ export const enum CommentLenght {
   MaxLength = 1024
 }
 
+
 export const enum CommentRating {
   MinRating = 1,
   MaxRating = 5
+}
+export const enum TrainingCount {
+  MinCount = 1,
+  MaxCount = 50
 }
