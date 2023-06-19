@@ -8,4 +8,5 @@ export * from './lib/questionnaire-coach.interface';
 export * from './lib/training-type.enum';
 export * from './lib/training-time.enum';
 export * from './lib/comment.interface';
-export * from './lib//status-order.enum';
+export * from './lib/status-order.enum';
+export * from './lib/payment-option.enum';
