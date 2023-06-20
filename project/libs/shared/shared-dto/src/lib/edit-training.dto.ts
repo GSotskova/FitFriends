@@ -3,7 +3,7 @@ import { ArrayMaxSize, IsInt, Max, MaxLength, Min, MinLength } from 'class-valid
 import { LevelTraining, TrainingTime, TrainingType, UserSex } from "@project/shared/shared-types";
 import { CaloriesReset, MAX_TRAINING_COUNT, NameTraining, DescriptionTraining } from "./dto.constants";
 
-export class CreateTrainingDTO  {
+export class EditTrainingDTO  {
 
   @ApiProperty({
     description: 'Training name'

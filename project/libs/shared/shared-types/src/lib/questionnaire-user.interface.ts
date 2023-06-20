@@ -3,7 +3,7 @@ import { TrainingTime } from "./training-time.enum";
 import { TrainingType } from "./training-type.enum";
 
 export interface QuestionnaireUser {
-  userId?: string;
+  userId: string;
   levelTraining: LevelTraining;
   trainingType: TrainingType[];
   trainingTime: TrainingTime;

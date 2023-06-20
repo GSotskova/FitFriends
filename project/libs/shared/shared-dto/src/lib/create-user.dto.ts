@@ -10,7 +10,7 @@ export class CreateUserDto  {
     example: 'Иван',
   })
   @IsString()
-  public name!: string;
+  public userName!: string;
 
 
   @ApiProperty({
@@ -60,20 +60,20 @@ export class CreateUserDto  {
   public location!: StationMetro;
 
   /**Add info for coach and users */
-  
+
   @ApiProperty({
     description: 'The level of physical fitness of the user',
     enum: LevelTraining, enumName: 'LevelTraining'
   })
   public levelTraining?: LevelTraining;
 
-  @ApiProperty({
+  /*@ApiProperty({
     description: 'The level of physical fitness of the user',
     type: [TrainingType]
   })
   @ArrayMaxSize(MAX_TRAINING_COUNT)
   public trainingType?: TrainingType[];
-
+*/
   @ApiProperty({
     description: 'Merits of the coach'
   })

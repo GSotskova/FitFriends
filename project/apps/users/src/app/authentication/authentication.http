@@ -1,0 +1,16 @@
+# 1.1. Регистрация новых пользователей.
+POST http://localhost:3333/api/auth/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "userNew1@notfound.local",
+  "userName": "UserNew1",
+  "password": "1234567",
+  "sex": "male",
+  "dateBirth": "2012-02-22",
+  "role": "coach",
+  "description": "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
+  "location": "Пионерская"
+  }
+
+###
