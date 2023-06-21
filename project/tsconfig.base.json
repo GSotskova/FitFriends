@@ -9,14 +9,17 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2015",
-    "module": "esnext",
+    "module": "commonjs",
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@project/config/config-users": ["libs/config/config-users/src/index.ts"],
       "@project/shared/shared-dto": ["libs/shared/shared-dto/src/index.ts"],
-      "@project/shared/shared-types": ["libs/shared/shared-types/src/index.ts"]
+      "@project/shared/shared-types": ["libs/shared/shared-types/src/index.ts"],
+      "@project/util/util-core": ["libs/util/util-core/src/index.ts"],
+      "@project/util/util-types": ["libs/util/util-types/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

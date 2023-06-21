@@ -2,10 +2,10 @@ import { LevelTraining } from "./level-traning.enum";
 import { TrainingType } from "./training-type.enum";
 
 export interface QuestionnaireCoach {
-  userId?: string;
+  userId: string;
   levelTraining: LevelTraining;
   trainingType: TrainingType[];
-  certificates: string;
+  certificates?: string;
   successCoach: string;
   isPersonal: boolean;
 }

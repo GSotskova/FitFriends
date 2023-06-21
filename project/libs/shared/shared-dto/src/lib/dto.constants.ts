@@ -1,6 +1,14 @@
-export const MIN_LENGTH_DESCRIPTION = 10;
-export const MAX_LENGTH_DESCRIPTION = 140;
 export const MAX_TRAINING_COUNT = 3;
+
+export const enum PasswordLength {
+  MinLength = 6,
+  MaxLength = 12
+}
+
+export const enum DescriptionUser {
+  MinLength = 10,
+  MaxLength = 140
+}
 
 export const enum CaloriesReset {
   MinCount = 1000,
