@@ -1,9 +1,10 @@
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema  } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { QuestionnaireCoach, LevelTraining, TrainingType } from '@project/shared/shared-types';
 
+
 @Schema({
-  collection: 'questionnairesCoache',
+  collection: 'questionnairesCoach',
   timestamps: true,
 })
 export class QuestionnaireCoachModel extends Document implements QuestionnaireCoach {
@@ -11,7 +12,9 @@ export class QuestionnaireCoachModel extends Document implements QuestionnaireCo
     required: true,
   })
   public userId: string;
-
+ /* @Prop({ type: MongooseSchema.Types.ObjectId , ref: 'UserModel' })
+  user:  UserModel
+*/
 
   @Prop({
     required: true,
@@ -21,16 +24,12 @@ export class QuestionnaireCoachModel extends Document implements QuestionnaireCo
   public levelTraining: LevelTraining;
 
   @Prop({
-    required: true,
-    type: String,
-    enum: TrainingType
+    type: MongooseSchema.Types.Array
   })
   public trainingType: TrainingType[];
 
-  @Prop({
-    required: true,
-  })
-  public certificates: string;
+  @Prop()
+  public certificates?: string;
 
   @Prop()
   public successCoach: string;
