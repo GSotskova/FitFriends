@@ -1,4 +1,4 @@
-# 1.1. Регистрация новых пользователей.
+# Регистрация новых пользователей. Тренер
 POST http://localhost:3333/api/auth/register HTTP/1.1
 Content-Type: application/json
 
@@ -19,7 +19,7 @@ Content-Type: application/json
 
 ###
 
-# 1.1. Регистрация новых пользователей.
+# Регистрация новых пользователей. Пользователь
 POST http://localhost:3333/api/auth/register HTTP/1.1
 Content-Type: application/json
 
@@ -42,8 +42,9 @@ Content-Type: application/json
 
 ###
 
-# 1.2. Авторизация пользователей
+# Авторизация пользователей
 POST http://localhost:3333/api/auth/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkxZjAyY2M1OGRhMDA5ZTJhMzZjNWYiLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODczNjIzNDQsImV4cCI6MTY4NzM2MzI0NH0.8hJ6Fk3zEL0F1ihXaaO6mWt-24wBNEvWzyqhHApDplk
 Content-Type: application/json
 
 {
