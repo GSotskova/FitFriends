@@ -10,3 +10,8 @@ export * from './lib/training-time.enum';
 export * from './lib/comment.interface';
 export * from './lib/status-order.enum';
 export * from './lib/payment-option.enum';
+export * from './lib/token-payload.interface';
+export * from './lib/request-with.user';
+export * from './lib/request-with-token-payload';
+export * from './lib/refresh-token-payload.interface';
+export * from './lib/token.interface';

@@ -5,7 +5,7 @@ export interface QuestionnaireCoach {
   userId: string;
   levelTraining: LevelTraining;
   trainingType: TrainingType[];
-  certificates: string;
+  certificates?: string;
   successCoach: string;
   isPersonal: boolean;
 }

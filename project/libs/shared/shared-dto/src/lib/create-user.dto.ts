@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ArrayMaxSize, IsEmail, IsISO8601, IsInt, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { ArrayMaxSize, IsEmail, IsEnum, IsISO8601, IsInt, IsNotEmpty, IsString, Max, MaxLength, Min, MinLength, ValidateIf } from 'class-validator';
 import { LevelTraining, StationMetro, TrainingTime, TrainingType, UserRole, UserSex } from "@project/shared/shared-types";
-import { CaloriesReset, CaloriesSpend, MAX_LENGTH_DESCRIPTION, MAX_TRAINING_COUNT, MIN_LENGTH_DESCRIPTION, SuccessCoach } from "./dto.constants";
+import { CaloriesReset, CaloriesSpend, DescriptionUser, MAX_TRAINING_COUNT, PasswordLength, SuccessCoach } from "./dto.constants";
 
 export class CreateUserDto  {
   /**User */
@@ -25,17 +25,19 @@ export class CreateUserDto  {
     example: '123456'
   })
   @IsString()
+  @MinLength(PasswordLength.MinLength)
+  @MaxLength(PasswordLength.MaxLength)
   public password!: string;
 
   @ApiProperty({
     description: 'User gender',
     enum: UserSex, enumName: 'UserSex'})
+  @IsEnum(UserSex)
   public sex!: UserSex;
 
   @ApiProperty({
     description: 'User birth date',
     example: '1981-03-12',
-
   })
   @IsISO8601({}, { message: 'The user date birth is not valid' })
   public dateBirth!: string;
@@ -44,19 +46,21 @@ export class CreateUserDto  {
     description: 'The role of the user in the system',
     enum: UserRole, enumName: 'UserRole'
   })
+  @IsEnum(UserRole)
   public role!: UserRole;
 
   @ApiProperty({
     description: 'Text with general information'
   })
-  @MinLength(MIN_LENGTH_DESCRIPTION)
-  @MaxLength(MAX_LENGTH_DESCRIPTION)
+  @MinLength(DescriptionUser.MinLength)
+  @MaxLength(DescriptionUser.MaxLength)
   public description!: string;
 
   @ApiProperty({
     description: 'Metro station',
     enum: StationMetro, enumName: 'StationMetro'
   })
+  @IsEnum(StationMetro)
   public location!: StationMetro;
 
   /**Add info for coach and users */
@@ -65,40 +69,40 @@ export class CreateUserDto  {
     description: 'The level of physical fitness of the user',
     enum: LevelTraining, enumName: 'LevelTraining'
   })
-  public levelTraining?: LevelTraining;
+  @IsEnum(LevelTraining)
+  public levelTraining: LevelTraining;
 
-  /*@ApiProperty({
-    description: 'The level of physical fitness of the user',
-    type: [TrainingType]
-  })
-  @ArrayMaxSize(MAX_TRAINING_COUNT)
-  public trainingType?: TrainingType[];
-*/
   @ApiProperty({
-    description: 'Merits of the coach'
+    description: 'Type of training',
+    isArray: true,
+    enum: TrainingType
   })
-  @Min(CaloriesReset.MinCount)
-  @Max(CaloriesReset.MaxCount)
-  public caloriesReset?: number;
+  @IsEnum(TrainingType, { each: true })
+  @ArrayMaxSize(MAX_TRAINING_COUNT)
+  trainingType: TrainingType[];
 
   /**Add info for coach */
 
   @ApiProperty({
     description: 'Coach Certificate'
   })
-  public certificates: string;
+  public certificates?: string;
 
   @ApiProperty({
-    description: 'Number of calories to spend per day.'
+    description: 'Merits of the coach'
   })
+  @ValidateIf(o => o.role === UserRole.Coach)
+  @IsNotEmpty()
   @MinLength(SuccessCoach.MinLength)
   @MaxLength(SuccessCoach.MaxLength)
-  public successCoach?: string;
+  public successCoach: string;
 
   @ApiProperty({
     description: 'Conducts personal trainings'
   })
-  public isPersonal?: boolean;
+  @ValidateIf(o => o.role === UserRole.Coach)
+  @IsNotEmpty()
+  public isPersonal: boolean;
 
   /**Add info for users */
 
@@ -106,8 +110,19 @@ export class CreateUserDto  {
     description: 'Time for training',
     enum: TrainingTime, enumName: 'TrainingTime'
   })
-  public trainingTime?: TrainingTime;
+  @ValidateIf(o => o.role === UserRole.User)
+  @IsNotEmpty()
+  @IsEnum(TrainingTime)
+  public trainingTime: TrainingTime;
 
+  @ApiProperty({
+    description: 'Number of calories to reset'
+  })
+  @Min(CaloriesReset.MinCount)
+  @Max(CaloriesReset.MaxCount)
+  @ValidateIf(o => o.role === UserRole.User)
+  @IsNotEmpty()
+  public caloriesReset: number;
 
   @ApiProperty({
     description: 'Number of calories to spend per day.'
@@ -115,10 +130,14 @@ export class CreateUserDto  {
   @IsInt()
   @Min(CaloriesSpend.MinCount)
   @Max(CaloriesSpend.MaxCount)
-  public caloriesSpend?: number;
+  @ValidateIf(o => o.role === UserRole.User)
+  @IsNotEmpty()
+  public caloriesSpend: number;
 
   @ApiProperty({
     description: 'Training readiness'
   })
-  public isReady?: boolean;
+  @ValidateIf(o => o.role === UserRole.User)
+  @IsNotEmpty()
+  public isReady: boolean;
 }

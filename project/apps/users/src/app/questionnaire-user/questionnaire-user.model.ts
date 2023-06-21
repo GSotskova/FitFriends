@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { QuestionnaireUser, LevelTraining, TrainingType, TrainingTime } from '@project/shared/shared-types';
 
@@ -21,9 +21,7 @@ export class QuestionnaireUserModel extends Document implements QuestionnaireUse
   public levelTraining: LevelTraining;
 
   @Prop({
-    required: true,
-    type: String,
-    enum: TrainingType
+    type: MongooseSchema.Types.Array
   })
   public trainingType: TrainingType[];
 
@@ -33,11 +31,6 @@ export class QuestionnaireUserModel extends Document implements QuestionnaireUse
     enum: TrainingTime
   })
   public trainingTime: TrainingTime;
-
-  @Prop({
-    required: true,
-  })
-  public description: string;
 
   @Prop()
   public caloriesReset: number;
