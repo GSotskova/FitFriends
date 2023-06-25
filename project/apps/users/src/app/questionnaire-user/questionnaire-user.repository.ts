@@ -38,4 +38,9 @@ export class QuestionnaireUserRepository implements CRUDRepository<Questionnaire
       .findByIdAndUpdate(id, item.toObject(), {new: true})
       .exec();
   }
+  public async updateByUserId(userId: string, item: QuestionnaireUserEntity): Promise<QuestionnaireUser> {
+    return this.QuestionnaireUserModel
+      .findOneAndUpdate({userId: userId}, item.toObject(), {new: true})
+      .exec();
+  }
 }

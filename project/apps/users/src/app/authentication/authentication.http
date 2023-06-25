@@ -3,16 +3,16 @@ POST http://localhost:3333/api/auth/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "userNew8@notfound.local",
-  "userName": "Иванов Иван",
+  "email": "userNew1@notfound.local",
+  "userName": "Степанов Степан",
   "password": "1234567",
   "sex": "male",
   "dateBirth": "2012-02-22",
   "role": "coach",
-  "description": "Иванов Иван Иванович",
-  "location": "Пионерская",
-  "levelTraining": "новичок",
-  "trainingType": ["йога"],
+  "description": "Степанов Степан Иванович",
+  "location": "Удельная",
+  "levelTraining": "любитель",
+  "trainingType": ["йога", "аэробика"],
   "successCoach": "Ооочень крутой тренер",
   "isPersonal": true
   }
@@ -44,10 +44,26 @@ Content-Type: application/json
 
 # Авторизация пользователей
 POST http://localhost:3333/api/auth/login HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkxZjAyY2M1OGRhMDA5ZTJhMzZjNWYiLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODczNjIzNDQsImV4cCI6MTY4NzM2MzI0NH0.8hJ6Fk3zEL0F1ihXaaO6mWt-24wBNEvWzyqhHApDplk
 Content-Type: application/json
 
 {
-  "email": "userNew10@notfound.local",
+  "email": "userNew@notfound.local",
   "password": "1234567"
 }
+###
+
+# Проверка токена
+POST http://localhost:3333/api/auth/check HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4NjZmNmRhYzA1MmU4NjE1ODlmNTkiLCJlbWFpbCI6InVzZXJOZXcxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6ImNvYWNoIiwidXNlck5hbWUiOiLQodGC0LXQv9Cw0L3QvtCyINCh0YLQtdC_0LDQvSIsImlhdCI6MTY4NzcwOTc0NiwiZXhwIjoxNjg3NzEwNjQ2fQ.oGAqoGnOzH4OCFao2e-4A-xLaO15Gc8VRSI-u_GBOcg
+###
+
+# Get new JWT pair
+POST http://localhost:3333/api/auth/refresh HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4NjZmNmRhYzA1MmU4NjE1ODlmNTkiLCJlbWFpbCI6InVzZXJOZXcxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6ImNvYWNoIiwidXNlck5hbWUiOiLQodGC0LXQv9Cw0L3QvtCyINCh0YLQtdC_0LDQvSIsInRva2VuSWQiOiJhNzI5MjY1OS1mNDZjLTQwNzYtYjBjZi04YWE5OTY3MDY1NjIiLCJpYXQiOjE2ODc3MTA3MzEsImV4cCI6MTY4ODMxNTUzMX0.Ee79tjZpLOhPVaIu2Sm1oqtW38OI8VigQkzoY1qqAb0
+
+###
+# Удалить refresh token
+POST http://localhost:3333/api/auth/refresh/delete HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4NjZmNmRhYzA1MmU4NjE1ODlmNTkiLCJlbWFpbCI6InVzZXJOZXcxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6ImNvYWNoIiwidXNlck5hbWUiOiLQodGC0LXQv9Cw0L3QvtCyINCh0YLQtdC_0LDQvSIsInRva2VuSWQiOiJhNzI5MjY1OS1mNDZjLTQwNzYtYjBjZi04YWE5OTY3MDY1NjIiLCJpYXQiOjE2ODc3MTA3MzEsImV4cCI6MTY4ODMxNTUzMX0.Ee79tjZpLOhPVaIu2Sm1oqtW38OI8VigQkzoY1qqAb0
+
+###

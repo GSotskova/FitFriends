@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 
-export class NewCoachRdo {
+
+export class UserInfoRdo {
   @ApiProperty({
     description: 'The uniq user ID',
   })
@@ -51,38 +52,15 @@ export class NewCoachRdo {
   public role: string;
 
   @ApiProperty({
+    description: 'Text with general information'
+  })
+  @Expose()
+  public description: string;
+
+  @ApiProperty({
     description: 'Metro station'
   })
   @Expose()
   public location: string;
-  
-  @ApiProperty({
-    description: 'The level of physical fitness of the user',
-  })
-  @Expose()
-  public levelTraining: string;
 
-  @ApiProperty({
-    description: 'Type of training',
-  })
-  @Expose()
-  public trainingType: string;
-
-  @ApiProperty({
-    description: 'Coach certificate',
-  })
-  @Expose()
-  public certificates: string;
-
-  @ApiProperty({
-    description: 'Number of calories to spend per day',
-  })
-  @Expose()
-  public successCoach: string;
-
-  @ApiProperty({
-    description: 'Conducts personal trainings',
-  })
-  @Expose()
-  public isPersonal: boolean;
 }

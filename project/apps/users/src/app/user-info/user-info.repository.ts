@@ -1,10 +1,11 @@
 import { CRUDRepository } from '@project/util/util-types';
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from './user-info.entity';
-import { QuestionnaireCoach, QuestionnaireUser, User } from '@project/shared/shared-types';
+import { QuestionnaireCoach, QuestionnaireUser, SomeObject, User } from '@project/shared/shared-types';
 import { UserModel } from './user-info.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { UsersQuery, DEFAULT_USERS_COUNT_LIMIT } from '@project/shared/shared-query';
 
 @Injectable()
 export class UserRepository implements CRUDRepository<UserEntity, string, User> {
@@ -120,6 +121,87 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
 
     ]).exec();
     return userInfo[0];
+  }
+
+  public async findAll(query: UsersQuery): Promise<User[]> {
+    const {limit, sortRole, location, trainingType, levelTraining, page}= query;
+    const pageNum = page? (page-1) : 0;
+    const skip = pageNum*limit;
+
+    const objSort: SomeObject = {};
+    if (query.sortRole) {objSort.sortRole = sortRole;}
+
+    const objFiltr: SomeObject = {};
+      if (query.location) {objFiltr.location = location;}
+      if (query.levelTraining) {objFiltr.levelTraining = levelTraining;}
+      if (query.trainingType) {objFiltr.trainingType = { "$in": trainingType };}
+
+      const usersInfo =  await this.userModel
+     .aggregate([
+      {
+        $lookup: {
+          from: 'questionnairesUser',
+          let: { user_id: '$_id' },
+          pipeline: [
+            { $addFields: { userId: { '$toObjectId': '$userId' }}},
+            { $match: { $expr: { $eq: [ '$userId', '$$user_id' ] } } },
+            { $project: { levelTraining: 1, trainingType: 1}}
+          ],
+          as: 'resultUser'
+        },
+      },
+      { "$unwind": {"path": "$resultUser", "preserveNullAndEmptyArrays": true}
+      },
+      { $addFields: { levelTraining: "$resultUser.levelTraining"}},
+      {
+        $lookup: {
+          from: 'questionnairesCoach',
+          let: { user_id: '$_id' },
+          pipeline: [
+            { $addFields: { userId: { '$toObjectId': '$userId' }}},
+            { $match: { $expr: { $eq: [ '$userId', '$$user_id' ] } } },
+            { $project: { levelTraining: 1, trainingType: 1}}
+          ],
+          as: 'resultCoach'
+        },
+      },
+     { "$unwind": {"path": "$resultCoach","preserveNullAndEmptyArrays": true}
+     },
+     { $addFields: {
+      levelTraining: {
+      $cond: [
+          {
+              "$ifNull": [
+                  "$resultUser.levelTraining",
+                   false
+              ]
+          },
+          "$resultUser.levelTraining",
+          "$resultCoach.levelTraining"
+      ]
+    },
+    trainingType: {
+    $cond: [
+        {
+            "$ifNull": [
+                "$resultUser.trainingType",
+                 false
+            ]
+        },
+        "$resultUser.trainingType",
+        "$resultCoach.trainingType"
+    ]
+  }
+}
+},
+     { $limit: skip + limit},
+      { $skip:  skip },
+     /* { $sort:  objSort },*/
+      {$match: objFiltr }
+     ])
+    .exec();
+    
+  return usersInfo
   }
 
 }
