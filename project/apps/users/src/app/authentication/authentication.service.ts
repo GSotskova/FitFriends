@@ -1,10 +1,10 @@
-import { ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { ConfigType, ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import dayjs from 'dayjs';
 import * as crypto from 'node:crypto';
 import { CreateUserDto, LoginUserDto } from'@project/shared/shared-dto';
-import { User, UserRole } from '@project/shared/shared-types';
+import { TokenLogin, User, UserRole } from '@project/shared/shared-types';
 import { createJWTPayload } from '@project/util/util-core';
 import { jwtConfig } from '@project/config/config-users';
 import { AuthErrorMsg } from './authentication.constant';
@@ -40,7 +40,6 @@ export class AuthenticationService {
        await this.createUserGeneral(dto);
       const newUserId = (await this.userRepository.findByEmail(dto.email))._id;
       if (dto.role === UserRole.Coach) {
-        console.log(dto.role, newUserId)
       await this.createQuestionCoach(newUserId, dto);
       return this.userRepository.getInfoCoach(newUserId);
       }
@@ -114,7 +113,10 @@ export class AuthenticationService {
     return this.userRepository.findById(id);
   }
 
-  public async createUserToken(user: User) {
+  public async createUserToken(user: User, tokenInfo?: TokenLogin) {
+    if (tokenInfo && tokenInfo.token && tokenInfo.userIdAuth === user._id.toString()) {
+      throw new BadRequestException('Current token:'+tokenInfo.token, { cause: new Error(), description: 'The user is logged in' })
+    }
     const accessTokenPayload = createJWTPayload(user);
     const refreshTokenPayload = { ...accessTokenPayload, tokenId: crypto.randomUUID() };
     await this.refreshTokenService.createRefreshSession(refreshTokenPayload)
@@ -127,4 +129,7 @@ export class AuthenticationService {
       })
     }
   }
+
+
+
 }
