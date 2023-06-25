@@ -3,7 +3,7 @@ POST http://localhost:3333/api/auth/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "userNew8@notfound.local",
+  "email": "userNew888@notfound.local",
   "userName": "Иванов Иван",
   "password": "1234567",
   "sex": "male",
@@ -44,10 +44,27 @@ Content-Type: application/json
 
 # Авторизация пользователей
 POST http://localhost:3333/api/auth/login HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkxZjAyY2M1OGRhMDA5ZTJhMzZjNWYiLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODczNjIzNDQsImV4cCI6MTY4NzM2MzI0NH0.8hJ6Fk3zEL0F1ihXaaO6mWt-24wBNEvWzyqhHApDplk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkxZjAyY2M1OGRhMDA5ZTJhMzZjNWYiLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODc2NzczNDksImV4cCI6MTY4NzY3ODI0OX0.NJWPickOknvGiBTCX8T6NWGMq2kQ-MHQESOEFLDubUo
 Content-Type: application/json
 
 {
   "email": "userNew10@notfound.local",
   "password": "1234567"
 }
+###
+
+# Проверка токена
+POST http://localhost:3333/api/auth/check HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkxZjAyY2M1OGRhMDA5ZTJhMzZjNWYiLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJ0b2tlbklkIjoiMmZmOTRhNTYtNjYzYS00NTg0LTg2ODQtNGM0OTBjYTM4YjZjIiwiaWF0IjoxNjg3Njc3MTQ1LCJleHAiOjE2ODgyODE5NDV9.rgs1AypvGRwC-bKXejGdNXA5qiRWZ1g9_vTgtqE7mls
+###
+
+# Get new JWT pair
+POST http://localhost:3333/api/auth/refresh HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkxZjAyY2M1OGRhMDA5ZTJhMzZjNWYiLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJ0b2tlbklkIjoiNTdiMDFkNDktOWQ3Zi00NzkxLThiZmUtOWVmY2EyOGNhMmJiIiwiaWF0IjoxNjg3Njc3MjUwLCJleHAiOjE2ODgyODIwNTB9.IEF4ovZ0-ERw-AsrLVnF8kyAQlhh-yqEkKTsELC9fG8
+
+###
+# Удалить refresh token
+POST http://localhost:3333/api/auth/refresh/delete HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDkxZjAyY2M1OGRhMDA5ZTJhMzZjNWYiLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJ0b2tlbklkIjoiNTdiMDFkNDktOWQ3Zi00NzkxLThiZmUtOWVmY2EyOGNhMmJiIiwiaWF0IjoxNjg3Njc3MjUwLCJleHAiOjE2ODgyODIwNTB9.IEF4ovZ0-ERw-AsrLVnF8kyAQlhh-yqEkKTsELC9fG8
+
+###
