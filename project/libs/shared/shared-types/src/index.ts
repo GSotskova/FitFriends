@@ -16,3 +16,5 @@ export * from './lib/request-with-token-payload';
 export * from './lib/refresh-token-payload.interface';
 export * from './lib/token.interface';
 export * from './lib/token-login.interface';
+export * from './lib/operation-type.enum';
+export * from './lib/some-object.interface';

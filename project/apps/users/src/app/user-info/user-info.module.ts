@@ -2,12 +2,19 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModel, UserSchema } from './user-info.model';
 import { UserRepository } from './user-info.repository';
+import { UserInfoController } from './user-info.controller';
+import { UserService } from './user-info.service';
+import { QuestionnaireCoachModule } from '../questionnaire-coach/questionnaire-coach.module';
+import { QuestionnaireUserModule } from '../questionnaire-user/questionnaire-user.module';
 
 @Module({
   imports: [MongooseModule.forFeature([
     { name: UserModel.name, schema: UserSchema }
-  ])],
-  providers: [UserRepository],
-  exports: [UserRepository]
+  ]),
+  QuestionnaireCoachModule,
+  QuestionnaireUserModule],
+  controllers: [UserInfoController],
+  providers: [UserService, UserRepository],
+  exports: [UserRepository, UserService]
 })
 export class UserInfoModule {}

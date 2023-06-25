@@ -1,0 +1,51 @@
+# 1.12. Получение списка публикаций с применением сортировки: по популярности, дате создания, по количеству лайков, по количеству комментариев.
+GET http://localhost:3333/api/users?location=Петроградская&trainingType=йога&levelTraining=новичок&limit=15&page=1 HTTP/1.1
+
+###
+
+# 1.12. Получение списка публикаций с применением сортировки: по популярности, дате создания, по количеству лайков, по количеству комментариев.
+GET http://localhost:3333/api/users?location=Пионерская&trainingType=йога,стрейчинг HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4NjZmNmRhYzA1MmU4NjE1ODlmNTkiLCJlbWFpbCI6InVzZXJOZXcxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6ImNvYWNoIiwidXNlck5hbWUiOiLQodGC0LXQv9Cw0L3QvtCyINCh0YLQtdC_0LDQvSIsImlhdCI6MTY4NzcxMTg3NCwiZXhwIjoxNjg3NzEyNzc0fQ.ckKEgcqpUkXjasFlMx_ETf_t1y1xtjAMcMiATCPxpCk
+###
+
+
+
+#  Получение детальной информации о пользователе.
+GET http://localhost:3333/api/users/6497fd0eaaa5a02715264c9b HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4NjZmNmRhYzA1MmU4NjE1ODlmNTkiLCJlbWFpbCI6InVzZXJOZXcxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6ImNvYWNoIiwidXNlck5hbWUiOiLQodGC0LXQv9Cw0L3QvtCyINCh0YLQtdC_0LDQvSIsImlhdCI6MTY4NzcxMjI1OCwiZXhwIjoxNjg3NzEzMTU4fQ.lwjFS5nDBp0GhoIBkhnb-f5BNydqONzqjFi6ySsTUQk
+Content-Type: application/json
+###
+
+#  Обновление тренера
+POST http://localhost:3333/api/users/edit/649866f6dac052e861589f59 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4NjZmNmRhYzA1MmU4NjE1ODlmNTkiLCJlbWFpbCI6InVzZXJOZXcxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6ImNvYWNoIiwidXNlck5hbWUiOiLQodGC0LXQv9Cw0L3QvtCyINCh0YLQtdC_0LDQvSIsImlhdCI6MTY4NzcwOTQ1NywiZXhwIjoxNjg3NzEwMzU3fQ.0Ar9QhhGOXmDfkzZa31eI_e64Ipgqx8JYOc8TVXPljQ
+Content-Type: application/json
+
+{
+  "location": "Звёздная"
+  }
+
+###
+
+#  Обновление пользователя
+POST http://localhost:3333/api/users/edit/6497fd0eaaa5a02715264c9b HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4NjZmNmRhYzA1MmU4NjE1ODlmNTkiLCJlbWFpbCI6InVzZXJOZXcxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6ImNvYWNoIiwidXNlck5hbWUiOiLQodGC0LXQv9Cw0L3QvtCyINCh0YLQtdC_0LDQvSIsImlhdCI6MTY4NzcwOTQ1NywiZXhwIjoxNjg3NzEwMzU3fQ.0Ar9QhhGOXmDfkzZa31eI_e64Ipgqx8JYOc8TVXPljQ
+Content-Type: application/json
+
+{
+  "userName": "Иванов Иван",
+  "sex": "male",
+  "dateBirth": "2012-02-22",
+  "role": "coach",
+  "description": "Иванов Иван Иванович",
+  "location": "Пионерская",
+  "levelTraining": "профессионал",
+  "trainingType": ["йога"],
+  "trainingTime": "10-30 мин",
+  "caloriesReset": 1200,
+  "caloriesSpend": 1500,
+  "isReady": true
+  }
+
+###
+

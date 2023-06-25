@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, Session, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req,  UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthenticationService } from './authentication.service';
 import { fillObject } from '@project/util/util-core';
@@ -11,6 +11,7 @@ import { LocalAuthGuard } from './guards/local-auth-guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CheckJwtAuthGuard } from './guards/check-jwt-auth.guard';
+
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -81,6 +82,5 @@ export class AuthenticationController {
   public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
     return payload;
   }
-
 
 }

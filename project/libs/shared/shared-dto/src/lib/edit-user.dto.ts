@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ArrayMaxSize, IsEnum, IsISO8601, IsInt, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
-import { LevelTraining, StationMetro, TrainingTime, TrainingType, UserRole, UserSex } from "@project/shared/shared-types";
+import { ArrayMaxSize, IsEnum, IsISO8601, IsInt, IsOptional, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { LevelTraining, StationMetro, TrainingTime, TrainingType, UserSex } from "@project/shared/shared-types";
 import { CaloriesReset, MAX_TRAINING_COUNT, CaloriesSpend, SuccessCoach, DescriptionUser } from "./dto.constants";
 
 export class EditUserDto  {
@@ -9,12 +9,21 @@ export class EditUserDto  {
     example: 'Иван',
   })
   @IsString()
+  @IsOptional()
   public userName?: string;
+
+  @ApiProperty({
+    description: 'User avatar',
+  })
+  @IsString()
+  @IsOptional()
+  public avatar?: string;
 
   @ApiProperty({
     description: 'User gender',
     enum: UserSex, enumName: 'UserSex'})
   @IsEnum(UserSex)
+  @IsOptional()
   public sex?: UserSex;
 
   @ApiProperty({
@@ -23,20 +32,15 @@ export class EditUserDto  {
 
   })
   @IsISO8601({}, { message: 'The user date birth is not valid' })
+  @IsOptional()
   public dateBirth?: string;
-
-  @ApiProperty({
-    description: 'The role of the user in the system',
-    enum: UserRole, enumName: 'UserRole'
-  })
-  @IsEnum(UserRole)
-  public role?: UserRole;
 
   @ApiProperty({
     description: 'Text with general information'
   })
   @MinLength(DescriptionUser.MinLength)
   @MaxLength(DescriptionUser.MaxLength)
+  @IsOptional()
   public description?: string;
 
   @ApiProperty({
@@ -44,14 +48,22 @@ export class EditUserDto  {
     enum: StationMetro, enumName: 'StationMetro'
   })
   @IsEnum(StationMetro)
+  @IsOptional()
   public location?: StationMetro;
 
+  @ApiProperty({
+    description: 'User backgroundImg',
+  })
+  @IsString()
+  @IsOptional()
+  public backgroundImg?: string;
 
   @ApiProperty({
     description: 'The level of physical fitness of the user',
     enum: LevelTraining, enumName: 'LevelTraining'
   })
   @IsEnum(LevelTraining)
+  @IsOptional()
   public levelTraining?: LevelTraining;
 
   @ApiProperty({
@@ -61,13 +73,16 @@ export class EditUserDto  {
   })
   @IsEnum(TrainingType, { each: true })
   @ArrayMaxSize(MAX_TRAINING_COUNT)
-  trainingType: TrainingType[];
+  @IsOptional()
+  public trainingType: TrainingType[];
+
 
   @ApiProperty({
     description: 'Type of training',
     enum: TrainingTime, enumName: 'TrainingTime'
   })
   @IsEnum(TrainingTime)
+  @IsOptional()
   public trainingTime?: TrainingTime;
 
   @ApiProperty({
@@ -76,6 +91,7 @@ export class EditUserDto  {
   @IsInt()
   @Min(CaloriesReset.MinCount)
   @Max(CaloriesReset.MaxCount)
+  @IsOptional()
   public caloriesReset?: number;
 
   @ApiProperty({
@@ -84,6 +100,7 @@ export class EditUserDto  {
   @IsInt()
   @Min(CaloriesSpend.MinCount)
   @Max(CaloriesSpend.MaxCount)
+  @IsOptional()
   public caloriesSpend?: number;
 
   @ApiProperty({
@@ -94,6 +111,7 @@ export class EditUserDto  {
   @ApiProperty({
     description: 'Coach certificate'
   })
+  @IsOptional()
   public certificates?: string;
 
   @ApiProperty({
@@ -101,10 +119,12 @@ export class EditUserDto  {
   })
   @MinLength(SuccessCoach.MinLength)
   @MaxLength(SuccessCoach.MaxLength)
+  @IsOptional()
   public successCoach?: string;
 
   @ApiProperty({
     description: 'Conducts personal trainings'
   })
+  @IsOptional()
   public isPersonal?: boolean;
 }

@@ -38,4 +38,10 @@ export class QuestionnaireCoachRepository implements CRUDRepository<Questionnair
       .findByIdAndUpdate(id, item.toObject(), {new: true})
       .exec();
   }
+
+  public async updateByUserId(userId: string, item: QuestionnaireCoachEntity): Promise<QuestionnaireCoach> {
+    return this.questionnaireCoachModel
+      .findOneAndUpdate({userId: userId}, item.toObject(), {new: true})
+      .exec();
+  }
 }

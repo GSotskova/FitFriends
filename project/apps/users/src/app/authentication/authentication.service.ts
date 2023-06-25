@@ -1,7 +1,6 @@
 import { ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { ConfigType, ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import dayjs from 'dayjs';
 import * as crypto from 'node:crypto';
 import { CreateUserDto, LoginUserDto } from'@project/shared/shared-dto';
 import { TokenLogin, User, UserRole } from '@project/shared/shared-types';
@@ -11,10 +10,9 @@ import { AuthErrorMsg } from './authentication.constant';
 import { UserEntity } from '../user-info/user-info.entity';
 import { UserRepository } from '../user-info/user-info.repository';
 import { QuestionnaireCoachRepository } from '../questionnaire-coach/questionnaire-coach.repository';
-import { QuestionnaireCoachEntity } from '../questionnaire-coach/questionnaire-coach.entity';
-import { QuestionnaireUserEntity } from '../questionnaire-user/questionnaire-user.entity';
 import { QuestionnaireUserRepository } from '../questionnaire-user/questionnaire-user.repository';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
+import { UserService } from '../user-info/user-info.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -23,6 +21,7 @@ export class AuthenticationService {
     private readonly questionnaireCoachRepository: QuestionnaireCoachRepository,
     private readonly questionnaireUserRepository: QuestionnaireUserRepository,
     private readonly refreshTokenService: RefreshTokenService,
+    private readonly userService: UserService,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
     @Inject (jwtConfig.KEY) private readonly jwtOptions: ConfigType<typeof jwtConfig>,
@@ -49,47 +48,18 @@ export class AuthenticationService {
 
 
   private async createUserGeneral(dto: CreateUserDto) {
-    const userInfo = {
-      userName: dto.userName, email: dto.email,
-      avatar: '', passwordHash: '',
-      sex: dto.sex, dateBirth: dayjs(dto.dateBirth).toDate(),
-      role: dto.role, description: dto.description,
-      location: dto.location, backgroundImg: ''
-    };
-
-    const userEntity = await new UserEntity(userInfo)
-      .setPassword(dto.password)
-
-      return this.userRepository
-      .create(userEntity);
+    const userEntity = await this.userService.getGeneralUserEntity(dto).setPassword(dto.password)
+    return this.userRepository.create(userEntity);
   }
 
   private async createQuestionCoach(userId: string, dto: CreateUserDto) {
-
-    const questionCoach = {
-      userId: userId, levelTraining: dto.levelTraining,
-      trainingType: dto.trainingType,
-      certificates: dto.certificates, successCoach: dto.successCoach,
-      isPersonal: dto.isPersonal
-    };
-
-    const questionCoachEntity = await new QuestionnaireCoachEntity(questionCoach)
-
-      return this.questionnaireCoachRepository.create(questionCoachEntity);
+    const questionCoachEntity = await this.userService.getCoachEntity(userId, dto)
+    return this.questionnaireCoachRepository.create(questionCoachEntity);
   }
 
   private async createQuestionUser(userId: string, dto: CreateUserDto) {
-
-    const questionUser = {
-      userId: userId, levelTraining: dto.levelTraining,
-      trainingType: dto.trainingType,
-      trainingTime: dto.trainingTime, caloriesReset: dto.caloriesReset,
-      caloriesSpend: dto.caloriesSpend, isReady: dto.isReady
-    };
-
-    const questionUserEntity = await new QuestionnaireUserEntity(questionUser)
-
-      return this.questionnaireUserRepository.create(questionUserEntity);
+    const questionUserEntity = await this.userService.getUserEntity(userId, dto);
+    return this.questionnaireUserRepository.create(questionUserEntity);
   }
 
 
@@ -109,15 +79,13 @@ export class AuthenticationService {
     return userEntity.toObject();
   }
 
-  public async getUser(id: string) {
-    return this.userRepository.findById(id);
-  }
 
   public async createUserToken(user: User, tokenInfo?: TokenLogin) {
     if (tokenInfo && tokenInfo.token && tokenInfo.userIdAuth === user._id.toString()) {
       throw new BadRequestException('Current token:'+tokenInfo.token, { cause: new Error(), description: 'The user is logged in' })
     }
     const accessTokenPayload = createJWTPayload(user);
+    await this.refreshTokenService.deleteRefreshSessionByUserId(user._id);
     const refreshTokenPayload = { ...accessTokenPayload, tokenId: crypto.randomUUID() };
     await this.refreshTokenService.createRefreshSession(refreshTokenPayload)
 
@@ -129,7 +97,6 @@ export class AuthenticationService {
       })
     }
   }
-
 
 
 }

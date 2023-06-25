@@ -51,6 +51,12 @@ export class NewUserRdo {
   public role: string;
 
   @ApiProperty({
+    description: 'Metro station'
+  })
+  @Expose()
+  public location: string;
+  
+  @ApiProperty({
     description: 'The level of physical fitness of the user',
   })
   @Expose()
