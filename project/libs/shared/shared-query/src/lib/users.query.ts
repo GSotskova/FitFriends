@@ -1,7 +1,7 @@
-import { IsIn, IsNumber, IsOptional, IsEnum, IsArray } from 'class-validator';
+import { IsNumber, IsOptional, IsEnum, IsArray } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { DEFAULT_USERS_COUNT_LIMIT } from './query.constants';
-import {  StationMetro, LevelTraining } from '@project/shared/shared-types';
+import {  StationMetro, LevelTraining, UserRole } from '@project/shared/shared-types';
 
 export class UsersQuery {
   @Transform(({ value } ) => +value || DEFAULT_USERS_COUNT_LIMIT)
@@ -9,9 +9,9 @@ export class UsersQuery {
   public limit = DEFAULT_USERS_COUNT_LIMIT;
 
 
-  @IsIn(['asc', 'desc'])
+  @IsEnum(UserRole)
   @IsOptional()
-  public sortRole?: 'desc' | 'asc';
+  public userRole?: UserRole;
 
 
   @IsEnum(StationMetro)

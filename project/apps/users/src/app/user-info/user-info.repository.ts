@@ -5,7 +5,7 @@ import { QuestionnaireCoach, QuestionnaireUser, SomeObject, User } from '@projec
 import { UserModel } from './user-info.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { UsersQuery, DEFAULT_USERS_COUNT_LIMIT } from '@project/shared/shared-query';
+import { UsersQuery } from '@project/shared/shared-query';
 
 @Injectable()
 export class UserRepository implements CRUDRepository<UserEntity, string, User> {
@@ -124,16 +124,14 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
   }
 
   public async findAll(query: UsersQuery): Promise<User[]> {
-    const {limit, sortRole, location, trainingType, levelTraining, page}= query;
+    const {limit, userRole, location, trainingType, levelTraining, page}= query;
     const pageNum = page? (page-1) : 0;
     const skip = pageNum*limit;
-
-    const objSort: SomeObject = {};
-    if (query.sortRole) {objSort.sortRole = sortRole;}
 
     const objFiltr: SomeObject = {};
       if (query.location) {objFiltr.location = location;}
       if (query.levelTraining) {objFiltr.levelTraining = levelTraining;}
+      if (query.userRole) {objFiltr.userRole = userRole;}
       if (query.trainingType) {objFiltr.trainingType = { "$in": trainingType };}
 
       const usersInfo =  await this.userModel
@@ -196,11 +194,10 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
 },
      { $limit: skip + limit},
       { $skip:  skip },
-     /* { $sort:  objSort },*/
       {$match: objFiltr }
      ])
     .exec();
-    
+
   return usersInfo
   }
 
