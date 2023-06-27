@@ -1,0 +1,33 @@
+# Создание тренировки
+POST http://localhost:3334/api/training/create HTTP/1.1
+Content-Type: application/json
+
+{
+  "nameTraining": "Тренировка 3",
+  "levelTraining": "любитель",
+  "trainingType": "йога",
+  "trainingTime": "10-30 мин",
+  "price": 2000,
+  "caloriesReset": 3000,
+  "descriptionTraining": "Тренировка 3",
+  "sex": "male",
+  "coachId": "6497fd0eaaa5a02715264c9b",
+  "isSpecialOffer": true
+}
+###
+# Редактирование  тренировки
+POST http://localhost:3334/api/training/edit/649afd18e0be2c6e2c674fbe HTTP/1.1
+Content-Type: application/json
+
+{
+  "levelTraining": "новичок"
+}
+###
+# Детальная информация о тренировке
+GET http://localhost:3334/api/training/649afd18e0be2c6e2c674fbe HTTP/1.1
+Content-Type: application/json
+###
+
+# Список тренировок
+GET http://localhost:3334/api/training/list/6497fd0eaaa5a02715264c9b?trainingTime=10-30 мин HTTP/1.1
+###

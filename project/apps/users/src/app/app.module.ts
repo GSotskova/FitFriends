@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthenticationModule } from './authentication/authentication.module';
-import { ConfigUsersModule, getMongooseOptions } from '@project/config/config-users';
+import { ConfigUsersModule } from '@project/config/config-users';
+import { getMongooseOptions } from '@project/util/util-core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserInfoModule } from './user-info/user-info.module';
 import { QuestionnaireCoachModule } from './questionnaire-coach/questionnaire-coach.module';
@@ -15,7 +16,7 @@ import { QuestionnaireUserModule } from './questionnaire-user/questionnaire-user
     QuestionnaireUserModule,
     ConfigUsersModule,
     MongooseModule.forRootAsync(
-      getMongooseOptions()
+      getMongooseOptions('application.db')
   )],
   controllers: [],
   providers: [],

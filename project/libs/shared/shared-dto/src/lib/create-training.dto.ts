@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ArrayMaxSize, IsInt, Max, MaxLength, Min, MinLength } from 'class-validator';
+import { IsInt, Max, MaxLength, Min, MinLength } from 'class-validator';
 import { LevelTraining, TrainingTime, TrainingType, UserSex } from "@project/shared/shared-types";
-import { CaloriesReset, MAX_TRAINING_COUNT, NameTraining, DescriptionTraining } from "./dto.constants";
+import { CaloriesReset, NameTraining, DescriptionTraining } from "./dto.constants";
 
 export class CreateTrainingDTO  {
 
@@ -20,10 +20,9 @@ export class CreateTrainingDTO  {
 
   @ApiProperty({
     description: 'The level of physical fitness of the user',
-    type: [TrainingType]
+    enum: TrainingTime, enumName: 'TrainingType'
   })
-  @ArrayMaxSize(MAX_TRAINING_COUNT)
-  public trainingType: TrainingType[];
+  public trainingType: TrainingType;
 
   @ApiProperty({
     description: 'Time for training',
