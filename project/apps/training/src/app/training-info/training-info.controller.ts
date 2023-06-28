@@ -53,7 +53,7 @@ export class TrainingInfoController {
   @ApiResponse({
     type: TrainingRdo,
     status: HttpStatus.OK,
-    description: 'Show list posts'
+    description: 'Show list training'
   })
   @Get('list/:coachId')
   public async showList(@Param('coachId') coachId: string, @Query() query: TrainingQuery) {

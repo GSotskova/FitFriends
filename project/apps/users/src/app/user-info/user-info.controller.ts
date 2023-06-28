@@ -26,7 +26,7 @@ export class UserInfoController {
   @ApiResponse({
     type: UserInfoRdo,
     status: HttpStatus.OK,
-    description: 'Show list posts'
+    description: 'Show list users'
   })
   @Get('')
   public async showList(@Query() query: UsersQuery) {

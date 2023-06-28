@@ -1,10 +1,11 @@
 import { PaymentOption } from "./payment-option.enum";
 
 export interface Order {
-  orderId?: number;
+  _id?: string;
+  userId: string;
+  coachId: string;
   orderType: string;
-  trainingId: number;
-  price: number;
+  trainingId: string;
   trainingCount: number;
   totalPrice: number;
   paymentOption: PaymentOption;
