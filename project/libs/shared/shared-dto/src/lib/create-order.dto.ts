@@ -5,21 +5,11 @@ import { TrainingCount } from "./dto.constants";
 
 export class CreateOrderDto {
 
-  @ApiProperty({
-    description: 'Order type'
-  })
-  public orderType: string;
 
   @ApiProperty({
     description: 'Training Id'
   })
-  public trainingId: number;
-
-  @ApiProperty({
-    description: 'The cost of training'
-  })
-  @IsInt()
-  public price: number;
+  public trainingId: string;
 
   @ApiProperty({
     description: 'Training count'

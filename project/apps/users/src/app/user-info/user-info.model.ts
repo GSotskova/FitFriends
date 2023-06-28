@@ -1,4 +1,4 @@
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Document} from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { StationMetro, User, UserRole, UserSex } from '@project/shared/shared-types';
 
@@ -7,17 +7,6 @@ import { StationMetro, User, UserRole, UserSex } from '@project/shared/shared-ty
   timestamps: true,
 })
 export class UserModel extends Document implements User {
-
- /* @Prop({
-    type: MongooseSchema.Types.ObjectId,
-    index: true,
-    required: true,
-    auto: true,
-    type:MongooseSchema.Types.ObjectId,
-     default: function () { return new Object()}
-  })
-  public _id: string;
-*/
 
   @Prop({
     required: true,

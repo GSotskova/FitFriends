@@ -5,6 +5,6 @@ export * from './lib/create-training.dto';
 export * from './lib/edit-training.dto';
 export * from './lib/create-order.dto';
 export * from './lib/create-order-personal.dto';
-export * from './lib/create-order-personal.dto';
+export * from './lib/create-order.dto';
 export * from './lib/edit-order-personal.dto';
 export * from './lib/comment.dto';

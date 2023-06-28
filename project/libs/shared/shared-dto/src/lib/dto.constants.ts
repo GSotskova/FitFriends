@@ -48,3 +48,4 @@ export const enum TrainingCount {
   MinCount = 1,
   MaxCount = 50
 }
+
