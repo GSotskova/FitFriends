@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserInfoModule } from './user-info/user-info.module';
 import { QuestionnaireCoachModule } from './questionnaire-coach/questionnaire-coach.module';
 import { QuestionnaireUserModule } from './questionnaire-user/questionnaire-user.module';
+import { FriendModule } from './friends/friends.module';
 
 
 @Module({
@@ -14,9 +15,10 @@ import { QuestionnaireUserModule } from './questionnaire-user/questionnaire-user
     UserInfoModule,
     QuestionnaireCoachModule,
     QuestionnaireUserModule,
+    FriendModule,
     ConfigUsersModule,
     MongooseModule.forRootAsync(
-      getMongooseOptions('application.db')
+      getMongooseOptions('db')
   )],
   controllers: [],
   providers: [],

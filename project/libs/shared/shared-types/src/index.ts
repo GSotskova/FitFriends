@@ -20,3 +20,4 @@ export * from './lib/token-login.interface';
 export * from './lib/operation-type.enum';
 export * from './lib/some-object.interface';
 export * from './lib/order.interface';
+export * from './lib/friend.interface';
