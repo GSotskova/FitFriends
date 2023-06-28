@@ -1,0 +1,32 @@
+# Добавить друга
+POST http://localhost:3333/api/friends/add/649809159b59277aa0c615a7 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODc5Njg5NjQsImV4cCI6MTY4Nzk2OTg2NH0.GxQyXdf7-9S_8YmKR6PywZ5v036MrtlfkSHWyH2ZGaI
+
+###
+
+# Список друзей пользователя
+GET http://localhost:3333/api/friends HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODc5Njg5NjQsImV4cCI6MTY4Nzk2OTg2NH0.GxQyXdf7-9S_8YmKR6PywZ5v036MrtlfkSHWyH2ZGaI
+###
+
+
+
+#  Список друзей тренера
+GET http://localhost:3333/api/friends/coach HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZmQwZWFhYTVhMDI3MTUyNjRjOWIiLCJlbWFpbCI6InVzZXJOZXdAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY29hY2giLCJ1c2VyTmFtZSI6ItCf0LXRgtGA0L7QsiIsImlhdCI6MTY4Nzk2OTA5MSwiZXhwIjoxNjg3OTY5OTkxfQ.xQpy1Uw2s7ew3qyXHlDH6GDue9UY_JjtTQNNKLoBEKA
+Content-Type: application/json
+###
+
+#  Удаление из списка друзей для тренера
+POST http://localhost:3333/api/friends/delete/coach/649809159b59277aa0c615a7 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZmQwZWFhYTVhMDI3MTUyNjRjOWIiLCJlbWFpbCI6InVzZXJOZXdAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY29hY2giLCJ1c2VyTmFtZSI6ItCf0LXRgtGA0L7QsiIsImlhdCI6MTY4Nzk2OTA5MSwiZXhwIjoxNjg3OTY5OTkxfQ.xQpy1Uw2s7ew3qyXHlDH6GDue9UY_JjtTQNNKLoBEKA
+Content-Type: application/json
+
+###
+
+#  Удаление из списка друзей для пользователя
+POST http://localhost:3333/api/friends/delete/649809159b59277aa0c615a7 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZmQwZWFhYTVhMDI3MTUyNjRjOWIiLCJlbWFpbCI6InVzZXJOZXdAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY29hY2giLCJ1c2VyTmFtZSI6ItCf0LXRgtGA0L7QsiIsImlhdCI6MTY4Nzk2OTA5MSwiZXhwIjoxNjg3OTY5OTkxfQ.xQpy1Uw2s7ew3qyXHlDH6GDue9UY_JjtTQNNKLoBEKA
+Content-Type: application/json
+
+###
