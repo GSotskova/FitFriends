@@ -22,6 +22,7 @@ export class FriendController {
   })
   @Post('add/:friendId')
   public async create(@Req() { user: payload }: RequestWithTokenPayload, @Param('friendId') friendId: string) {
+    console.log(payload.sub, friendId)
     const newFriends = await this.friendService.create(payload.sub, friendId);
     return newFriends;
   }

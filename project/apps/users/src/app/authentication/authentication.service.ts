@@ -1,4 +1,4 @@
-import { ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigType, ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'node:crypto';
@@ -82,8 +82,10 @@ export class AuthenticationService {
 
   public async createUserToken(user: User, tokenInfo?: TokenLogin) {
     if (tokenInfo && tokenInfo.token && tokenInfo.userIdAuth === user._id.toString()) {
-      throw new BadRequestException('Current token:'+tokenInfo.token, { cause: new Error(), description: 'The user is logged in' })
+      return {current_access_token: tokenInfo.token,  description: 'The user is logged in' }
+    //  throw new BadRequestException('Current token:'+tokenInfo.token, { cause: new Error(), description: 'The user is logged in' })
     }
+
     const accessTokenPayload = createJWTPayload(user);
     await this.refreshTokenService.deleteRefreshSessionByUserId(user._id);
     const refreshTokenPayload = { ...accessTokenPayload, tokenId: crypto.randomUUID() };

@@ -4,7 +4,6 @@ import { AuthenticationService } from './authentication.service';
 import { fillObject } from '@project/util/util-core';
 import { NewCoachRdo } from './rdo/new-coach.rdo';
 import { NewUserRdo } from './rdo/new-user.rdo';
-import { LoggedUserRdo } from './rdo/logged-user.rdo';
 import { RequestWithTokenPayload, RequestWithUser, TokenLogin, UserRole } from '@project/shared/shared-types';
 import { CreateUserDto } from'@project/shared/shared-dto';
 import { LocalAuthGuard } from './guards/local-auth-guard';
@@ -36,7 +35,6 @@ export class AuthenticationController {
 
   @UseGuards(CheckJwtAuthGuard, LocalAuthGuard)
   @ApiResponse({
-    type: LoggedUserRdo,
     status: HttpStatus.OK,
     description: 'User has been successfully logged.'
   })
@@ -46,8 +44,9 @@ export class AuthenticationController {
   })
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  public async login(@Req() { user }: RequestWithUser,@Body() tokenInfo?: TokenLogin) {
-    return this.authService.createUserToken(user, tokenInfo);
+  public async login(@Req() req: RequestWithUser & TokenLogin ,@Body() tokenInfo?: TokenLogin) {
+    const tt ={userIdAuth: tokenInfo.userIdAuth, token: tokenInfo.token} as TokenLogin;
+    return this.authService.createUserToken(req.user, tt);
   }
 
  @UseGuards(JwtRefreshGuard)
@@ -80,6 +79,16 @@ export class AuthenticationController {
     description: 'Check access token'
   })
   public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
+    return payload;
+  }
+
+  @UseGuards(CheckJwtAuthGuard)
+  @Post('isauth')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'User is auth'
+  })
+  public async isAuth(@Req() { user: payload }: RequestWithTokenPayload) {
     return payload;
   }
 
