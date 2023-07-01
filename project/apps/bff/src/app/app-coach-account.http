@@ -41,7 +41,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDlkYTM1N
 ###
 
 #  Список друзей тренера
-GET http://localhost:4000/api/coach/show/frineds HTTP/1.1
+GET http://localhost:4000/api/coach/friends/show HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZmQwZWFhYTVhMDI3MTUyNjRjOWIiLCJlbWFpbCI6InVzZXJOZXdAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY29hY2giLCJ1c2VyTmFtZSI6ItCf0LXRgtGA0L7QsiIsImlhdCI6MTY4ODE0MDk5NSwiZXhwIjoxNjg4MTQxODk1fQ.rQiiROAJ-uBXzDXvGq0haJISYNNqMmXBQbK-NiKFHuE
+Content-Type: application/json
+###
+
+#  Удалиться из списка друзей
+POST http://localhost:4000/api/coach/friends/delete/649809159b59277aa0c615a7 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZmQwZWFhYTVhMDI3MTUyNjRjOWIiLCJlbWFpbCI6InVzZXJOZXdAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY29hY2giLCJ1c2VyTmFtZSI6ItCf0LXRgtGA0L7QsiIsImlhdCI6MTY4ODE0MzcwMiwiZXhwIjoxNjg4MTQ0NjAyfQ.lbzrCOYAXBooXVV3rIpAUC0s5jW-mg4fa5kEWKujTcc
 Content-Type: application/json
 ###

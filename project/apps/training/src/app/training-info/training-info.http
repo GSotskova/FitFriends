@@ -3,15 +3,16 @@ POST http://localhost:3334/api/training/create HTTP/1.1
 Content-Type: application/json
 
 {
-  "nameTraining": "Тренировка 3",
+  "nameTraining": "Тренировка йога",
   "levelTraining": "любитель",
   "trainingType": "йога",
   "trainingTime": "10-30 мин",
   "price": 2000,
   "caloriesReset": 3000,
-  "descriptionTraining": "Тренировка 3",
+  "descriptionTraining": "йога просто супер",
   "sex": "male",
-  "isSpecialOffer": true
+  "isSpecialOffer": true,
+  "coachId": "649866f6dac052e861589f59"
 }
 ###
 # Редактирование  тренировки

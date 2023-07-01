@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { getMongoConnectionString } from './helpers';
 
 export function getMongooseOptions(optionSpace: string): MongooseModuleAsyncOptions {
+  console.log('getMongooseOptions')
   return {
     useFactory: async (config: ConfigService) => {
       return {

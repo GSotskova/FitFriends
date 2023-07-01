@@ -54,4 +54,8 @@ export class TrainingService {
     return existTraining;
   }
 
+  public async getListTraingAfterDate(date: Date, coaches:[string]) {
+    return this.trainingRepository.findTrainingAfterDate(date, coaches);
+  }
+
 }

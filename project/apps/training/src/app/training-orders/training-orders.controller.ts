@@ -45,7 +45,6 @@ export class TrainingOrdersController {
   })
   @Get('show/list')
   public async showList(@Body() body, @Query() query: TrainingOrdersQuery) {
-    console.log('orders',body.coachId )
     const existPost = await this.orderService.showList(body.coachId, query);
     return fillObject(TrainingOrderRdo, existPost);
   }

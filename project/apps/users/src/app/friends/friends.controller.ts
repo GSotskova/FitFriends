@@ -22,7 +22,6 @@ export class FriendController {
   })
   @Post('add/:friendId')
   public async create(@Req() { user: payload }: RequestWithTokenPayload, @Param('friendId') friendId: string) {
-    console.log(payload.sub, friendId)
     const newFriends = await this.friendService.create(payload.sub, friendId);
     return newFriends;
   }
@@ -33,7 +32,7 @@ export class FriendController {
     status: HttpStatus.OK,
     description: 'Show list friends for user'
   })
-  @Get('')
+  @Get('user')
   public async showFriendsForUser(@Req() { user: payload }: RequestWithTokenPayload, @Query() query: DefaultQuery) {
     const friends = await this.friendService.getFriends(payload.sub, query.limit, query.page);
     return fillObject(UserInfoRdo, friends);
@@ -69,7 +68,7 @@ export class FriendController {
   })
   @Post('delete/:friendId')
   public async deleteFriend(@Req() { user: payload }: RequestWithTokenPayload, @Param('friendId') friendId: string) {
-    const newFriends = await this.friendService.delete(payload.sub, friendId);
+    const newFriends = await this.friendService.delete(friendId, payload.sub );
     return newFriends;
   }
 }

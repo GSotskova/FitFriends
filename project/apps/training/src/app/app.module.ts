@@ -4,6 +4,7 @@ import { getMongooseOptions } from '@project/util/util-core';
 import { ConfigTrainingModule } from '@project/config/config-training';
 import { TrainingInfoModule } from './training-info/training-info.module';
 import { TrainingOrdersModule } from './training-orders/training-orders.module';
+import { SubscribersModule } from './subscribers/subscribers.module';
 
 
 @Module({
@@ -11,9 +12,8 @@ import { TrainingOrdersModule } from './training-orders/training-orders.module';
     TrainingInfoModule,
     TrainingOrdersModule,
     ConfigTrainingModule,
-    MongooseModule.forRootAsync(
-      getMongooseOptions('application.db')),
-
+    MongooseModule.forRootAsync(getMongooseOptions('application.db')),
+    SubscribersModule
   ],
   controllers: [],
   providers: [],

@@ -29,7 +29,6 @@ export class UserInfoController {
   })
   @Get('')
   public async showList(@Query() query: UsersQuery) {
-    console.log(query)
     const existPost = await this.userService.getUsers(query);
     return fillObject(UserInfoRdo, existPost);
   }

@@ -1,0 +1,62 @@
+#  Добавить друга
+POST http://localhost:4000/api/user/friends/add/649da3764f4fc537d512a65e HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODgxNDM1MzQsImV4cCI6MTY4ODE0NDQzNH0.tHG2JjWjgOZ3ShsqhuH8F73RCAM4QNOWDtICzqkKuYY
+Content-Type: application/json
+###
+
+#  Удалить пользователя из друзей
+POST http://localhost:4000/api/user/friends/delete/649da3764f4fc537d512a65e HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODgxNDM1MzQsImV4cCI6MTY4ODE0NDQzNH0.tHG2JjWjgOZ3ShsqhuH8F73RCAM4QNOWDtICzqkKuYY
+Content-Type: application/json
+###
+
+#  Список друзей пользователя
+GET http://localhost:4000/api/user/friends/show HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODgxNDM1MzQsImV4cCI6MTY4ODE0NDQzNH0.tHG2JjWjgOZ3ShsqhuH8F73RCAM4QNOWDtICzqkKuYY
+Content-Type: application/json
+###
+
+
+# Список тренировок
+GET http://localhost:4000/api/coach/training/show/list?price=10,3000 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDlkYTM1NDRmNGZjNTM3ZDUxMmE2NTYiLCJlbWFpbCI6InVzZXJOZXcyQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6ImNvYWNoIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LLQsCDQmNGA0LjQvdCwIiwiaWF0IjoxNjg4MTQwNDc0LCJleHAiOjE2ODgxNDEzNzR9.YD-oKDWgKP1zjxDsSJG96SOft0HloT8qSRpuiWabJRs
+###
+
+# Список заказов для тренера
+GET http://localhost:4000/api/coach/orders?sortPrice=desc HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDlkYTM1NDRmNGZjNTM3ZDUxMmE2NTYiLCJlbWFpbCI6InVzZXJOZXcyQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6ImNvYWNoIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LLQsCDQmNGA0LjQvdCwIiwiaWF0IjoxNjg4MTQwOTA0LCJleHAiOjE2ODgxNDE4MDR9.2Fwh5e_RGWd3K3uqXSn7_dPzADz2srHnENX2Cbj8sRI
+###
+
+#  Список друзей тренера
+GET http://localhost:4000/api/coach/show/friends HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZmQwZWFhYTVhMDI3MTUyNjRjOWIiLCJlbWFpbCI6InVzZXJOZXdAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY29hY2giLCJ1c2VyTmFtZSI6ItCf0LXRgtGA0L7QsiIsImlhdCI6MTY4ODE0MDk5NSwiZXhwIjoxNjg4MTQxODk1fQ.rQiiROAJ-uBXzDXvGq0haJISYNNqMmXBQbK-NiKFHuE
+Content-Type: application/json
+###
+
+# Подписка на получение уведомлений по email на появление новых тренировок определённого тренера
+POST http://localhost:4000/api/user/subscription/create HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODgyMjQ3OTIsImV4cCI6MTY4ODIyNTY5Mn0.79BHsZhfwKpB10PaT0cX0oRtuP5dQ_GHPCq9DgLhEiI
+Content-Type: application/json
+
+{
+  "coachId": "6497fd0eaaa5a02715264c9b"
+}
+
+###
+
+# Отмена подписки на других пользователей.
+DELETE  http://localhost:4000/api/user/subscription/delete HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODgyMjQ3OTIsImV4cCI6MTY4ODIyNTY5Mn0.79BHsZhfwKpB10PaT0cX0oRtuP5dQ_GHPCq9DgLhEiI
+Content-Type: application/json
+
+{
+  "coachId": "6497fd0eaaa5a02715264c9b"
+}
+###
+# Рассылка почтовых уведомлений на email о новых тренировках
+GET http://localhost:4000/api/user/notify/newtraining HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODgyMjQ3OTIsImV4cCI6MTY4ODIyNTY5Mn0.79BHsZhfwKpB10PaT0cX0oRtuP5dQ_GHPCq9DgLhEiI
+Content-Type: application/json
+
+###
+

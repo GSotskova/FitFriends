@@ -8,7 +8,6 @@ export class UseridTrainingInterceptor implements NestInterceptor {
     private readonly httpService: HttpService,
   ) {}
   public async intercept(context: ExecutionContext, next: CallHandler) {
-    console.log('UseridTrainingInterceptor')
     const request = context.switchToHttp().getRequest();
     const {data} = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Training}/${request.params.id}`);
     if (request.user.sub !== data.coachId) {

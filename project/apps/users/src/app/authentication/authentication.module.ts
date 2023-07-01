@@ -11,6 +11,10 @@ import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 import { RefreshTokenModule } from '../refresh-token/refresh-token.module';
+import { NotifyModule } from '../notify/notify.module';
+import { TrainingModule } from '../training/training.module';
+import { NotifyDateModule } from '../date-notify/date-notify.module';
+import { UsersSubscriptionsModule } from '../users-subscriptions/users-subscriptions.module';
 
 @Module({
   imports: [
@@ -21,7 +25,11 @@ import { RefreshTokenModule } from '../refresh-token/refresh-token.module';
       inject: [ConfigService],
       useFactory: getJwtOptions
     }),
-    RefreshTokenModule
+    RefreshTokenModule,
+    NotifyModule,
+    TrainingModule,
+    NotifyDateModule,
+    UsersSubscriptionsModule,
   ],
   controllers: [AuthenticationController],
   providers: [

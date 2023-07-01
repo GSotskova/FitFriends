@@ -70,7 +70,6 @@ export class UsersController {
   @UseGuards(CheckAuthGuard)
   @Post('edit')
   public async edit(@Req() req: Request) {
-    console.log('edit')
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/edit`, null, {
       headers: {
         'Authorization': req.headers['authorization']
@@ -83,7 +82,6 @@ export class UsersController {
 @UseInterceptors(RoleUserInterceptor)
 @Get('')
 public async showList(@Req() req: Request, @Query() query: UsersQuery) {
-  console.log(query)
   const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}`,  {
     params : query,
     headers: {

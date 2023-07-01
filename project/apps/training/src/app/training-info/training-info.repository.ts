@@ -65,4 +65,13 @@ export class TrainingRepository implements CRUDRepository<TrainingEntity, string
   }
 
 
+  public async findTrainingAfterDate(date: Date, coaches: [string]): Promise<Training[]> {
+    const training = await this.trainingModel
+    .find({createdAt: {$gte: date},
+          coachId: { $in: coaches }})
+    .exec();
+      return training;
+
+    }
+
 }

@@ -7,6 +7,10 @@ import { UserInfoModule } from './user-info/user-info.module';
 import { QuestionnaireCoachModule } from './questionnaire-coach/questionnaire-coach.module';
 import { QuestionnaireUserModule } from './questionnaire-user/questionnaire-user.module';
 import { FriendModule } from './friends/friends.module';
+import { NotifyModule } from './notify/notify.module';
+import { TrainingModule } from './training/training.module';
+import { NotifyDateModule } from './date-notify/date-notify.module';
+import { UsersSubscriptionsModule } from './users-subscriptions/users-subscriptions.module';
 
 
 @Module({
@@ -17,6 +21,10 @@ import { FriendModule } from './friends/friends.module';
     QuestionnaireUserModule,
     FriendModule,
     ConfigUsersModule,
+    NotifyModule,
+    NotifyDateModule,
+    TrainingModule,
+    UsersSubscriptionsModule,
     MongooseModule.forRootAsync(
       getMongooseOptions('db')
   )],
