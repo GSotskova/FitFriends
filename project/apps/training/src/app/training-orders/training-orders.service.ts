@@ -1,11 +1,10 @@
-import { ConflictException, Injectable} from '@nestjs/common';
+import { Injectable} from '@nestjs/common';
 import { TrainingOrdersRepository } from './training-orders.repository';
-import { TRANING_NOT_FOUND } from '../training-info/training-info.constant';
 import { TrainingOrdersEntity } from './training-orders.entity';
 import { CreateOrderDto } from '@project/shared/shared-dto';
 import { TrainingOrdersQuery } from '@project/shared/shared-query';
 import { TrainingRepository } from '../training-info/training-info.repository';
-import { ORDER_TYPE } from './training-order.constant';
+import { ORDER_IS_DONE, ORDER_NOT_FOUND, ORDER_TYPE, TRAINING_NOT_FOUND } from './training-order.constant';
 
 
 @Injectable()
@@ -16,36 +15,77 @@ export class TrainingOrdersService {
 
   ) {}
 
-  public async create(userId: string, dto: CreateOrderDto) {
+  public async create(dto: CreateOrderDto) {
     const existTraining = await this.trainingRepository.findById(dto.trainingId)
     if (!existTraining) {
-      throw new ConflictException(TRANING_NOT_FOUND);
+      return {error: TRAINING_NOT_FOUND}
     }
     const orderEntity = new TrainingOrdersEntity({
       ...dto,
       orderType: ORDER_TYPE,
-      userId: userId,
       coachId: existTraining.coachId,
-      totalPrice: existTraining.price *dto.trainingCount
+      price: existTraining.price,
+      totalPrice: existTraining.price *dto.trainingCount,
+      trainingRestCount: dto.trainingCount,
+      trainingDoneCount: 0,
+      isDone: false
     });
     return this.ordersRepository.create(orderEntity);
   }
 
+  public async update(orderId: string) {
+    const existOrder = await this.ordersRepository.findById(orderId)
+    if (!existOrder) {
+      return {error: ORDER_NOT_FOUND}
+    }
+
+    if (existOrder.isDone) {
+      return {error: ORDER_IS_DONE}
+    }
+    const orderEntity = new TrainingOrdersEntity({
+      ...existOrder,
+      orderType: ORDER_TYPE,
+      coachId: existOrder.coachId,
+      totalPrice: (existOrder.trainingRestCount-1) *existOrder.price,
+      trainingDoneCount: existOrder.trainingDoneCount+1,
+      trainingRestCount: existOrder.trainingRestCount-1,
+      isDone: existOrder.trainingRestCount-1 === 0? true : false
+    });
+    return this.ordersRepository.update(orderId, orderEntity);
+  }
+
 
   public async delete(id: string) {
-    const existTraining = await this.ordersRepository.findById(id);
-    if (!existTraining) {
-      throw new ConflictException(TRANING_NOT_FOUND);
+    const existOrder = await this.ordersRepository.findById(id);
+
+    if (!existOrder) {
+      return {error: ORDER_NOT_FOUND}
     }
-    return this.ordersRepository.destroy(id);
+    return this.ordersRepository.destroy(existOrder._id);
   }
 
   public async showList(coachId: string, query: TrainingOrdersQuery) {
-    const existTraining = await this.ordersRepository.findByCoachId(coachId, query);
-    if (!existTraining) {
-      throw new ConflictException(TRANING_NOT_FOUND);
+    const existOrder = await this.ordersRepository.findByCoachId(coachId, query);
+    if (!existOrder) {
+      return {error: ORDER_NOT_FOUND}
     }
-    return existTraining;
+    return existOrder;
+  }
+
+  public async showListByUser(userId: string, query: TrainingOrdersQuery) {
+    const existOrder = await this.ordersRepository.findByUserId(userId, query);
+    if (!existOrder) {
+      return {error: ORDER_NOT_FOUND}
+    }
+    return existOrder;
+  }
+
+  public async show(id:string) {
+    const existOrder = await this.ordersRepository.findById(id);
+    if (!existOrder) {
+      return {error: ORDER_NOT_FOUND}
+    }
+    return existOrder;
   }
 
 }

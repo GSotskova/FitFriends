@@ -3,12 +3,13 @@ import { HttpService } from '@nestjs/axios';
 import { ApplicationServiceURL } from './app.config';
 import { Request } from 'express';
 import { AxiosExceptionFilter } from './filters/axios-exception.filter';
-import { DefaultQuery } from '@project/shared/shared-query';
+import { DefaultQuery, TrainingOrdersQuery } from '@project/shared/shared-query';
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { CheckAuthGuard } from './guards/check-auth.guard';
 import { UseridInterceptor } from './interceptors/userid.interceptor';
 import { RoleUserInterceptor } from './interceptors/role-user.interceptor';
-import { UserSubscriptionDto } from '@project/shared/shared-dto';
+import { CreateOrderDto, UserSubscriptionDto } from '@project/shared/shared-dto';
+import { UseridOrderInterceptor } from './interceptors/userid-order.interceptor';
 
 
 
@@ -59,7 +60,43 @@ export class UserAccountController {
   }
 
 
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(RoleUserInterceptor)
+  @UseInterceptors(UseridInterceptor)
+  @Post('orders/create')
+  public async createOrder(@Body() dto: CreateOrderDto) {
+    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Orders}/create`, dto);
+   return data;
+  }
 
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(RoleUserInterceptor)
+  @UseInterceptors(UseridInterceptor)
+  @UseInterceptors(UseridOrderInterceptor)
+  @Post('orders/reduce/:id')
+  public async reduceOrder(@Param('id', MongoidValidationPipe) id: string) {
+    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Orders}/reduce/${id}`, null);
+   return data;
+  }
+
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(RoleUserInterceptor)
+  @UseInterceptors(UseridInterceptor)
+  @Get('orders')
+  public async showOrders(@Body() userId: string, @Query() query: TrainingOrdersQuery) {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Orders}/show/list/user`, {params : query, data: userId});
+   return data;
+  }
+
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(RoleUserInterceptor)
+  @UseInterceptors(UseridInterceptor)
+  @UseInterceptors(UseridOrderInterceptor)
+  @Delete('orders/delete/:id')
+  public async deleteOrder(@Param('id', MongoidValidationPipe) id: string) {
+    const { data } = await this.httpService.axiosRef.delete(`${ApplicationServiceURL.Orders}/delete/${id}`);
+   return data;
+  }
 
 @UseGuards(CheckAuthGuard)
 @UseInterceptors(UseridInterceptor)

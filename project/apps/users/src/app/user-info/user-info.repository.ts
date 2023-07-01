@@ -163,7 +163,7 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
           as: 'resultCoach'
         },
       },
-     { "$unwind": {"path": "$resultCoach","preserveNullAndEmptyArrays": true}
+     { "$unwind": {"path": "$resultCoach","preserveNullAndEmptyArrays": false}
      },
      { $addFields: {
       levelTraining: {
