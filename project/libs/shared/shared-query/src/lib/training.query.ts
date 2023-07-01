@@ -9,13 +9,13 @@ export class TrainingQuery {
   public limit = DEFAULT_LIST_COUNT_LIMIT;
 
 
-  @Transform(({ value }) => value.split(',').map((el: string) => el))
+  @Transform(({ value }) => {if (typeof value === "string") {return value.split(',').map((el: string) => el)} return value })
   @IsArray({})
   @IsOptional()
   public price?: string;
 
 
-  @Transform(({ value }) => value.split(',').map((el: string) => el))
+  @Transform(({ value }) => {if (typeof value === "string") {return value.split(',').map((el: string) => el)} return value })
   @IsArray({})
   @IsOptional()
   public caloriesReset?: string;
@@ -26,7 +26,7 @@ export class TrainingQuery {
   @IsOptional()
   public rating?: number;
 
-  @Transform(({ value }) => value.split(',').map((el: string) => el))
+  @Transform(({ value }) => {if (typeof value === "string") {return value.split(',').map((el: string) => el)} return value })
   @IsArray({})
   @IsOptional()
   public trainingTime?: TrainingTime[];

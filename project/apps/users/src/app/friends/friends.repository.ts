@@ -19,7 +19,6 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
   }
 
   public async destroy(id: string): Promise<void> {
-    console.log(id)
     await this.friendModel.deleteOne({_id: id});
   }
 

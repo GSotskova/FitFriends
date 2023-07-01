@@ -6,6 +6,9 @@ import { TrainingQuery } from '@project/shared/shared-query';
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { CreateTrainingDTO, EditTrainingDTO } from '@project/shared/shared-dto';
 import { TrainingRdo } from './rdo/training-info.rdo';
+import { SubscribersService } from '../subscribers/subscribers.service';
+import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { DataNotifyTraining, RabbitRouting, TrainingForSend } from '@project/shared/shared-types';
 
 
 
@@ -13,7 +16,8 @@ import { TrainingRdo } from './rdo/training-info.rdo';
 @Controller('training')
 export class TrainingInfoController {
   constructor(
-    private readonly trainingService: TrainingService
+    private readonly trainingService: TrainingService,
+    private readonly subscribersService: SubscribersService
   ) {}
 
   @ApiResponse({
@@ -24,6 +28,7 @@ export class TrainingInfoController {
   @Post('create')
   public async create(@Body() dto: CreateTrainingDTO) {
     const newTrainig = await this.trainingService.create(dto);
+   // await this.subscribersService.trainingSuscribers(newTrainig)
     return fillObject(TrainingRdo, newTrainig);
   }
 
@@ -34,8 +39,8 @@ export class TrainingInfoController {
     description: 'User edit'
   })
   public async update(@Param('id', MongoidValidationPipe) id: string, @Body() dto: EditTrainingDTO) {
-    const existUser = await this.trainingService.update(id, dto);
-      return fillObject(TrainingRdo, existUser);
+    const existTrainig = await this.trainingService.update(id, dto);
+      return fillObject(TrainingRdo, existTrainig);
 
   }
 
@@ -46,19 +51,34 @@ export class TrainingInfoController {
     description: 'User found'
   })
   public async show(@Param('id', MongoidValidationPipe) id: string) {
-    const existUser = await this.trainingService.show(id);
-    return fillObject(TrainingRdo, existUser);
+    const existTrainig = await this.trainingService.show(id);
+    return fillObject(TrainingRdo, existTrainig);
   }
 
+
+  @Get('show/list')
   @ApiResponse({
     type: TrainingRdo,
     status: HttpStatus.OK,
     description: 'Show list training'
   })
-  @Get('list/:coachId')
-  public async showList(@Param('coachId') coachId: string, @Query() query: TrainingQuery) {
-    const existPost = await this.trainingService.showList(coachId, query);
-    return fillObject(TrainingRdo, existPost);
+  public async showList(@Body() body, @Query() query: TrainingQuery) {
+    const existTrainig = await this.trainingService.showList(body.coachId, query);
+    return fillObject(TrainingRdo, existTrainig);
+  }
+
+  @RabbitRPC({
+    exchange: 'fitfriends.training',
+    routingKey: RabbitRouting.GeNewtTraining,
+    queue: 'fitfriends.training.newtraining',
+  })
+  public async getNewTraining(dataNotifyTraining: DataNotifyTraining) : Promise<TrainingForSend[]> {
+    const listTraining = await this.trainingService.getListTraingAfterDate(dataNotifyTraining.dateNotify, dataNotifyTraining.coaches);
+    const listTrainingForSend = listTraining.map((el) => {
+      return {nameTraining: el.nameTraining, descriptionTraining: el.descriptionTraining,
+              coachId: el.coachId, createDate: el.createdAt} as TrainingForSend
+    })
+    return listTrainingForSend
   }
 
 

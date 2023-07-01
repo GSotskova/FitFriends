@@ -18,7 +18,7 @@ export class UsersQuery {
   @IsOptional()
   public location?: StationMetro;
 
-  @Transform(({ value }) => value.split(',').map((el: string) => el))
+  @Transform(({ value }) => {if (typeof value === "string") {return value.split(',').map((el: string) => el)} return value })
   @IsArray({})
   @IsOptional()
   public trainingType?: string[];

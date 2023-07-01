@@ -1,4 +1,4 @@
-import { ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigType, ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'node:crypto';
@@ -13,6 +13,8 @@ import { QuestionnaireCoachRepository } from '../questionnaire-coach/questionnai
 import { QuestionnaireUserRepository } from '../questionnaire-user/questionnaire-user.repository';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { UserService } from '../user-info/user-info.service';
+import { NotifyDateEntity } from '../date-notify/date-notify.entity';
+import { NotifyDateRepository } from '../date-notify/date-notify.repository';
 
 @Injectable()
 export class AuthenticationService {
@@ -24,6 +26,7 @@ export class AuthenticationService {
     private readonly userService: UserService,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
+    private readonly notifyDateRepository: NotifyDateRepository,
     @Inject (jwtConfig.KEY) private readonly jwtOptions: ConfigType<typeof jwtConfig>,
   ) {
     console.log(configService.get<string>('db.host'));
@@ -82,8 +85,9 @@ export class AuthenticationService {
 
   public async createUserToken(user: User, tokenInfo?: TokenLogin) {
     if (tokenInfo && tokenInfo.token && tokenInfo.userIdAuth === user._id.toString()) {
-      throw new BadRequestException('Current token:'+tokenInfo.token, { cause: new Error(), description: 'The user is logged in' })
+      return {current_access_token: tokenInfo.token,  description: 'The user is logged in' }
     }
+
     const accessTokenPayload = createJWTPayload(user);
     await this.refreshTokenService.deleteRefreshSessionByUserId(user._id);
     const refreshTokenPayload = { ...accessTokenPayload, tokenId: crypto.randomUUID() };
@@ -98,5 +102,16 @@ export class AuthenticationService {
     }
   }
 
+
+
+
+  public async createOrUpdateNotify(userId: string, dateNotify: Date) {
+    const notifyEntity = await new NotifyDateEntity({userId, dateNotify})
+    return this.notifyDateRepository.createOrUpdate(notifyEntity);
+  }
+
+  public async findNotifyByUser(userId: string) {
+    return this.notifyDateRepository.findByUserId(userId);
+  }
 
 }

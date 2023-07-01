@@ -17,6 +17,6 @@ export class CheckJwtAuthGuard extends AuthGuard('jwt') {
       request.body['token'] = request.headers['authorization'].split(" ")[1]
       request.body['userIdAuth'] = userToken.sub;
     }
-    return null
+    return userToken
   }
 }

@@ -8,3 +8,6 @@ export * from './lib/create-order-personal.dto';
 export * from './lib/create-order.dto';
 export * from './lib/edit-order-personal.dto';
 export * from './lib/comment.dto';
+export * from './lib/create-subscriber.dto';
+export * from './lib/user-subscription.dto';
+export * from './lib/notify-training.dto';

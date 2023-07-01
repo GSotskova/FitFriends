@@ -1,5 +1,5 @@
-import { ConflictException, Injectable} from '@nestjs/common';
-import {  USER_EQ_FRIEND, USER_IS_FRIEND } from './friends.constant';
+import { Injectable} from '@nestjs/common';
+import {  USER_EQ_FRIEND, USER_IS_FRIEND, FRIENDS_NOT_FOUND } from './friends.constant';
 import { FriendRepository } from './friends.repository';
 import { FriendEntity } from './friends.entity';
 
@@ -12,11 +12,13 @@ export class FriendService {
 
   public async create(userId: string, friendId: string) {
     if (userId === friendId) {
-      throw new ConflictException(USER_EQ_FRIEND)
+      return {error: USER_EQ_FRIEND}
+      //throw new ConflictException(USER_EQ_FRIEND)
     }
-    const existsFriend = this.friendRepository.findId( friendId, userId)
+    const existsFriend = await this.friendRepository.findId( friendId, userId)
     if (existsFriend) {
-      throw new ConflictException(USER_IS_FRIEND)
+      return {error: USER_IS_FRIEND}
+      //throw new ConflictException(USER_IS_FRIEND)
     }
     const friendEntity = new FriendEntity({userId, friendId});
     return this.friendRepository.create(friendEntity);
@@ -33,7 +35,9 @@ export class FriendService {
 
   public async delete(friendId: string, userId: string) {
     const idFriends = await this.friendRepository.findId(friendId, userId)
-    console.log(idFriends)
+    if (!idFriends) {
+      return {error: FRIENDS_NOT_FOUND}
+    }
     return this.friendRepository.destroy(idFriends._id);
   }
 

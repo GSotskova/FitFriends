@@ -43,9 +43,9 @@ export class TrainingOrdersController {
     status: HttpStatus.OK,
     description: 'Show list orders'
   })
-  @Get('list/:coachId')
-  public async showList(@Param('coachId') coachId: string, @Query() query: TrainingOrdersQuery) {
-    const existPost = await this.orderService.showList(coachId, query);
+  @Get('show/list')
+  public async showList(@Body() body, @Query() query: TrainingOrdersQuery) {
+    const existPost = await this.orderService.showList(body.coachId, query);
     return fillObject(TrainingOrderRdo, existPost);
   }
 
