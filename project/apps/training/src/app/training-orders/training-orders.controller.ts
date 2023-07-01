@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Query} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillObject } from '@project/util/util-core';
 import { TrainingOrdersQuery } from '@project/shared/shared-query';
@@ -21,10 +21,21 @@ export class TrainingOrdersController {
     status: HttpStatus.OK,
     description: 'Create new order'
   })
-  @Post('create/:userId')
-  public async create(@Param('userId', MongoidValidationPipe) userId: string, @Body() dto: CreateOrderDto) {
-    const newOrder = await this.orderService.create(userId, dto);
+  @Post('create')
+  public async create(@Body() dto: CreateOrderDto) {
+    const newOrder = await this.orderService.create(dto);
     return fillObject(TrainingOrderRdo, newOrder);
+  }
+
+  @ApiResponse({
+    type: TrainingOrderRdo,
+    status: HttpStatus.OK,
+    description: 'Create new order'
+  })
+  @Post('reduce/:id')
+  public async reduceOrder(@Param('id', MongoidValidationPipe) id: string) {
+    const newOrder = await this.orderService.update(id);
+    return newOrder
   }
 
   @ApiResponse({
@@ -32,7 +43,7 @@ export class TrainingOrdersController {
     status: HttpStatus.OK,
     description: 'Delete order'
   })
-  @Post(':id')
+  @Delete('delete/:id')
   public async delete(@Param('id', MongoidValidationPipe) id: string) {
    return await this.orderService.delete(id);
   }
@@ -41,13 +52,35 @@ export class TrainingOrdersController {
   @ApiResponse({
     type: TrainingOrderRdo,
     status: HttpStatus.OK,
-    description: 'Show list orders'
+    description: 'Show list orders for coach'
   })
   @Get('show/list')
   public async showList(@Body() body, @Query() query: TrainingOrdersQuery) {
-    const existPost = await this.orderService.showList(body.coachId, query);
-    return fillObject(TrainingOrderRdo, existPost);
+    const existOrder = await this.orderService.showList(body.coachId, query);
+    return fillObject(TrainingOrderRdo, existOrder);
   }
 
+  @ApiResponse({
+    type: TrainingOrderRdo,
+    status: HttpStatus.OK,
+    description: 'Show list orders for user'
+  })
+  @Get('show/list/user')
+  public async showListUser(@Body() body, @Query() query: TrainingOrdersQuery) {
+    const existOrder = await this.orderService.showListByUser(body.userId, query);
+    return fillObject(TrainingOrderRdo, existOrder);
+  }
+
+
+  @ApiResponse({
+    type: TrainingOrderRdo,
+    status: HttpStatus.OK,
+    description: 'Show order'
+  })
+  @Get(':id')
+  public async show(@Param('id', MongoidValidationPipe) id: string) {
+    const existOrder = await this.orderService.show(id);
+    return fillObject(TrainingOrderRdo, existOrder);
+  }
 
 }

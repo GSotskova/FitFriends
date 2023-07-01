@@ -37,12 +37,34 @@ export class TrainingOrdersModel extends Document implements Order  {
   public totalPrice: number;
 
   @Prop({
+    required: true
+  })
+  public price: number;
+
+  @Prop({
     required: true,
     type: String,
     enum: PaymentOption
   })
   public paymentOption: PaymentOption;
 
+  @Prop({
+    required: true,
+    default: 0
+  })
+  public trainingDoneCount: number;
+
+  @Prop({
+    required: true
+  })
+  public trainingRestCount: number;
+
+
+  @Prop({
+    required: true,
+    default: false
+  })
+  public isDone: boolean;
 }
 
 export const TrainingOrdersSchema = SchemaFactory.createForClass(TrainingOrdersModel);

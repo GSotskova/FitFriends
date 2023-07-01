@@ -8,5 +8,9 @@ export interface Order {
   trainingId: string;
   trainingCount: number;
   totalPrice: number;
+  price: number;
   paymentOption: PaymentOption;
+  trainingDoneCount: number;
+  trainingRestCount: number;
+  isDone: boolean;
 }

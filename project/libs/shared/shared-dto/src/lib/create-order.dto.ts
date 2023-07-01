@@ -5,6 +5,10 @@ import { TrainingCount } from "./dto.constants";
 
 export class CreateOrderDto {
 
+  @ApiProperty({
+    description: 'User Id'
+  })
+  public userId: string;
 
   @ApiProperty({
     description: 'Training Id'

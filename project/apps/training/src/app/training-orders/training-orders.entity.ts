@@ -8,7 +8,11 @@ export class TrainingOrdersEntity implements Order {
   public trainingId: string;
   public trainingCount: number;
   public totalPrice: number;
+  public price: number;
   public paymentOption: PaymentOption;
+  public trainingDoneCount: number;
+  public trainingRestCount: number;
+  public isDone: boolean;
 
   constructor(ordersEntity: Order) {
     this.fillEntity(ordersEntity);
@@ -26,6 +30,10 @@ export class TrainingOrdersEntity implements Order {
     this.trainingId = ordersEntity.trainingId;
     this.trainingCount = ordersEntity.trainingCount;
     this.totalPrice = ordersEntity.totalPrice;
+    this.price = ordersEntity.price;
     this.paymentOption = ordersEntity.paymentOption;
+    this.trainingDoneCount = ordersEntity.trainingDoneCount;
+    this.trainingRestCount = ordersEntity.trainingRestCount;
+    this.isDone = ordersEntity.isDone;
   }
 }

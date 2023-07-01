@@ -82,4 +82,10 @@ export class TrainingOrderRdo {
   @Expose()
   public totalPrice: number;
 
+  @ApiProperty({
+    description: 'User Id'
+  })
+  @Expose()
+  public userId: string;
+
 }

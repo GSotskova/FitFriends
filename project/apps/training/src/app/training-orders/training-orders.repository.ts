@@ -19,7 +19,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
   }
 
   public async destroy(id: string): Promise<void> {
-    this.ordersModel.deleteOne({_id: id});
+    await this.ordersModel.deleteOne({_id: id});
   }
 
   public async findById(id: string): Promise<Order | null> {
@@ -42,10 +42,13 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
 
     return this.ordersModel
     .aggregate([
-        {$match: {coachId: coachId}},
+        {$match: { $and: [
+          {coachId: coachId},
+          {isDone: false}
+        ]}},
         {
           $addFields: {
-            trainingObjectId: {'$toObjectId': '$trainingId'}
+            trainingObjectId: {'$toObjectId': '$trainingId'},
           }
         },
         {$lookup: {
@@ -72,7 +75,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
           rating: "$result.rating",
           isSpecialOffer: "$result.isSpecialOffer",},
           totalPrice: { $sum: '$totalPrice' },
-          trainingCount: { $sum: '$trainingCount' },
+          trainingCount: { $sum: '$trainingRestCount' },
       }
     },
       {
@@ -101,6 +104,81 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
     .exec();
   }
 
+  public async findByUserId(userId: string, query: TrainingOrdersQuery): Promise<Order[]> {
+    const {limit, sortCount, sortPrice,  page}= query;
+    const pageNum = page? (page-1) : 0;
+    const skip = pageNum*limit;
+
+    const objSort: SomeObject = {};
+    const keys = Object.keys(query);
+    keys.forEach(key => {
+      key === 'sortCount'? objSort.trainingCount = sortCount : '';
+      key === 'sortPrice'? objSort.totalPrice = sortPrice : '';
+    });
+    return this.ordersModel
+    .aggregate([
+        {$match: { $and: [
+          {isDone: false},
+          {userId: userId},
+
+        ]}},
+        {
+          $addFields: {
+            trainingObjectId: {'$toObjectId': '$trainingId'},
+          }
+        },
+        {$lookup: {
+          from: 'training',
+          localField: 'trainingObjectId',
+          foreignField: '_id',
+          as: 'result'
+        },
+      },
+      { $unwind: '$result',},
+      { $group: {
+        _id: {
+          trainingId: '$trainingId',
+          nameTraining: "$result.nameTraining",
+          photoTraning: "$result.photoTraning",
+          levelTraining: "$result.levelTraining",
+          trainingType: "$result.trainingType",
+          trainingTime: "$result.trainingTime",
+          price: "$result.price",
+          caloriesReset: "$result.caloriesReset",
+          descriptionTraining: "$result.descriptionTraining",
+          sex: "$result.sex",
+          videoTraning: "$result.videoTraning",
+          rating: "$result.rating",
+          isSpecialOffer: "$result.isSpecialOffer",},
+          totalPrice: { $sum: '$totalPrice' },
+          trainingCount: { $sum: '$trainingRestCount' },
+      }
+    },
+      {
+        $project:{_id: 0,
+              nameTraining:  "$_id.nameTraining",
+              photoTraning: "$_id.photoTraning",
+              levelTraining: "$_id.levelTraining",
+              trainingType: "$_id.trainingType",
+              trainingTime: "$_id.trainingTime",
+              price: "$_id.price",
+              caloriesReset: "$_id.caloriesReset",
+              descriptionTraining: "$_id.descriptionTraining",
+              sex: "$_id.sex",
+              videoTraning: "$_id.videoTraning",
+              rating: "$_id.rating",
+              isSpecialOffer: "$_id.isSpecialOffer",
+              trainingCount: 1,
+              totalPrice: 1
+        }
+    },
+      { $unset: 'result' },
+      { $limit: skip + limit},
+      { $skip:  skip },
+      { $sort:  objSort }
+     ])
+    .exec();
+  }
 
   public async update(id: string, item: TrainingOrdersEntity): Promise<Order> {
     return this.ordersModel
