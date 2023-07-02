@@ -1,9 +1,9 @@
-import { ConflictException, Injectable} from '@nestjs/common';
+import { Injectable} from '@nestjs/common';
 import { TrainingRepository } from './training-info.repository';
 import { TRANING_NOT_FOUND } from './training-info.constant';
 import { TrainingEntity } from './training-info.entity';
 import { CreateTrainingDTO, EditTrainingDTO } from '@project/shared/shared-dto';
-import { TrainingQuery } from '@project/shared/shared-query';
+import { TrainingCatalogQuery, TrainingQuery } from '@project/shared/shared-query';
 
 
 
@@ -24,7 +24,7 @@ export class TrainingService {
   public async update(id: string, dto: EditTrainingDTO) {
     const existTraining = await this.trainingRepository.findById(id);
     if (!existTraining) {
-      throw new ConflictException(TRANING_NOT_FOUND);
+      return {error: TRANING_NOT_FOUND}
     }
     const training = {
       ...dto,
@@ -41,7 +41,7 @@ export class TrainingService {
   public async show(id: string) {
     const existTraining = await this.trainingRepository.findById(id);
     if (!existTraining) {
-      throw new ConflictException(TRANING_NOT_FOUND);
+      return {error: TRANING_NOT_FOUND}
     }
     return existTraining;
   }
@@ -49,7 +49,15 @@ export class TrainingService {
   public async showList(coachId: string, query: TrainingQuery) {
     const existTraining = await this.trainingRepository.findByCoachId(coachId, query);
     if (!existTraining) {
-      throw new ConflictException(TRANING_NOT_FOUND);
+      return {error: TRANING_NOT_FOUND}
+    }
+    return existTraining;
+  }
+
+  public async showCatalog(query: TrainingCatalogQuery) {
+    const existTraining = await this.trainingRepository.findCatalog(query);
+    if (!existTraining) {
+      return {error: TRANING_NOT_FOUND}
     }
     return existTraining;
   }

@@ -5,7 +5,7 @@ import { SomeObject, Training } from '@project/shared/shared-types';
 import { TrainingModel } from './training-info.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { TrainingQuery } from '@project/shared/shared-query';
+import { TrainingCatalogQuery, TrainingQuery } from '@project/shared/shared-query';
 
 @Injectable()
 export class TrainingRepository implements CRUDRepository<TrainingEntity, string, Training> {
@@ -57,6 +57,39 @@ export class TrainingRepository implements CRUDRepository<TrainingEntity, string
     .exec();
   }
 
+  public async findCatalog(query: TrainingCatalogQuery): Promise<Training[]> {
+    const {limit, price, caloriesReset, rating, trainingType, sortPrice, page}= query;
+    const pageNum = page? (page-1) : 0;
+
+    const objFiltr: SomeObject = {};
+      if (query.price) {
+          objFiltr.price =  { "$gte": price[0],
+                               "$lte": price[1],
+                             };
+                            }
+      if (query.caloriesReset) {
+        objFiltr.caloriesReset =  { "$gte": caloriesReset[0],
+                                    "$lte": caloriesReset[1],
+                                  };
+                               }
+      if (query.rating) {
+        objFiltr.rating =  { "$gte": rating[0],
+                              "$lte": rating[1],
+                           };
+                        }
+      if (query.trainingType) {objFiltr.trainingType = { "$in": trainingType };}
+
+
+      const objSort: SomeObject = {};
+      if (query.sortPrice) {objSort.sortPrice =  sortPrice}
+
+
+    return this.trainingModel
+    .find({...objFiltr})
+    .skip(pageNum * limit)
+    .limit( limit )
+    .exec();
+  }
 
   public async update(id: string, item: TrainingEntity): Promise<Training> {
     return this.trainingModel
