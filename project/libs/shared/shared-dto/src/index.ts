@@ -11,3 +11,4 @@ export * from './lib/comment.dto';
 export * from './lib/create-subscriber.dto';
 export * from './lib/user-subscription.dto';
 export * from './lib/notify-training.dto';
+export * from './lib/notify-user.dto';

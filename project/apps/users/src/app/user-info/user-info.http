@@ -42,3 +42,14 @@ Content-Type: application/json
 
 ###
 
+#  Список оповещений пользователя (последние 5)
+GET http://localhost:3333/api/users/notify/show HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZmQwZWFhYTVhMDI3MTUyNjRjOWIiLCJlbWFpbCI6InVzZXJOZXdAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY29hY2giLCJ1c2VyTmFtZSI6ItCf0LXRgtGA0L7QsiIsImlhdCI6MTY4ODMxNDM0NywiZXhwIjoxNjg4MzE1MjQ3fQ.a4dMtbmS8Hd3J8ukOSRvaizd-3iY7gO0lL_7502UAoM
+Content-Type: application/json
+###
+
+#  Удаление оповещения по ИД
+DELETE http://localhost:3333/api/users/notify/delete/64a19dadd522ea56f37d5ea6 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZmQwZWFhYTVhMDI3MTUyNjRjOWIiLCJlbWFpbCI6InVzZXJOZXdAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY29hY2giLCJ1c2VyTmFtZSI6ItCf0LXRgtGA0L7QsiIsImlhdCI6MTY4ODMxMzI3NywiZXhwIjoxNjg4MzE0MTc3fQ.JX-hEkCardm3tGecNaKLumTPJa8ON4-jw3pt8fXE9_0
+Content-Type: application/json
+###

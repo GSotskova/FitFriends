@@ -13,7 +13,6 @@ export interface RabbitConfig {
 }
 
 export default registerAs('rabbit', (): RabbitConfig => {
-  console.log('RabbitConfig')
   const  config: RabbitConfig = {
     host: process.env.RABBIT_HOST,
     password: process.env.RABBIT_PASSWORD,

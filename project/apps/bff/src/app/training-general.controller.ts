@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ApplicationServiceURL } from './app.config';
 import { AxiosExceptionFilter } from './filters/axios-exception.filter';
@@ -30,7 +30,6 @@ export class TrainingGeneralController {
   @UseInterceptors(UseridInterceptor)
   @Post('/comments/create/:id')
   public async createComment(@Param('id') id: string, @Body() dto: CommentDto) {
-    console.log('fff')
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Comments}/create/${id}`, dto);
    return data;
   }

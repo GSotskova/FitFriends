@@ -27,7 +27,6 @@ export interface TrainingConfig {
 }
 
 export default registerAs('application', (): TrainingConfig => {
-  console.log('TrainingConfig')
     const config: TrainingConfig = {
     environment: process.env.NODE_ENV,
     port: parseInt(process.env.PORT || DEFAULT_PORT.toString(), 10),

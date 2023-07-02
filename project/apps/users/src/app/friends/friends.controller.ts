@@ -4,15 +4,21 @@ import { fillObject } from '@project/util/util-core';
 import { UserInfoRdo } from '../user-info/rdo/user-info.rdo';
 import { FriendService } from './friends.service';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
-import { RequestWithTokenPayload } from '@project/shared/shared-types';
+import { NotifyMessage, RequestWithTokenPayload } from '@project/shared/shared-types';
 import { DefaultQuery } from '@project/shared/shared-query';
+import { NotifyService } from '../notify/notify.service';
+import { NotifyUserService } from '../user-notify/user-notify.service';
+import { UserService } from '../user-info/user-info.service';
 
 
 @ApiTags('friends')
 @Controller('friends')
 export class FriendController {
   constructor(
-    private readonly friendService: FriendService
+    private readonly friendService: FriendService,
+    private readonly notifyService: NotifyService,
+    private readonly notifyUserService: NotifyUserService,
+    private readonly userService: UserService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -23,6 +29,19 @@ export class FriendController {
   @Post('add/:friendId')
   public async create(@Req() { user: payload }: RequestWithTokenPayload, @Param('friendId') friendId: string) {
     const newFriends = await this.friendService.create(payload.sub, friendId);
+    await this.notifyUserService.create(newFriends.userId, newFriends.friendId, NotifyMessage.Friend)
+
+    const friend = await this.userService.getUser(newFriends.friendId)
+    const currentDate = new Date();
+    await this.notifyService.notifyUser({
+      userId: friend._id,
+      email: friend.email,
+      initiatorId: payload.sub,
+      initiatorName: payload.userName,
+      text: NotifyMessage.Friend,
+      dateNotify: currentDate
+     })
+
     return newFriends;
   }
 

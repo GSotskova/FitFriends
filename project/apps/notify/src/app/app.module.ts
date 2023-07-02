@@ -4,6 +4,7 @@ import { ConfigNotifyModule } from '@project/config/config-notify';
 import { getMongooseOptions } from '@project/util/util-core';
 import { EmailSubscriberModule } from './email-subscriber/email-subscriber.module';
 import { NewTrainingModule } from './new-training/new-training.module';
+import { UserNotifyModule } from './user-notify/user-notify.module';
 
 
 @Module({
@@ -11,7 +12,8 @@ import { NewTrainingModule } from './new-training/new-training.module';
     ConfigNotifyModule,
     MongooseModule.forRootAsync(getMongooseOptions('application.db')),
     EmailSubscriberModule,
-    NewTrainingModule
+    NewTrainingModule,
+    UserNotifyModule
   ],
   controllers: [],
   providers: [],

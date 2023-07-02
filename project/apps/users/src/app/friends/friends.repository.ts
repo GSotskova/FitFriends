@@ -121,5 +121,4 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
       .exec();
   }
 
-
 }
