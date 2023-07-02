@@ -87,5 +87,9 @@ export class TrainingOrderRdo {
   })
   @Expose()
   public userId: string;
-
+  @ApiProperty({
+    description: 'Error'
+  })
+  @Expose()
+  public error: string;
 }

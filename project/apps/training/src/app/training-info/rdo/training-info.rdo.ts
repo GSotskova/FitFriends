@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Transform } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 
 export class TrainingRdo {
   @ApiProperty({
@@ -68,4 +68,10 @@ export class TrainingRdo {
   })
   @Expose()
   public isSpecialOffer: boolean;
+
+  @ApiProperty({
+    description: 'Error'
+  })
+  @Expose()
+  public error: string;
 }

@@ -1,0 +1,4 @@
+# Каталог тренировок
+GET http://localhost:4000/api/training/catalog?price=10,2000 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODgyNzIwMDQsImV4cCI6MTY4ODI3MjkwNH0.9MPTBJtMZBOkKszNbqSnzFEr9630u-YyfIDd0m4FeEA
+###

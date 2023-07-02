@@ -5,6 +5,7 @@ import { HTTP_CLIENT_MAX_REDIRECTS, HTTP_CLIENT_TIMEOUT } from './app.config';
 import { CheckAuthGuard } from './guards/check-auth.guard';
 import { CoachAccountController } from './coach-account.controller';
 import { UserAccountController } from './user-account.controller';
+import { TrainingGeneralController } from './training-general.controller';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { UserAccountController } from './user-account.controller';
   controllers: [
     UsersController,
     CoachAccountController,
-    UserAccountController
+    UserAccountController,
+    TrainingGeneralController
   ],
   providers: [
     CheckAuthGuard],

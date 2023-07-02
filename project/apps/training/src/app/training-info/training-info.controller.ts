@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpStatus, Param, Post, Query} from '@nestjs/co
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TrainingService } from './training-info.service';
 import { fillObject } from '@project/util/util-core';
-import { TrainingQuery } from '@project/shared/shared-query';
+import { TrainingCatalogQuery, TrainingQuery } from '@project/shared/shared-query';
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { CreateTrainingDTO, EditTrainingDTO } from '@project/shared/shared-dto';
 import { TrainingRdo } from './rdo/training-info.rdo';
@@ -56,6 +56,18 @@ export class TrainingInfoController {
   }
 
 
+  @Get('show/catalog')
+  @ApiResponse({
+    type: TrainingRdo,
+    status: HttpStatus.OK,
+    description: 'Show catalog training'
+  })
+  public async showCatalog(@Query() query: TrainingCatalogQuery) {
+    const existTrainig = await this.trainingService.showCatalog(query);
+    return fillObject(TrainingRdo, existTrainig);
+  }
+
+
   @Get('show/list')
   @ApiResponse({
     type: TrainingRdo,
@@ -66,6 +78,7 @@ export class TrainingInfoController {
     const existTrainig = await this.trainingService.showList(body.coachId, query);
     return fillObject(TrainingRdo, existTrainig);
   }
+
 
   @RabbitRPC({
     exchange: 'fitfriends.training',

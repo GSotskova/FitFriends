@@ -35,7 +35,7 @@ export class TrainingOrdersController {
   @Post('reduce/:id')
   public async reduceOrder(@Param('id', MongoidValidationPipe) id: string) {
     const newOrder = await this.orderService.update(id);
-    return newOrder
+    return fillObject(TrainingOrderRdo, newOrder);
   }
 
   @ApiResponse({

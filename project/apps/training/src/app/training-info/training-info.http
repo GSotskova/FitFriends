@@ -27,11 +27,16 @@ Content-Type: application/json
 GET http://localhost:3334/api/training/649afd18e0be2c6e2c674fbe HTTP/1.1
 Content-Type: application/json
 ###
-# Детальная информация о тренировке
+
+# Список тренировок тренера
 GET http://localhost:3334/api/training/show/list HTTP/1.1
 Content-Type: application/json
 
 {
   "coachId": "6497fd0eaaa5a02715264c9b"
 }
+###
+
+# Каталог тренировок
+GET http://localhost:3334/api/training/show/catalog?trainingType=йога,бокс HTTP/1.1
 ###
