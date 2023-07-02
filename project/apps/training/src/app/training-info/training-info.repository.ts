@@ -107,4 +107,11 @@ export class TrainingRepository implements CRUDRepository<TrainingEntity, string
 
     }
 
+
+  public async updateRating(id: string, newRating: number): Promise<Training> {
+    return this.trainingModel
+      .findByIdAndUpdate(id, {rating: newRating}, {new: true})
+      .exec();
+  }
+
 }

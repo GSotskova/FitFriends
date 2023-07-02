@@ -5,6 +5,7 @@ import { ConfigTrainingModule } from '@project/config/config-training';
 import { TrainingInfoModule } from './training-info/training-info.module';
 import { TrainingOrdersModule } from './training-orders/training-orders.module';
 import { SubscribersModule } from './subscribers/subscribers.module';
+import { CommentsModule } from './comments/comments.module';
 
 
 @Module({
@@ -13,7 +14,8 @@ import { SubscribersModule } from './subscribers/subscribers.module';
     TrainingOrdersModule,
     ConfigTrainingModule,
     MongooseModule.forRootAsync(getMongooseOptions('application.db')),
-    SubscribersModule
+    SubscribersModule,
+    CommentsModule
   ],
   controllers: [],
   providers: [],
