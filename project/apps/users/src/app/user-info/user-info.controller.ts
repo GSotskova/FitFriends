@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Query, Req, UseGuards, UseInterceptors} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, UseGuards, UseInterceptors} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user-info.service';
 import { fillObject } from '@project/util/util-core';
@@ -11,13 +11,16 @@ import { EditUserDto } from '@project/shared/shared-dto';
 import { RequestWithTokenPayload, UserRole } from '@project/shared/shared-types';
 import { NewCoachRdo } from '../authentication/rdo/new-coach.rdo';
 import { NewUserRdo } from '../authentication/rdo/new-user.rdo';
+import { NotifyUserService } from '../user-notify/user-notify.service';
+import { NotifyRdo } from './rdo/notify.rdo';
 
 
 @ApiTags('user-info')
 @Controller('users')
 export class UserInfoController {
   constructor(
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly notifyUserService: NotifyUserService
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -61,5 +64,47 @@ export class UserInfoController {
       }
       return fillObject(NewUserRdo, existUser);
 
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('notify/show')
+  @ApiResponse({
+    type: NotifyRdo,
+    status: HttpStatus.OK,
+    description: 'Show notify for user'
+  })
+  public async showNotifyUser(@Req() { user: payload }: RequestWithTokenPayload) {
+    const notify = await this.notifyUserService.getNotifyUsers(payload.sub);
+    await Promise.all(notify.map(async (el) => {
+      el.initiatorName = (await this.userService.getUser(el.initiatorId)).userName
+      return {...el, dateNotify: el.dateNotify.toDateString()}
+       }));
+       notify.map(async (el) => { return {...el,
+        dateNotify: el.dateNotify.toDateString()
+         }
+         })
+    return fillObject(NotifyRdo, notify);
+  }
+
+  @Get('notify/get/:id')
+  @ApiResponse({
+    type: NotifyRdo,
+    status: HttpStatus.OK,
+    description: 'Get notify by Id'
+  })
+  public async getNotifyId(@Param('id', MongoidValidationPipe) id: string) {
+    return await this.notifyUserService.getNotifyId(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('notify/delete/:id')
+  @ApiResponse({
+    type: NotifyRdo,
+    status: HttpStatus.OK,
+    description: 'Delete notify by ID'
+  })
+  public async deleteNotifyById(@Param('id', MongoidValidationPipe) id: string) {
+    const notify = await this.notifyUserService.deleteNotify(id);
+    return fillObject(NotifyRdo, notify);
   }
 }

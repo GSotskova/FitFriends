@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ApplicationServiceURL } from './app.config';
 import { Request } from 'express';
@@ -11,6 +11,7 @@ import { CheckJwtAuthGuard } from './guards/check-jwt-auth.guard';
 import { UserIsAuthInterceptor } from './interceptors/user-is-auth.interceptor';
 import { RoleUserInterceptor } from './interceptors/role-user.interceptor';
 import { UsersQuery } from '@project/shared/shared-query';
+import { UseridNotifyInterceptor } from './interceptors/userid-notify.interceptor';
 
 @Controller('users')
 @UseFilters(AxiosExceptionFilter)
@@ -88,6 +89,34 @@ public async showList(@Req() req: Request, @Query() query: UsersQuery) {
       'Authorization': req.headers['authorization']
     }
   });
+  return data;
+}
+
+
+@UseGuards(CheckAuthGuard)
+@UseInterceptors(UseridInterceptor)
+@Get('notify/show')
+public async showNotifyUser(@Req() req: Request) {
+  const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/notify/show`,  {
+    headers: {
+      'Authorization': req.headers['authorization']
+    }
+  });
+  return data;
+}
+
+@UseGuards(CheckAuthGuard)
+@UseInterceptors(UseridInterceptor)
+@UseInterceptors(UseridNotifyInterceptor)
+@Delete('notify/delete/:id')
+public async deleteNotifyById(@Req() req: Request, @Param('id', MongoidValidationPipe) id: string) {
+  const { data } = await this.httpService.axiosRef.delete(`${ApplicationServiceURL.Users}/notify/delete/${id}`,
+    {
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    }
+  );
   return data;
 }
 

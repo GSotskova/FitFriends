@@ -15,7 +15,6 @@ export class FriendModel extends Document implements Friend {
 
   @Prop({
     required: true,
-    unique: true,
   })
   public friendId: string;
 

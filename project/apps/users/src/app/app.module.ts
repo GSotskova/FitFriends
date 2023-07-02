@@ -11,6 +11,7 @@ import { NotifyModule } from './notify/notify.module';
 import { TrainingModule } from './training/training.module';
 import { NotifyDateModule } from './date-notify/date-notify.module';
 import { UsersSubscriptionsModule } from './users-subscriptions/users-subscriptions.module';
+import { NotifyUserModule } from './user-notify/user-notify.module';
 
 
 @Module({
@@ -23,6 +24,7 @@ import { UsersSubscriptionsModule } from './users-subscriptions/users-subscripti
     ConfigUsersModule,
     NotifyModule,
     NotifyDateModule,
+    NotifyUserModule,
     TrainingModule,
     UsersSubscriptionsModule,
     MongooseModule.forRootAsync(

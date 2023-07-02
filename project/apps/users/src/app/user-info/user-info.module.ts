@@ -6,13 +6,16 @@ import { UserInfoController } from './user-info.controller';
 import { UserService } from './user-info.service';
 import { QuestionnaireCoachModule } from '../questionnaire-coach/questionnaire-coach.module';
 import { QuestionnaireUserModule } from '../questionnaire-user/questionnaire-user.module';
+import { NotifyUserModule } from '../user-notify/user-notify.module';
 
 @Module({
   imports: [MongooseModule.forFeature([
     { name: UserModel.name, schema: UserSchema }
   ]),
   QuestionnaireCoachModule,
-  QuestionnaireUserModule],
+  QuestionnaireUserModule,
+  NotifyUserModule
+  ],
   controllers: [UserInfoController],
   providers: [UserService, UserRepository],
   exports: [UserRepository, UserService]

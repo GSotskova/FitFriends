@@ -1,4 +1,4 @@
-import { Injectable} from '@nestjs/common';
+import { ConflictException, Injectable} from '@nestjs/common';
 import {  USER_EQ_FRIEND, USER_IS_FRIEND, FRIENDS_NOT_FOUND } from './friends.constant';
 import { FriendRepository } from './friends.repository';
 import { FriendEntity } from './friends.entity';
@@ -12,13 +12,13 @@ export class FriendService {
 
   public async create(userId: string, friendId: string) {
     if (userId === friendId) {
-      return {error: USER_EQ_FRIEND}
-      //throw new ConflictException(USER_EQ_FRIEND)
+    //  return {error: USER_EQ_FRIEND}
+      throw new ConflictException(USER_EQ_FRIEND)
     }
     const existsFriend = await this.friendRepository.findId( friendId, userId)
     if (existsFriend) {
-      return {error: USER_IS_FRIEND}
-      //throw new ConflictException(USER_IS_FRIEND)
+      //return {error: USER_IS_FRIEND}
+      throw new ConflictException(USER_IS_FRIEND)
     }
     const friendEntity = new FriendEntity({userId, friendId});
     return this.friendRepository.create(friendEntity);

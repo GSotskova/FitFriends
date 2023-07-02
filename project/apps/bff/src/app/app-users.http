@@ -51,7 +51,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4NjZmN
 Content-Type: application/json
 
 {
-  "email": "userNew10@notfound.local",
+  "email": "userNew3@notfound.local",
   "password": "1234567"
 }
 ###
@@ -87,4 +87,13 @@ GET http://localhost:4000/api/users?location=Петроградская&training
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODgwNjM3NTUsImV4cCI6MTY4ODA2NDY1NX0.5wZMrh-EhFvBUzYjrra605vM_1-rG8bebXDILQBfayo
 ###
 
+# Список оповещений
+GET http://localhost:4000/api/users/notify/show HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZmQwZWFhYTVhMDI3MTUyNjRjOWIiLCJlbWFpbCI6InVzZXJOZXdAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY29hY2giLCJ1c2VyTmFtZSI6ItCf0LXRgtGA0L7QsiIsImlhdCI6MTY4ODMxNTM5MCwiZXhwIjoxNjg4MzE2MjkwfQ.MlvxuHaEz6GoEaiFo_-sumIbnKUvwz_xON0R-0tF9Z0
+###
 
+# Удаление оповещения
+DELETE http://localhost:4000/api/users/notify/delete/64a1a5c7a4de99cd838d50a9 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZmQwZWFhYTVhMDI3MTUyNjRjOWIiLCJlbWFpbCI6InVzZXJOZXdAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY29hY2giLCJ1c2VyTmFtZSI6ItCf0LXRgtGA0L7QsiIsImlhdCI6MTY4ODMxNTM5MCwiZXhwIjoxNjg4MzE2MjkwfQ.MlvxuHaEz6GoEaiFo_-sumIbnKUvwz_xON0R-0tF9Z0
+Content-Type: application/json
+###
