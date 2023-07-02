@@ -1,0 +1,19 @@
+# Создание отзыва к тренировке
+POST http://localhost:3334/api/comment/create/649afd18e0be2c6e2c674fbe HTTP/1.1
+Content-Type: application/json
+
+{
+  "message": "tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt",
+  "ratingTraining": 1,
+  "userId": "649809159b59277aa0c615a7"
+}
+
+###
+
+# Список комментариев к тренировке
+GET http://localhost:3334/api/comment/649afd18e0be2c6e2c674fbe?&limit=5&page=1 HTTP/1.1
+Content-Type: application/json
+###
+
+
+

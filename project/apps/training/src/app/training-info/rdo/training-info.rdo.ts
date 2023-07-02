@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude, Expose, Transform } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 
 export class TrainingRdo {
   @ApiProperty({
@@ -56,6 +56,12 @@ export class TrainingRdo {
   })
   @Expose()
   public sex: string;
+
+  @ApiProperty({
+    description: 'Rating'
+  })
+  @Expose()
+  public rating: number;
 
   @ApiProperty({
     description: 'Coach Id'
