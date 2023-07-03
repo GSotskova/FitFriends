@@ -30,7 +30,7 @@ export class TrainingOrdersController {
   @ApiResponse({
     type: TrainingOrderRdo,
     status: HttpStatus.OK,
-    description: 'Create new order'
+    description: 'Write off a workout from an order'
   })
   @Post('reduce/:id')
   public async reduceOrder(@Param('id', MongoidValidationPipe) id: string) {

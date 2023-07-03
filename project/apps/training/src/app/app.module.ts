@@ -6,6 +6,7 @@ import { TrainingInfoModule } from './training-info/training-info.module';
 import { TrainingOrdersModule } from './training-orders/training-orders.module';
 import { SubscribersModule } from './subscribers/subscribers.module';
 import { CommentsModule } from './comments/comments.module';
+import { TrainingRequestModule } from './training-request/training-request.module';
 
 
 @Module({
@@ -15,7 +16,8 @@ import { CommentsModule } from './comments/comments.module';
     ConfigTrainingModule,
     MongooseModule.forRootAsync(getMongooseOptions('application.db')),
     SubscribersModule,
-    CommentsModule
+    CommentsModule,
+    TrainingRequestModule
   ],
   controllers: [],
   providers: [],
