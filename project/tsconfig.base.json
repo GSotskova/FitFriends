@@ -21,6 +21,9 @@
       "@project/config/config-training": [
         "libs/config/config-training/src/index.ts"
       ],
+      "@project/config/config-uploader": [
+        "libs/config/config-uploader/src/index.ts"
+      ],
       "@project/config/config-users": ["libs/config/config-users/src/index.ts"],
       "@project/shared/shared-dto": ["libs/shared/shared-dto/src/index.ts"],
       "@project/shared/shared-pipes": ["libs/shared/shared-pipes/src/index.ts"],

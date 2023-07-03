@@ -6,6 +6,7 @@ import { CheckAuthGuard } from './guards/check-auth.guard';
 import { CoachAccountController } from './coach-account.controller';
 import { UserAccountController } from './user-account.controller';
 import { TrainingGeneralController } from './training-general.controller';
+import { UploaderController } from './uploader.controller';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { TrainingGeneralController } from './training-general.controller';
     UsersController,
     CoachAccountController,
     UserAccountController,
-    TrainingGeneralController
+    TrainingGeneralController,
+    UploaderController
   ],
   providers: [
     CheckAuthGuard],

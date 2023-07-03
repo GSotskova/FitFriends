@@ -114,4 +114,15 @@ export class TrainingRepository implements CRUDRepository<TrainingEntity, string
       .exec();
   }
 
+
+  public async updateImg(id: string, fileId: string): Promise<Training> {
+    return this.trainingModel
+      .findByIdAndUpdate(id, {photoTraning: fileId}, {new: true})
+      .exec();
+  }
+  public async updateVideo(id: string, fileId: string): Promise<Training> {
+    return this.trainingModel
+      .findByIdAndUpdate(id, {videoTraning: fileId}, {new: true})
+      .exec();
+  }
 }

@@ -5,6 +5,9 @@ export enum RabbitRouting {
   AddNotifyTraining = 'notify.addNotifyTraining',
   TrainingForSuscribers = 'users.trainingForSuscribers',
   AddUserNotify = 'notify.addUserNotify',
-//  PostAvatars = 'users.postAvatars',
-//  PostImg = 'training.postImg'
+  UserAvatars = 'users.userAvatars',
+  CoachCertificate = 'users.CoachCertificate',
+  UserBackgroundImg = 'users.userBackgroundImg',
+  TrainingImg = 'training.trainingImg',
+  TrainingVideo = 'training.trainingVideo'
 }

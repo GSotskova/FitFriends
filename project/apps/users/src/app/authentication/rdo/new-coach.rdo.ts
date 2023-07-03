@@ -55,7 +55,7 @@ export class NewCoachRdo {
   })
   @Expose()
   public location: string;
-  
+
   @ApiProperty({
     description: 'The level of physical fitness of the user',
   })
@@ -72,7 +72,7 @@ export class NewCoachRdo {
     description: 'Coach certificate',
   })
   @Expose()
-  public certificates: string;
+  public certificate: string;
 
   @ApiProperty({
     description: 'Number of calories to spend per day',

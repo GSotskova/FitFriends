@@ -71,7 +71,7 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
             backgroundImg : 1,
             levelTraining : "$result.levelTraining",
             trainingType : "$result.trainingType",
-            certificates : "$result.certificates",
+            certificate : "$result.certificate",
             successCoach : "$result.successCoach",
             isPersonal : "$result.isPersonal",
         }
@@ -201,4 +201,16 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
   return usersInfo
   }
 
+
+  public async updateAvatar(id: string, fileId: string): Promise<User> {
+    return this.userModel
+      .findByIdAndUpdate(id, {avatar: fileId}, {new: true})
+      .exec();
+  }
+
+  public async updateBackgroundImg(id: string, fileId: string): Promise<User> {
+    return this.userModel
+      .findByIdAndUpdate(id, {backgroundImg: fileId}, {new: true})
+      .exec();
+  }
 }

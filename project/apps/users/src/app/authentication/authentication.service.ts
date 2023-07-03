@@ -114,4 +114,21 @@ export class AuthenticationService {
     return this.notifyDateRepository.findByUserId(userId);
   }
 
+  public async changeAvatar(userId: string, fileId: string) {
+    const existUser = await this.userRepository.findById(userId);
+    if (!existUser)   {
+    //  throw new NotFoundException(AuthErrorMsg.NotFound);
+    return {error: AuthErrorMsg.NotFound}
+    }
+    return this.userRepository.updateAvatar(userId, fileId);
+  }
+
+  public async changeBackgroundImg(userId: string, fileId: string) {
+    const existUser = await this.userRepository.findById(userId);
+    if (!existUser)   {
+    return {error: AuthErrorMsg.NotFound}
+    }
+    return this.userRepository.updateBackgroundImg(userId, fileId);
+  }
+
 }

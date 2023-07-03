@@ -4,7 +4,7 @@ export class QuestionnaireCoachEntity implements QuestionnaireCoach {
   public userId: string;
   public levelTraining: LevelTraining;
   public trainingType: TrainingType[];
-  public certificates: string;
+  public certificate: string;
   public successCoach: string;
   public isPersonal: boolean;
 
@@ -20,7 +20,7 @@ export class QuestionnaireCoachEntity implements QuestionnaireCoach {
     this.userId = questionnaireEntity.userId;
     this.levelTraining = questionnaireEntity.levelTraining;
     this.trainingType = questionnaireEntity.trainingType;
-    this.certificates = questionnaireEntity.certificates;
+    this.certificate = questionnaireEntity.certificate;
     this.successCoach = questionnaireEntity.successCoach;
     this.isPersonal = questionnaireEntity.isPersonal;
   }

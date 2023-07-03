@@ -94,5 +94,23 @@ export class TrainingInfoController {
     return listTrainingForSend
   }
 
+  @RabbitRPC({
+    exchange: 'fitfriends.uploader',
+    routingKey: RabbitRouting.TrainingImg,
+    queue: 'fitfriends.uploader.posts',
+  })
+  public async trainingImg({trainingId, fileId}) {
+    const postUpd = await this.trainingService.changeImg(trainingId, fileId)
+    return fillObject(TrainingRdo, postUpd);
+  }
 
+  @RabbitRPC({
+    exchange: 'fitfriends.uploader',
+    routingKey: RabbitRouting.TrainingVideo,
+    queue: 'fitfriends.uploader.video',
+  })
+  public async trainingVideo({trainingId, fileId}) {
+    const postUpd = await this.trainingService.changeVideo(trainingId, fileId)
+    return fillObject(TrainingRdo, postUpd);
+  }
 }

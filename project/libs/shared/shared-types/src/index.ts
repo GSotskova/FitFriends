@@ -30,3 +30,4 @@ export * from './lib/notify-training.interface';
 export * from './lib/data-notify-training.interface';
 export * from './lib/notify-user.interface';
 export * from './lib/notify-message.enum';
+export * from './lib/file.interface';
