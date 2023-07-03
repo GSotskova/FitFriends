@@ -1,0 +1,23 @@
+# Get file by ID
+GET http://localhost:3333/api/files/643ce69f6fd7fc73120410c1 HTTP/1.1
+
+###
+
+### curl -i -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:3335/api/files/upload/avatar/649866f6dac052e861589f59
+### curl -i -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:3335/api/files/upload/image/649afd18e0be2c6e2c674fbe
+### curl -i -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:3335/api/files/upload/background/649866f6dac052e861589f59
+### curl -i -F file="@/C:/fit_img/1.pdf" http://localhost:3335/api/files/upload/certificate/6497fd0eaaa5a02715264c9b
+### curl -i -F file="@/C:/fit_img/Video_HTML_Academy_1.mp4" http://localhost:3335/api/files/upload/video/649afd18e0be2c6e2c674fbe
+
+##
+POST http://localhost:3335/api/files/upload/avatar/649da3764f4fc537d512a65e HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="avatar-angelina.jpg"
+Content-Type: image/png
+
+< ./mocks/avatar-angelina.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###

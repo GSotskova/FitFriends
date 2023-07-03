@@ -44,4 +44,10 @@ export class QuestionnaireCoachRepository implements CRUDRepository<Questionnair
       .findOneAndUpdate({userId: userId}, item.toObject(), {new: true})
       .exec();
   }
+
+  public async updateCertificate(coachId: string, fileId: string): Promise<QuestionnaireCoach | null> {
+    return this.questionnaireCoachModel
+      .findOneAndUpdate({userId: coachId}, {certificate: fileId}, {new: true})
+      .exec();
+  }
 }

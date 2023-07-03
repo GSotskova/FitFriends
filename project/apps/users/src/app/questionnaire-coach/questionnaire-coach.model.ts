@@ -29,7 +29,7 @@ export class QuestionnaireCoachModel extends Document implements QuestionnaireCo
   public trainingType: TrainingType[];
 
   @Prop()
-  public certificates?: string;
+  public certificate?: string;
 
   @Prop()
   public successCoach: string;

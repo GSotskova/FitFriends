@@ -112,7 +112,7 @@ export class EditUserDto  {
     description: 'Coach certificate'
   })
   @IsOptional()
-  public certificates?: string;
+  public certificate?: string;
 
   @ApiProperty({
     description: 'Number of calories to spend per day'

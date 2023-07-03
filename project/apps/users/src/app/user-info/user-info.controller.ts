@@ -8,11 +8,12 @@ import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { UserRoleInterceptor } from './interceptors/user-role.interceptor';
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { EditUserDto } from '@project/shared/shared-dto';
-import { RequestWithTokenPayload, UserRole } from '@project/shared/shared-types';
+import { RabbitRouting, RequestWithTokenPayload, UserRole } from '@project/shared/shared-types';
 import { NewCoachRdo } from '../authentication/rdo/new-coach.rdo';
 import { NewUserRdo } from '../authentication/rdo/new-user.rdo';
 import { NotifyUserService } from '../user-notify/user-notify.service';
 import { NotifyRdo } from './rdo/notify.rdo';
+import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 
 
 @ApiTags('user-info')
@@ -106,5 +107,16 @@ export class UserInfoController {
   public async deleteNotifyById(@Param('id', MongoidValidationPipe) id: string) {
     const notify = await this.notifyUserService.deleteNotify(id);
     return fillObject(NotifyRdo, notify);
+  }
+
+
+  @RabbitRPC({
+    exchange: 'fitfriends.uploader',
+    routingKey: RabbitRouting.CoachCertificate,
+    queue: 'fitfriends.uploader.certificate',
+  })
+  public async coachCertificate({coachId, fileId}) {
+    const userUpd = await this.userService.changeCoachCetrificate(coachId, fileId)
+    return fillObject(NewUserRdo, userUpd);
   }
 }

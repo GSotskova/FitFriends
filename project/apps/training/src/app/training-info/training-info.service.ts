@@ -66,4 +66,20 @@ export class TrainingService {
     return this.trainingRepository.findTrainingAfterDate(date, coaches);
   }
 
-}
+  public async changeImg(trainingId: string, fileId: string) {
+    const existTraining = await this.trainingRepository.findById(trainingId);
+    if (!existTraining) {
+      return {error: TRANING_NOT_FOUND}
+    }
+      return this.trainingRepository.updateImg(trainingId, fileId);
+    }
+
+  public async changeVideo(trainingId: string, fileId: string) {
+    const existTraining = await this.trainingRepository.findById(trainingId);
+    if (!existTraining) {
+      return {error: TRANING_NOT_FOUND}
+    }
+      return this.trainingRepository.updateVideo(trainingId, fileId);
+    }
+  }
+

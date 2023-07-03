@@ -4,7 +4,7 @@ import { AuthenticationService } from './authentication.service';
 import { fillObject } from '@project/util/util-core';
 import { NewCoachRdo } from './rdo/new-coach.rdo';
 import { NewUserRdo } from './rdo/new-user.rdo';
-import { DataNotifyTraining, RequestWithTokenPayload, RequestWithUser, TokenLogin, UserRole } from '@project/shared/shared-types';
+import { DataNotifyTraining, RabbitRouting, RequestWithTokenPayload, RequestWithUser, TokenLogin, UserRole } from '@project/shared/shared-types';
 import { CreateUserDto } from'@project/shared/shared-dto';
 import { LocalAuthGuard } from './guards/local-auth-guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
@@ -14,6 +14,7 @@ import { NotifyService } from '../notify/notify.service';
 import { TrainingService } from '../training/training.service';
 import { UsersSubscriptionsService } from '../users-subscriptions/users-subscriptions.service';
 import { UserService } from '../user-info/user-info.service';
+import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 
 
 
@@ -132,6 +133,27 @@ export class AuthenticationController {
     await this.notifyService.notifyNewTraining({userId: sub, email, training:listTraining, dateSend: currentDate.toDateString() })
     await this.authService.createOrUpdateNotify(sub, currentDate)
    return listTraining;
+  }
+
+  @RabbitRPC({
+    exchange: 'fitfriends.uploader',
+    routingKey: RabbitRouting.UserAvatars,
+    queue: 'fitfriends.uploader.avatar',
+  })
+  public async userAvatars({userId, fileId}) {
+    console.log(userId, fileId)
+    const userUpd = await this.authService.changeAvatar(userId, fileId)
+    return fillObject(NewUserRdo, userUpd);
+  }
+
+  @RabbitRPC({
+    exchange: 'fitfriends.uploader',
+    routingKey: RabbitRouting.UserBackgroundImg,
+    queue: 'fitfriends.uploader.background',
+  })
+  public async userBackgroundImg({userId, fileId}) {
+    const userUpd = await this.authService.changeBackgroundImg(userId, fileId)
+    return fillObject(NewUserRdo, userUpd);
   }
 
 

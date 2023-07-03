@@ -24,6 +24,17 @@ Content-Type: application/json
   "price": 3000
 }
 ###
+
+### Загрузка фонового изображение для тренировки
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN " -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:4000/api/files/image/training/649afe8c1b6c87810dbb07bf
+
+### Загрузка видео тренировки
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN " -F file="@/C:/fit_img/Video_HTML_Academy_1.mp4" http://localhost:4000/api/files/video/training/649afe8c1b6c87810dbb07bf
+
+###Загрузка сертификатов
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F file="@/C:/fit_img/1.pdf" http://localhost:4000/api/files/coach/certificate
+
+
 # Детальная информация о тренировке
 GET http://localhost:4000/api/coach/training/649afe8c1b6c87810dbb07bf HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4NjZmNmRhYzA1MmU4NjE1ODlmNTkiLCJlbWFpbCI6InVzZXJOZXcxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6ImNvYWNoIiwidXNlck5hbWUiOiLQodGC0LXQv9Cw0L3QvtCyINCh0YLQtdC_0LDQvSIsImlhdCI6MTY4ODEyMzYxNSwiZXhwIjoxNjg4MTI0NTE1fQ.BkIFm9F2dVv8xedjiUutz6C29A3pw16MtO6-fvc53jE

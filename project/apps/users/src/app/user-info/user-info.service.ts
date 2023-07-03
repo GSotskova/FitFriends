@@ -50,6 +50,14 @@ export class UserService {
       return this.userRepository.getInfoUser(existUser._id);
     }
 
+    public async changeCoachCetrificate(coachId: string, fileId: string) {
+      const existUser = await this.userRepository.findById(coachId);
+      if (!existUser)   {
+      return {error: USERS_NOT_FOUND}
+      }
+      return this.questionnaireCoachRepository.updateCertificate(coachId, fileId);
+    }
+
 
 
 
@@ -90,7 +98,7 @@ export class UserService {
     const item = {
       userId: userId, levelTraining: dto.levelTraining,
       trainingType: dto.trainingType,
-      certificates: dto.certificates, successCoach: dto.successCoach,
+      certificate: dto.certificate, successCoach: dto.successCoach,
       isPersonal: dto.isPersonal
     };
     return new QuestionnaireCoachEntity(item)
