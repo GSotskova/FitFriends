@@ -25,8 +25,6 @@ export class CommentsController {
     return fillObject(CommentRdo, newComment);
   }
 
-
-
   @ApiResponse({
     type: CommentRdo,
     status: HttpStatus.OK,
@@ -36,6 +34,16 @@ export class CommentsController {
   public async showPostId(@Query() query: DefaultQuery, @Param('trainingId') trainingId: string) {
     const comments = await this.commentsService.getTrainingId(trainingId, query);
     return fillObject(CommentRdo, comments);
+  }
+
+  @Post('test')
+  public async createTestData(@Body() test_data) {
+    const dataArr = [];
+    for (const key in test_data) {
+      const training = await this.commentsService.createTestData(test_data[key]);
+    dataArr.push(training);
+  }
+    return dataArr;
   }
 
 }
