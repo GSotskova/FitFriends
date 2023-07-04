@@ -5,6 +5,7 @@ export enum ApplicationServiceURL {
   Subscription = 'http://localhost:3333/api/subscription',
   Training = 'http://localhost:3334/api/training',
   Orders = 'http://localhost:3334/api/orders',
+  Request = 'http://localhost:3334/api/request',
   Comments = 'http://localhost:3334/api/comment',
   Uploads = 'http://localhost:3335/api/files/upload'
 }

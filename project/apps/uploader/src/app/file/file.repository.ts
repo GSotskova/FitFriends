@@ -12,7 +12,6 @@ export class FileRepository {
   ) {}
 
   public async create(item: FileEntity): Promise<File> {
-    console.log('create')
     const file = new this.fileModel(item);
     return file.save();
   }
@@ -24,7 +23,6 @@ export class FileRepository {
   }
 
   public async findByObjectId(id: string): Promise<File | null> {
-    console.log('findByObjectId', id)
     return this.fileModel
       .findOne({ objectId: id})
       .exec();

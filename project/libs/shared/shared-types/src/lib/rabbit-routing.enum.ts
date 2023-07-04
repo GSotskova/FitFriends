@@ -3,7 +3,7 @@ export enum RabbitRouting {
   GetOrders = 'training.getOrdersUser',
   GeNewtTraining = 'training.getNewTraining',
   AddNotifyTraining = 'notify.addNotifyTraining',
-  TrainingForSuscribers = 'users.trainingForSuscribers',
+  TrainingRequestNotify = 'users.trainingRequestNotify',
   AddUserNotify = 'notify.addUserNotify',
   UserAvatars = 'users.userAvatars',
   CoachCertificate = 'users.CoachCertificate',

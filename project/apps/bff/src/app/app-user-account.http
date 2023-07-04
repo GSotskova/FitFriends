@@ -34,6 +34,29 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxN
 Content-Type: application/json
 ###
 
+# Создание запроса на персональную/совместную тренировку
+POST http://localhost:4000/api/user/request/training/create HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODg0NTIyMzQsImV4cCI6MTY4ODQ1MzEzNH0.DdmLQn0Dsz3YsIXs5DRg3NE6p_RnplWoB20uO9cryMY
+Content-Type: application/json
+
+{
+  "userId": "649da3764f4fc537d512a65e",
+  "statusRequest": "на рассмотрении",
+  "typeRequest": "совместная тренировка"
+}
+###
+
+
+# Изменений статуса заявки
+POST http://localhost:4000/api/user/request/update/64a3bcc6a8afdf898eaf8c1c HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODg0NTIyMzQsImV4cCI6MTY4ODQ1MzEzNH0.DdmLQn0Dsz3YsIXs5DRg3NE6p_RnplWoB20uO9cryMY
+Content-Type: application/json
+
+{
+  "statusRequest": "принят"
+}
+###
+
 # Баланс пользователя
 GET http://localhost:4000/api/user/orders?sortPrice=desc HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXJOZXcxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwidXNlck5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJpYXQiOjE2ODgyMzY3NTIsImV4cCI6MTY4ODIzNzY1Mn0.9Kn4XXbT8FIqrt6xV0XcLL7zeI21V_3dCRsoEpbWiRE
