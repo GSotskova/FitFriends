@@ -36,4 +36,10 @@ export class CommentsService {
     return this.commentRepository.findByTrainingId(trainingId, query);
   }
 
+
+  public async createTestData(test_data) {
+    const commentEntity = await new CommentEntity(test_data)
+    const newComment = await this.commentRepository.create(commentEntity);
+    return newComment
+  }
 }

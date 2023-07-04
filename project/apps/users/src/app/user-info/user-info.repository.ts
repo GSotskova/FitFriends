@@ -18,6 +18,11 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
     return newUser.save();
   }
 
+  public async createTestData(test_user): Promise<User> {
+    const newUser = new this.userModel(test_user);
+    return newUser.save();
+  }
+
   public async destroy(id: string): Promise<void> {
     this.userModel.deleteOne({_id: id});
   }

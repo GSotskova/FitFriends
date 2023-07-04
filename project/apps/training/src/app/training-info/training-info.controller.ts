@@ -110,4 +110,14 @@ export class TrainingInfoController {
     const postUpd = await this.trainingService.changeVideo(trainingId, fileId)
     return fillObject(TrainingRdo, postUpd);
   }
+
+  @Post('test')
+  public async createTestData(@Body() test_data) {
+    const dataArr = [];
+    for (const key in test_data) {
+      const training = await this.trainingService.createTestData(test_data[key]);
+    dataArr.push(training);
+  }
+    return dataArr;
+  }
 }

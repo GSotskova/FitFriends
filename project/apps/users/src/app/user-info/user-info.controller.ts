@@ -150,4 +150,14 @@ export class UserInfoController {
     return newNotify
   }
 
+
+  @Post('test')
+  public async createTestData(@Body() test_user) {
+    const dataArr = [];
+    for (const key in test_user) {
+      const user = await this.userService.createTestData(test_user[key].data, test_user[key].questionnaire);
+    dataArr.push(user);
+  }
+    return dataArr;
+  }
 }

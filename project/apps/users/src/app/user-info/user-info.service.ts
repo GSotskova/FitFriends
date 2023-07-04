@@ -59,6 +59,19 @@ export class UserService {
     }
 
 
+    public async createTestData(user, questionnaire) {
+      const entityTest = new UserEntity(user)
+      const userEntity = await entityTest.setPassword(user.password)
+      const newUser = await this.userRepository.create(userEntity);
+      if (user.role === UserRole.Coach) {
+        const questionnaireNew = await this.questionnaireCoachRepository.create(questionnaire)
+        return {newUser, questionnaireNew}
+      }
+      else {
+        const questionnaireNew = await this.questionnaireUserRepository.create(questionnaire)
+        return {newUser, questionnaireNew}
+      }
+    }
 
 
   public getGeneralUserEntity(createDto: CreateUserDto, editDto?: EditUserDto, user?: User) : UserEntity {

@@ -81,5 +81,12 @@ export class TrainingService {
     }
       return this.trainingRepository.updateVideo(trainingId, fileId);
     }
+
+
+    public async createTestData(training) {
+      const trainingEntity = new TrainingEntity({...training, photoTraning: ' ',videoTraning:' '});
+      return this.trainingRepository.create(trainingEntity);
+
+    }
   }
 

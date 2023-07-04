@@ -49,7 +49,6 @@ export class AuthenticationService {
       return this.userRepository.getInfoUser(newUserId);
   }
 
-
   private async createUserGeneral(dto: CreateUserDto) {
     const userEntity = await this.userService.getGeneralUserEntity(dto).setPassword(dto.password)
     return this.userRepository.create(userEntity);
