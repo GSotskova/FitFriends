@@ -1,5 +1,5 @@
 # Тестовые данные
-POST http://localhost:3333/api/users/test HTTP/1.1
+POST http://localhost:3337/api/seed/users HTTP/1.1
 Content-Type: application/json
 
 {
