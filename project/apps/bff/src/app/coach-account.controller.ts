@@ -9,7 +9,6 @@ import { CreateTrainingDTO, EditTrainingDTO } from '@project/shared/shared-dto';
 import { CheckAuthGuard } from './guards/check-auth.guard';
 import { RoleCoachInterceptor } from './interceptors/role-coach.interceptor';
 import { UseridTrainingInterceptor } from './interceptors/userid-tarining.interceptor';
-import { UseridInterceptor } from './interceptors/userid.interceptor';
 import { CoachIdInterceptor } from './interceptors/coachId.interceptor';
 
 
@@ -33,7 +32,7 @@ export class CoachAccountController {
 
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(RoleCoachInterceptor)
-  @UseInterceptors(UseridInterceptor)
+  @UseInterceptors(CoachIdInterceptor)
   @Get('training/show/list')
   public async showList(@Body() coachId: string, @Query() query: TrainingQuery) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Training}/show/list`, {params : query, data: coachId});

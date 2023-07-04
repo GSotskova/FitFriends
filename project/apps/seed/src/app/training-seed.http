@@ -1,0 +1,23 @@
+# Тестовые данные
+POST http://localhost:3337/api/seed/training HTTP/1.1
+Content-Type: application/json
+
+{
+  "training1": {"_id":"64a406e9c4d605ea3e822df6", "nameTraining": "Тренировка 1 йога", "levelTraining": "любитель","trainingType": "йога", "trainingTime": "10-30 мин",
+                 "price": 2000, "caloriesReset": 3000, "descriptionTraining": "йога для любителей", "sex": "none", "isSpecialOffer": true,
+                 "coachId": "6497fd0eaaa5a02715264c9b", "rating": 3},
+  "training2": { "_id":"64a406e9c4d605ea3e822df8", "nameTraining": "Тренировка 2 аэробика", "levelTraining": "любитель","trainingType": "аэробика", "trainingTime": "10-30 мин",
+                 "price": 1000, "caloriesReset": 2000, "descriptionTraining": "аэробика для любителей", "sex": "female", "isSpecialOffer": true,
+                 "coachId": "6497fd0eaaa5a02715264c9b", "rating": 0},
+  "training3": { "_id":"64a406e9c4d605ea3e822dfa", "nameTraining": "Тренировка 3 стрейчинг", "levelTraining": "новичок","trainingType": "стрейчинг", "trainingTime": "80-100 мин",
+                 "price": 1500, "caloriesReset": 1000, "descriptionTraining": "стрейчинг для новичков", "sex": "female", "isSpecialOffer": true,
+                 "coachId": "649866f6dac052e861589f59", "rating": 5},
+  "training4": { "_id":"64a406e9c4d605ea3e822dfc", "nameTraining": "Тренировка 4 бег", "levelTraining": "профессионал","trainingType": "бег", "trainingTime": "80-100 мин",
+                 "price": 1500, "caloriesReset": 1000, "descriptionTraining": "бег для профессионалов", "sex": "male", "isSpecialOffer": true,
+                 "coachId": "649866f6dac052e861589f59", "rating": 0},
+  "training5": { "_id":"64a406e9c4d605ea3e822dfe", "nameTraining": "Тренировка 5 йога", "levelTraining": "профессионал","trainingType": "йога", "trainingTime": "10-30 мин",
+                 "price": 1500, "caloriesReset": 1000, "descriptionTraining": "йога для профессионалов", "sex": "female", "isSpecialOffer": true,
+                 "coachId": "649866f6dac052e861589f59", "rating": 0}
+}
+
+###
