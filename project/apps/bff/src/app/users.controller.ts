@@ -3,7 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { ApplicationServiceURL } from './app.config';
 import { Request } from 'express';
 import { AxiosExceptionFilter } from './filters/axios-exception.filter';
-import { CreateUserDto, LoginUserDto } from '@project/shared/shared-dto';
+import { CreateUserDto, EditUserDto, LoginUserDto } from '@project/shared/shared-dto';
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { UseridInterceptor } from './interceptors/userid.interceptor';
 import { CheckAuthGuard } from './guards/check-auth.guard';
@@ -44,7 +44,7 @@ export class UsersController {
     return data;
   }
 
-  @UseGuards(CheckAuthGuard)
+
   @Post('refresh/delete')
   public async deleteRefreshToken(@Req() req: Request) {
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Auth}/refresh/delete`, null, {
@@ -70,8 +70,8 @@ export class UsersController {
 
   @UseGuards(CheckAuthGuard)
   @Post('edit')
-  public async edit(@Req() req: Request) {
-    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/edit`, null, {
+  public async edit(@Req() req: Request, @Body() editUserDto: EditUserDto) {
+    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/edit`, editUserDto, {
       headers: {
         'Authorization': req.headers['authorization']
       }
