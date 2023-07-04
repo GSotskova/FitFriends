@@ -29,7 +29,6 @@ export interface UploaderConfig {
 }
 
 export default registerAs('application', (): UploaderConfig => {
-  console.log(process.env.MONGO_DB);
     const config: UploaderConfig = {
     serveRoot: process.env.SERVE_ROOT,
     environment: process.env.NODE_ENV,

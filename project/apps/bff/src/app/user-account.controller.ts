@@ -8,8 +8,10 @@ import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { CheckAuthGuard } from './guards/check-auth.guard';
 import { UseridInterceptor } from './interceptors/userid.interceptor';
 import { RoleUserInterceptor } from './interceptors/role-user.interceptor';
-import { CreateOrderDto, UserSubscriptionDto } from '@project/shared/shared-dto';
+import { CreateOrderDto, CreateRequestDto, UserSubscriptionDto } from '@project/shared/shared-dto';
 import { UseridOrderInterceptor } from './interceptors/userid-order.interceptor';
+import { InintiatoridInterceptor } from './interceptors/initiatorid.interceptor';
+import { UseridExistsInterceptor } from './interceptors/userid-exists.interceptor';
 
 
 
@@ -127,6 +129,26 @@ public async getTrainingAndNotify(@Req() req: Request) {
       'Authorization': req.headers['authorization']
     }
   });
+  return data;
+}
+
+@UseGuards(CheckAuthGuard)
+@UseInterceptors(InintiatoridInterceptor)
+@UseInterceptors(RoleUserInterceptor)
+@UseInterceptors(UseridExistsInterceptor)
+@Post('request/training/create')
+public async createTrainingRequest(@Req() req: Request, @Body() dto: CreateRequestDto) {
+  const { data } = await  this.httpService.axiosRef.post(`${ApplicationServiceURL.Request}/create`, dto);
+  return data;
+}
+
+@UseGuards(CheckAuthGuard)
+@UseInterceptors(InintiatoridInterceptor)
+@UseInterceptors(RoleUserInterceptor)
+@Post('request/update/:id')
+public async editTrainingRequest(@Param('id', MongoidValidationPipe) id: string, @Body() statusRequest: string) {
+
+  const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Request}/update/${id}`, statusRequest);
   return data;
 }
 

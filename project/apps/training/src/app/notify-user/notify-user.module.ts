@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { getRabbitMQOptions } from '@project/util/util-core';
-import { SubscribersService } from './subscribers.service';
+import { NotifyUserService } from './notify-user.service';
 
 @Module({
   imports: [
@@ -10,7 +10,7 @@ import { SubscribersService } from './subscribers.service';
       getRabbitMQOptions('application.rabbit')
     )
   ],
-  providers: [SubscribersService],
-  exports: [SubscribersService]
+  providers: [NotifyUserService],
+  exports: [NotifyUserService]
 })
-export class SubscribersModule {}
+export class NotifyUserModule {}

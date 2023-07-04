@@ -27,7 +27,7 @@ export class FileService {
     const [ year, month ] = dayjs().format('YYYY MM').split(' ');
     const { uploadDirectory } = this.applicationConfig;
     const subDirectory = `${year}/${month}`;
-console.log(file.mimetype);
+
     const uuid = crypto.randomUUID();
     const fileExtension = extension(file.mimetype);
     const hashName = `${uuid}.${fileExtension}`;
@@ -48,7 +48,7 @@ console.log(file.mimetype);
 
   public async saveFile(file: Express.Multer.File, appName: string, objectId: string) {
     const writedFile = await this.writeFile(file);
-    console.log('writedFile', writedFile.path);
+
     const newFile = new FileEntity({
       size: file.size,
       hashName: writedFile.hashName,
@@ -60,7 +60,6 @@ console.log(file.mimetype);
     });
 
     const existsFile = await this.fileRepository.findByObjectId(objectId);
-    console.log('existsFile', existsFile)
     if (existsFile){
       return await this.fileRepository.update(existsFile.id, newFile)
     }

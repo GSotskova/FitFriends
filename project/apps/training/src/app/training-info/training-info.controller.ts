@@ -6,7 +6,6 @@ import { TrainingCatalogQuery, TrainingQuery } from '@project/shared/shared-quer
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { CreateTrainingDTO, EditTrainingDTO } from '@project/shared/shared-dto';
 import { TrainingRdo } from './rdo/training-info.rdo';
-import { SubscribersService } from '../subscribers/subscribers.service';
 import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import { DataNotifyTraining, RabbitRouting, TrainingForSend } from '@project/shared/shared-types';
 
@@ -17,7 +16,6 @@ import { DataNotifyTraining, RabbitRouting, TrainingForSend } from '@project/sha
 export class TrainingInfoController {
   constructor(
     private readonly trainingService: TrainingService,
-    private readonly subscribersService: SubscribersService
   ) {}
 
   @ApiResponse({
@@ -28,7 +26,6 @@ export class TrainingInfoController {
   @Post('create')
   public async create(@Body() dto: CreateTrainingDTO) {
     const newTrainig = await this.trainingService.create(dto);
-   // await this.subscribersService.trainingSuscribers(newTrainig)
     return fillObject(TrainingRdo, newTrainig);
   }
 

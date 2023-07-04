@@ -1,9 +1,10 @@
-import { Injectable} from '@nestjs/common';
+import { Injectable, NotFoundException} from '@nestjs/common';
 import {  USER_IS_INITIATOR, REQUEST_NOT_FOUND } from './training-request.constant';
 import { TrainingRequestRepository } from './training-request.repository';
 import { TrainingRequestEntity } from './training-request.entity';
 import { CreateRequestDto } from '@project/shared/shared-dto';
 import { StatusRequest } from '@project/shared/shared-types';
+
 
 
 @Injectable()
@@ -14,8 +15,10 @@ export class TrainingRequestService {
 
   public async create(dto: CreateRequestDto) {
     if (dto.userId === dto.initiatorId) {
-      return {error: USER_IS_INITIATOR}
+     // return {error: USER_IS_INITIATOR}
+     throw new NotFoundException(USER_IS_INITIATOR);
     }
+    
     const requestEntity = new TrainingRequestEntity(dto);
     return this.requestRepository.create(requestEntity);
   }

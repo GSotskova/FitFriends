@@ -8,12 +8,13 @@ import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { UserRoleInterceptor } from './interceptors/user-role.interceptor';
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { EditUserDto } from '@project/shared/shared-dto';
-import { RabbitRouting, RequestWithTokenPayload, UserRole } from '@project/shared/shared-types';
+import { NotifyMessage, RabbitRouting, RequestWithTokenPayload, TrainingRequest, TypeRequest, UserRole } from '@project/shared/shared-types';
 import { NewCoachRdo } from '../authentication/rdo/new-coach.rdo';
 import { NewUserRdo } from '../authentication/rdo/new-user.rdo';
 import { NotifyUserService } from '../user-notify/user-notify.service';
 import { NotifyRdo } from './rdo/notify.rdo';
 import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { NotifyService } from '../notify/notify.service';
 
 
 @ApiTags('user-info')
@@ -21,7 +22,8 @@ import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 export class UserInfoController {
   constructor(
     private readonly userService: UserService,
-    private readonly notifyUserService: NotifyUserService
+    private readonly notifyUserService: NotifyUserService,
+    private readonly notifyService: NotifyService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -119,4 +121,33 @@ export class UserInfoController {
     const userUpd = await this.userService.changeCoachCetrificate(coachId, fileId)
     return fillObject(NewUserRdo, userUpd);
   }
+
+  @RabbitRPC({
+    exchange: 'fitfriends.training',
+    routingKey: RabbitRouting.TrainingRequestNotify,
+    queue: 'fitfriends.training.request',
+  })
+  public async trainingRequestNotify(@Body() request: TrainingRequest) {
+
+  const requestType =
+      request.typeRequest === TypeRequest.Personal
+      ? NotifyMessage.Personal
+      : NotifyMessage.Training
+
+      const newNotify =  this.notifyUserService.create(request.initiatorId, request.userId, requestType)
+
+      const initiator = await this.userService.getUser(request.initiatorId)
+      const userNotify = await this.userService.getUser(request.userId)
+      const currentDate = new Date();
+      await this.notifyService.notifyUser({
+        userId: request.userId,
+        email: userNotify.email,
+        initiatorId: request.initiatorId,
+        initiatorName: initiator.userName,
+        text: requestType,
+        dateNotify: currentDate
+       })
+    return newNotify
+  }
+
 }

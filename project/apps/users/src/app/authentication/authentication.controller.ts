@@ -141,7 +141,6 @@ export class AuthenticationController {
     queue: 'fitfriends.uploader.avatar',
   })
   public async userAvatars({userId, fileId}) {
-    console.log(userId, fileId)
     const userUpd = await this.authService.changeAvatar(userId, fileId)
     return fillObject(NewUserRdo, userUpd);
   }

@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
   "initiatorId": "649809159b59277aa0c615a7",
-  "userId": "649afeb71b6c87810dbb07c2",
+  "userId": "649da3764f4fc537d512a65e",
   "statusRequest": "на рассмотрении",
-  "typeRequest": "персональная тренировка"
+  "typeRequest": "совместная тренировка"
 }
 ###
 
