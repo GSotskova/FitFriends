@@ -34,5 +34,15 @@ export class CommentRdo {
   public message: string;
 
 
-
+  @ApiProperty({
+    description: 'Comment created date',
+  })
+  @Expose()
+  public createdAt: string;
+  
+  @ApiProperty({
+    description: 'Error'
+  })
+  @Expose()
+  public error: string;
 }

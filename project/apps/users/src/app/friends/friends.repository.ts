@@ -1,11 +1,11 @@
 import { CRUDRepository } from '@project/util/util-types';
 import { Injectable } from '@nestjs/common';
-import { Friend} from '@project/shared/shared-types';
+import { Friend, SomeObject} from '@project/shared/shared-types';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { FriendEntity } from './friends.entity';
 import { FriendModel } from './friends.model';
-import { DEFAULT_LIST_COUNT_LIMIT } from '@project/shared/shared-query';
+import { DEFAULT_LIST_COUNT_LIMIT, DefaultQuery } from '@project/shared/shared-query';
 
 @Injectable()
 export class FriendRepository implements CRUDRepository<FriendEntity, string, Friend> {
@@ -33,10 +33,15 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
       .exec();
   }
 
-  public async findByUserId(userId: string, limit?: number, page?: number): Promise<Friend[]> {
-    const limitCount = limit ?? DEFAULT_LIST_COUNT_LIMIT;
-    const pageNum = page? (page-1) : 0;
+  public async findByUserId(userId: string, query: DefaultQuery): Promise<Friend[]> {
+    const limitCount = query.limit ?? DEFAULT_LIST_COUNT_LIMIT;
+    const pageNum = query.page? (query.page-1) : 0;
     const skip = pageNum*limitCount;
+
+    const objSort: SomeObject = {};
+    if (query.sortDate) {objSort.createdAt =  query.sortDate}
+    else {objSort.createdAt = 1}
+
     return this.friendModel
     .aggregate([
       {$match: {userId: userId}},
@@ -56,6 +61,7 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
     {
       $project:{
           _id : 1,
+          createdAt: {$dateToString:{format:"%Y-%m-%d %H:%M:%S",date:"$createdAt"}},
           userName : "$result.userName",
           email : "$result.email",
           avatar : "$result.avatar",
@@ -68,16 +74,22 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
       }
     },
     { $unset: 'result' },
-      { $limit: skip + limitCount},
-      { $skip:  skip }
+    { $sort:  objSort },
+    { $limit: skip + limitCount},
+    { $skip:  skip }
     ])
       .exec();
   }
 
-  public async findByFriendId(friendId: string, limit?: number, page?: number): Promise<Friend[]> {
-    const limitCount = limit ?? DEFAULT_LIST_COUNT_LIMIT;
-    const pageNum = page? (page-1) : 0;
+  public async findByFriendId(friendId: string, query: DefaultQuery): Promise<Friend[]> {
+    const limitCount = query.limit ?? DEFAULT_LIST_COUNT_LIMIT;
+    const pageNum = query.page? (query.page-1) : 0;
     const skip = pageNum*limitCount;
+
+    const objSort: SomeObject = {};
+    if (query.sortDate) {objSort.createdAt =  query.sortDate}
+    else {objSort.createdAt = 1}
+
     return this.friendModel
     .aggregate([
       {$match: {friendId: friendId}},
@@ -97,6 +109,7 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
     {
       $project:{
           _id : 1,
+          createdAt: {$dateToString:{format:"%Y-%m-%d %H:%M:%S",date:"$createdAt"}},
           userName : "$result.userName",
           email : "$result.email",
           avatar : "$result.avatar",
@@ -109,8 +122,9 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
       }
     },
     { $unset: 'result' },
-      { $limit: skip + limitCount},
-      { $skip:  skip }
+    { $sort:  objSort },
+    { $limit: skip + limitCount},
+    { $skip:  skip }
     ])
       .exec();
   }

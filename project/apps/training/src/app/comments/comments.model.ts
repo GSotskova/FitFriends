@@ -1,4 +1,4 @@
-import { Document} from 'mongoose';
+import { Document, now} from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Comment } from '@project/shared/shared-types';
 
@@ -27,6 +27,8 @@ export class CommentModel extends Document implements Comment  {
     required: true})
   public message: string;
 
+  @Prop({default: now()})
+  public createdAt: Date;
 
 }
 

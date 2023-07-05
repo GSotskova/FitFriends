@@ -18,11 +18,11 @@ Content-Type: application/json
 
 # Создание заказа
 POST http://localhost:4000/api/user/orders/create HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXIxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6InVzZXIiLCJ1c2VyTmFtZSI6ItCY0LLQsNC90L7QsiDQmNCy0LDQvSIsImlhdCI6MTY4ODQ4ODQyOSwiZXhwIjoxNjg4NDg5MzI5fQ.p2zWcQHwXy0JHV-RJAaRV_R-zYkWWxnJ0xnQQ4ZbR0Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXIxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6InVzZXIiLCJ1c2VyTmFtZSI6ItCY0LLQsNC90L7QsiDQmNCy0LDQvSIsImlhdCI6MTY4ODQ5MDk1OCwiZXhwIjoxNjg4NDkxODU4fQ.lYhGSokJ8xcYMzkErrYGlnvGphlpTQQt7cF6KLGeKdg
 Content-Type: application/json
 
 {
-  "trainingId": "64a406e9c4d605ea3e822df8",
+  "trainingId": "64a406e9c4d605ea3e822df6",
   "trainingCount": 3,
   "paymentOption": "visa"
 }
@@ -58,8 +58,8 @@ Content-Type: application/json
 ###
 
 # Баланс пользователя
-GET http://localhost:4000/api/user/orders?sortPrice=desc HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXIxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6InVzZXIiLCJ1c2VyTmFtZSI6ItCY0LLQsNC90L7QsiDQmNCy0LDQvSIsImlhdCI6MTY4ODQ4ODQyOSwiZXhwIjoxNjg4NDg5MzI5fQ.p2zWcQHwXy0JHV-RJAaRV_R-zYkWWxnJ0xnQQ4ZbR0Y
+GET http://localhost:4000/api/user/orders?sortDate=asc&sortPrice=desc HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk4MDkxNTliNTkyNzdhYTBjNjE1YTciLCJlbWFpbCI6InVzZXIxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6InVzZXIiLCJ1c2VyTmFtZSI6ItCY0LLQsNC90L7QsiDQmNCy0LDQvSIsImlhdCI6MTY4ODUzMTkzNCwiZXhwIjoxNjg4NTMyODM0fQ.dP2Xe1Jx0pFKEE31NMwb6xbpvH4ELMsAZybZwHX9YYg
 ###
 
 # Удаление заказа

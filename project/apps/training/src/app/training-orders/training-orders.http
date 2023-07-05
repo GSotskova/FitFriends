@@ -21,17 +21,17 @@ Content-Type: application/json
 ###
 
 # Список заказов для тренера
-GET http://localhost:3334/api/orders/show/list?sortPrice=desc HTTP/1.1
+GET http://localhost:3334/api/orders/show/list?sortDate=1 HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZmQwZWFhYTVhMDI3MTUyNjRjOWIiLCJlbWFpbCI6InVzZXJOZXdAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY29hY2giLCJ1c2VyTmFtZSI6ItCf0LXRgtGA0L7QsiIsImlhdCI6MTY4ODE0MDYzNCwiZXhwIjoxNjg4MTQxNTM0fQ.qxPOyMtj8dyMIXMRD4R8LmkCeGNmemEo0X8HpDKxwVQ
 Content-Type: application/json
 
 {
-  "coachId": "649809159b59277aa0c615a7",
+  "coachId": "6497fd0eaaa5a02715264c9b"
 }
 ###
 
 # Список заказов для пользователя (баланс пользователя)
-GET http://localhost:3334/api/orders/show/list/user?sortPrice=desc HTTP/1.1
+GET http://localhost:3334/api/orders/show/list/user HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDk3ZmQwZWFhYTVhMDI3MTUyNjRjOWIiLCJlbWFpbCI6InVzZXJOZXdAbm90Zm91bmQubG9jYWwiLCJyb2xlIjoiY29hY2giLCJ1c2VyTmFtZSI6ItCf0LXRgtGA0L7QsiIsImlhdCI6MTY4ODE0MDYzNCwiZXhwIjoxNjg4MTQxNTM0fQ.qxPOyMtj8dyMIXMRD4R8LmkCeGNmemEo0X8HpDKxwVQ
 Content-Type: application/json
 

@@ -63,4 +63,11 @@ export class UserInfoRdo {
   @Expose()
   public location: string;
 
+
+  @ApiProperty({
+    description: 'Comment created date',
+  })
+  @Expose()
+  public createdAt: string;
+
 }
