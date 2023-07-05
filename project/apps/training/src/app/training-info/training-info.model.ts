@@ -1,4 +1,4 @@
-import { Document} from 'mongoose';
+import { Document, now} from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { LevelTraining, Training, TrainingTime, TrainingType, UserSex } from '@project/shared/shared-types';
 
@@ -77,6 +77,9 @@ export class TrainingModel extends Document implements Training {
     required: true,
   })
   public isSpecialOffer: boolean;
+
+  @Prop({default: now()})
+  public createdAt: Date;
 }
 
 export const TrainingSchema = SchemaFactory.createForClass(TrainingModel);

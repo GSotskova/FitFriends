@@ -53,7 +53,7 @@ export class FriendController {
   })
   @Get('user')
   public async showFriendsForUser(@Req() { user: payload }: RequestWithTokenPayload, @Query() query: DefaultQuery) {
-    const friends = await this.friendService.getFriends(payload.sub, query.limit, query.page);
+    const friends = await this.friendService.getFriends(payload.sub, query);
     return fillObject(UserInfoRdo, friends);
   }
 
@@ -65,7 +65,7 @@ export class FriendController {
   })
   @Get('coach')
   public async showFriendsForCoach(@Req() { user: payload }: RequestWithTokenPayload, @Query() query: DefaultQuery) {
-    const friends = await this.friendService.getUsers(payload.sub, query.limit, query.page);
+    const friends = await this.friendService.getUsers(payload.sub, query);
     return fillObject(UserInfoRdo, friends);
   }
 

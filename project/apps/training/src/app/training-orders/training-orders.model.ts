@@ -1,4 +1,4 @@
-import { Document} from 'mongoose';
+import { Document, now} from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Order, PaymentOption } from '@project/shared/shared-types';
 
@@ -65,6 +65,9 @@ export class TrainingOrdersModel extends Document implements Order  {
     default: false
   })
   public isDone: boolean;
+
+  @Prop({default: now()})
+  public createdAt: Date;
 }
 
 export const TrainingOrdersSchema = SchemaFactory.createForClass(TrainingOrdersModel);

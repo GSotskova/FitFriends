@@ -1,4 +1,4 @@
-import { Document} from 'mongoose';
+import { Document, now} from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Friend } from '@project/shared/shared-types';
 
@@ -17,6 +17,9 @@ export class FriendModel extends Document implements Friend {
     required: true,
   })
   public friendId: string;
+
+  @Prop({default: now()})
+  public createdAt: Date;
 
 
 }

@@ -87,6 +87,13 @@ export class TrainingOrderRdo {
   })
   @Expose()
   public userId: string;
+
+  @ApiProperty({
+    description: 'Order created date',
+  })
+  @Expose()
+  public createdAt: string;
+
   @ApiProperty({
     description: 'Error'
   })

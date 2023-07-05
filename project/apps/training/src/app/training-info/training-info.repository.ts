@@ -29,8 +29,12 @@ export class TrainingRepository implements CRUDRepository<TrainingEntity, string
   }
 
   public async findByCoachId(coachId: string, query: TrainingQuery): Promise<Training[]> {
-    const {limit, price, caloriesReset, rating, trainingTime, page}= query;
+    const {limit, price, caloriesReset, rating, sortDate, trainingTime, page}= query;
     const pageNum = page? (page-1) : 0;
+
+    const objSort: SomeObject = {};
+      if (query.sortDate) {objSort.createdAt =  sortDate}
+      else {objSort.createdAt = 1}
 
     const objFiltr: SomeObject = {};
       if (query.price) {
@@ -52,13 +56,14 @@ export class TrainingRepository implements CRUDRepository<TrainingEntity, string
 
     return this.trainingModel
     .find({...objFiltr, coachId: coachId})
-    .skip(pageNum * limit)
+    .sort(objSort)
     .limit( limit )
+    .skip(pageNum * limit)
     .exec();
   }
 
   public async findCatalog(query: TrainingCatalogQuery): Promise<Training[]> {
-    const {limit, price, caloriesReset, rating, trainingType, sortPrice, page}= query;
+    const {limit, price, caloriesReset, rating, trainingType, sortPrice, sortDate, page}= query;
     const pageNum = page? (page-1) : 0;
 
     const objFiltr: SomeObject = {};
@@ -79,15 +84,19 @@ export class TrainingRepository implements CRUDRepository<TrainingEntity, string
                         }
       if (query.trainingType) {objFiltr.trainingType = { "$in": trainingType };}
 
-
       const objSort: SomeObject = {};
-      if (query.sortPrice) {objSort.sortPrice =  sortPrice}
+      const keys = Object.keys(query);
+      keys.forEach(key => {
+        key === 'sortPrice'? objSort.sortPrice = sortPrice : '';
+        key === 'sortDate'? objSort.createdAt = sortDate : objSort.createdAt = 1;
+      });
 
 
     return this.trainingModel
     .find({...objFiltr})
-    .skip(pageNum * limit)
+    .sort(objSort)
     .limit( limit )
+    .skip(pageNum * limit)
     .exec();
   }
 

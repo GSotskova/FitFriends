@@ -11,25 +11,8 @@ Content-Type: application/json
 ###
 
 # Список комментариев к тренировке
-GET http://localhost:3334/api/comment/649afd18e0be2c6e2c674fbe?&limit=5&page=1 HTTP/1.1
+GET http://localhost:3334/api/comment/64a406e9c4d605ea3e822df6?limit=5&page=1&sortDate=desc HTTP/1.1
 Content-Type: application/json
 ###
 
-# Создание отзыва к тренировке
-POST http://localhost:3334/api/comment/test HTTP/1.1
-Content-Type: application/json
-
-{
-  "comment1": { "trainingId": "64a406e9c4d605ea3e822df6","ratingTraining": 4, "userId": "649809159b59277aa0c615a7",
-                "message": "Тренировка понравилась, всем рекомендую, приходите обязательно......................"
-              },
-  "comment2": { "trainingId": "64a406e9c4d605ea3e822df6","ratingTraining": 2, "userId": "649da3544f4fc537d512a656",
-                "message": "Тренировка не понравилась, никому не рекомендую......................................."
-              },
-  "comment3": { "trainingId": "64a406e9c4d605ea3e822dfa","ratingTraining": 5, "userId": "649809159b59277aa0c615a7",
-                "message": "Тренировка отличная, обязательно пойду еще раз......................................"
-              }
-}
-
-###
 

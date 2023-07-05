@@ -2,6 +2,7 @@ import { ConflictException, Injectable} from '@nestjs/common';
 import {  USER_EQ_FRIEND, USER_IS_FRIEND, FRIENDS_NOT_FOUND } from './friends.constant';
 import { FriendRepository } from './friends.repository';
 import { FriendEntity } from './friends.entity';
+import { DefaultQuery } from '@project/shared/shared-query';
 
 
 @Injectable()
@@ -25,12 +26,12 @@ export class FriendService {
 
   }
 
-    public async getFriends(userid: string, limit?: number, page?: number) {
-    return this.friendRepository.findByUserId(userid, limit, page);
+    public async getFriends(userid: string, query: DefaultQuery) {
+    return this.friendRepository.findByUserId(userid, query);
   }
 
-  public async getUsers(friendId: string, limit?: number, page?: number) {
-    return this.friendRepository.findByFriendId(friendId, limit, page);
+  public async getUsers(friendId: string, query: DefaultQuery) {
+    return this.friendRepository.findByFriendId(friendId, query);
   }
 
   public async delete(friendId: string, userId: string) {

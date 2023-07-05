@@ -29,7 +29,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
   }
 
   public async findByCoachId(coachId: string, query: TrainingOrdersQuery): Promise<Order[]> {
-    const {limit, sortCount, sortPrice,  page}= query;
+    const {limit, sortCount, sortPrice, sortDate, page}= query;
     const pageNum = page? (page-1) : 0;
     const skip = pageNum*limit;
 
@@ -38,7 +38,9 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
     keys.forEach(key => {
       key === 'sortCount'? objSort.trainingCount = sortCount : '';
       key === 'sortPrice'? objSort.totalPrice = sortPrice : '';
+      key === 'sortDate'? objSort.createdAt = sortDate : '';
     });
+
 
     return this.ordersModel
     .aggregate([
@@ -62,6 +64,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
       { $group: {
         _id: {
           trainingId: '$trainingId',
+          createdAt: '$createdAt',
           nameTraining: "$result.nameTraining",
           photoTraning: "$result.photoTraning",
           levelTraining: "$result.levelTraining",
@@ -81,6 +84,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
       {
         $project:{_id: 0,
               nameTraining:  "$_id.nameTraining",
+              createdAt: {$dateToString:{format:"%Y-%m-%d %H:%M:%S",date:"$_id.createdAt"}},
               photoTraning: "$_id.photoTraning",
               levelTraining: "$_id.levelTraining",
               trainingType: "$_id.trainingType",
@@ -97,15 +101,15 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
         }
     },
       { $unset: 'result' },
+      { $sort:  objSort },
       { $limit: skip + limit},
-      { $skip:  skip },
-      { $sort:  objSort }
+      { $skip:  skip }
      ])
     .exec();
   }
 
   public async findByUserId(userId: string, query: TrainingOrdersQuery): Promise<Order[]> {
-    const {limit, sortCount, sortPrice,  page}= query;
+    const {limit, sortCount, sortPrice, sortDate, page}= query;
     const pageNum = page? (page-1) : 0;
     const skip = pageNum*limit;
 
@@ -114,6 +118,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
     keys.forEach(key => {
       key === 'sortCount'? objSort.trainingCount = sortCount : '';
       key === 'sortPrice'? objSort.totalPrice = sortPrice : '';
+      key === 'sortDate'? objSort.createdAt = sortDate : objSort.createdAt = 1;
     });
     return this.ordersModel
     .aggregate([
@@ -138,6 +143,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
       { $group: {
         _id: {
           trainingId: '$trainingId',
+          createdAt: '$createdAt',
           nameTraining: "$result.nameTraining",
           photoTraning: "$result.photoTraning",
           levelTraining: "$result.levelTraining",
@@ -157,6 +163,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
       {
         $project:{_id: 0,
               nameTraining:  "$_id.nameTraining",
+              createdAt: {$dateToString:{format:"%Y-%m-%d %H:%M:%S",date:"$_id.createdAt"}},
               photoTraning: "$_id.photoTraning",
               levelTraining: "$_id.levelTraining",
               trainingType: "$_id.trainingType",
@@ -173,9 +180,9 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
         }
     },
       { $unset: 'result' },
+      { $sort:  objSort },
       { $limit: skip + limit},
-      { $skip:  skip },
-      { $sort:  objSort }
+      { $skip:  skip }
      ])
     .exec();
   }

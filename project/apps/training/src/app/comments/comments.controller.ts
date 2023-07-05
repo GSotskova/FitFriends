@@ -31,7 +31,7 @@ export class CommentsController {
     description: 'Comment by trainingId found'
   })
   @Get(':trainingId')
-  public async showPostId(@Query() query: DefaultQuery, @Param('trainingId') trainingId: string) {
+  public async showTrainingId(@Query() query: DefaultQuery, @Param('trainingId') trainingId: string) {
     const comments = await this.commentsService.getTrainingId(trainingId, query);
     return fillObject(CommentRdo, comments);
   }

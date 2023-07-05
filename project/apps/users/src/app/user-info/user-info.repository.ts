@@ -129,7 +129,7 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
   }
 
   public async findAll(query: UsersQuery): Promise<User[]> {
-    const {limit, userRole, location, trainingType, levelTraining, page}= query;
+    const {limit, userRole, location, trainingType, levelTraining, sortDate, page}= query;
     const pageNum = page? (page-1) : 0;
     const skip = pageNum*limit;
 
@@ -138,6 +138,10 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
       if (query.levelTraining) {objFiltr.levelTraining = levelTraining;}
       if (query.userRole) {objFiltr.userRole = userRole;}
       if (query.trainingType) {objFiltr.trainingType = { "$in": trainingType };}
+
+    const objSort: SomeObject = {};
+      if (query.sortDate) {objSort.createdAt =  sortDate}
+      else {objSort.createdAt = 1}
 
       const usersInfo =  await this.userModel
      .aggregate([
@@ -197,9 +201,11 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
   }
 }
 },
+
+     { $match: objFiltr},
+     { $sort: objSort},
      { $limit: skip + limit},
-      { $skip:  skip },
-      {$match: objFiltr }
+     { $skip:  skip }
      ])
     .exec();
 

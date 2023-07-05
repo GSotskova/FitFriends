@@ -76,6 +76,13 @@ export class TrainingRdo {
   public isSpecialOffer: boolean;
 
   @ApiProperty({
+    description: 'Training created date',
+  })
+  @Expose()
+  public createdAt: string;
+
+
+  @ApiProperty({
     description: 'Error'
   })
   @Expose()

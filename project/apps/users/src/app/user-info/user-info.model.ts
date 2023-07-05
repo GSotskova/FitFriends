@@ -1,4 +1,4 @@
-import { Document} from 'mongoose';
+import { Document, now} from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { StationMetro, User, UserRole, UserSex } from '@project/shared/shared-types';
 
@@ -61,6 +61,9 @@ export class UserModel extends Document implements User {
 
   @Prop()
   public backgroundImg: string;
+
+  @Prop({default: now()})
+  public createdAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);
