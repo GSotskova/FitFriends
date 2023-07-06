@@ -4,7 +4,7 @@ import { AuthenticationService } from './authentication.service';
 import { fillObject } from '@project/util/util-core';
 import { NewCoachRdo } from './rdo/new-coach.rdo';
 import { NewUserRdo } from './rdo/new-user.rdo';
-import { DataNotifyTraining, RabbitRouting, RequestWithTokenPayload, RequestWithUser, TokenLogin, UserRole } from '@project/shared/shared-types';
+import { DataNotifyTraining, RabbitExchange, RabbitQueue, RabbitRouting, RequestWithTokenPayload, RequestWithUser, TokenLogin, UserRole } from '@project/shared/shared-types';
 import { CreateUserDto } from'@project/shared/shared-dto';
 import { LocalAuthGuard } from './guards/local-auth-guard';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
@@ -136,9 +136,9 @@ export class AuthenticationController {
   }
 
   @RabbitRPC({
-    exchange: 'fitfriends.uploader',
+    exchange: RabbitExchange.Uploader,
     routingKey: RabbitRouting.UserAvatars,
-    queue: 'fitfriends.uploader.avatar',
+    queue: RabbitQueue.Avatar,
   })
   public async userAvatars({userId, fileId}) {
     const userUpd = await this.authService.changeAvatar(userId, fileId)
@@ -146,9 +146,9 @@ export class AuthenticationController {
   }
 
   @RabbitRPC({
-    exchange: 'fitfriends.uploader',
+    exchange: RabbitExchange.Uploader,
     routingKey: RabbitRouting.UserBackgroundImg,
-    queue: 'fitfriends.uploader.background',
+    queue: RabbitQueue.Background,
   })
   public async userBackgroundImg({userId, fileId}) {
     const userUpd = await this.authService.changeBackgroundImg(userId, fileId)

@@ -2,8 +2,8 @@
 FitFriends
 
 Запуск приложения:
-nx run users:serve (Пользователи: регистрация, авторищация, просмотр, друзья и т.д.)
-nx run trainig:serve (Тренировки, заказы, заявки на персональные/совместные, комментарии)
+nx run users:serve (Пользователи: регистрация, авторизация, просмотр, друзья и т.д.)
+nx run training:serve (Тренировки, заказы, заявки на персональные/совместные, комментарии)
 nx run uploader:serve (Загрузка файлов: аватар, сертификаты и т.д.)
 nx run notify:serve (Оповещения)
 nx run bff:serve (Все запросы)
@@ -18,16 +18,15 @@ docker compose --file ./apps/training/docker-compose.dev.yml --project-name "fit
 
 Заполнение БД:
     каталог seed:
-            - user-seed.http (запрос заполняет таблицы users, questionnairesCoach, questionnairesUser в бд fitfriends-users)
-            - training-seed.http (запрос заполняет таблицу training в бд fitfriends-training)
-            - comments-seed.http (запрос заполняет таблицу comments в бд fitfriends-training)
+            - seed.http (заполняются таблицы users, questionnairesCoach, questionnairesUser в бд fitfriends-users
+                         заполняются таблицу training в бд fitfriends-training
+                         заполняются таблицу comments в бд fitfriends-training)
 
-Сценарии (каталог bff:):
-1. Пользователи app-users.http
-        Регистрации - 2 примера (пользователь и тренер)
-2. Личный кабинет тренера app-coach-account
-3. Личный кабинет пользователя app-user-account
-4. Каталог тренировок и комментарии app-training-general 
+Сценарии (каталог bff =>bff.http):
+1. Пользователи (регистрации - 2 примера (пользователь и тренер))
+2. Личный кабинет пользователя 
+3. Личный кабинет тренера
+4. Каталог тренировок и комментарии
                 
 Спецификация:
 user  http://localhost:3333/spec

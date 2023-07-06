@@ -8,7 +8,7 @@ import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { UserRoleInterceptor } from './interceptors/user-role.interceptor';
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { EditUserDto } from '@project/shared/shared-dto';
-import { NotifyMessage, RabbitRouting, RequestWithTokenPayload, TrainingRequest, TypeRequest, UserRole } from '@project/shared/shared-types';
+import { NotifyMessage, RabbitExchange, RabbitQueue, RabbitRouting, RequestWithTokenPayload, TrainingRequest, TypeRequest, UserRole } from '@project/shared/shared-types';
 import { NewCoachRdo } from '../authentication/rdo/new-coach.rdo';
 import { NewUserRdo } from '../authentication/rdo/new-user.rdo';
 import { NotifyUserService } from '../user-notify/user-notify.service';
@@ -113,9 +113,9 @@ export class UserInfoController {
 
 
   @RabbitRPC({
-    exchange: 'fitfriends.uploader',
+    exchange: RabbitExchange.Uploader,
     routingKey: RabbitRouting.CoachCertificate,
-    queue: 'fitfriends.uploader.certificate',
+    queue: RabbitQueue.Certificate,
   })
   public async coachCertificate({coachId, fileId}) {
     const userUpd = await this.userService.changeCoachCetrificate(coachId, fileId)
@@ -123,9 +123,9 @@ export class UserInfoController {
   }
 
   @RabbitRPC({
-    exchange: 'fitfriends.training',
+    exchange: RabbitExchange.Training,
     routingKey: RabbitRouting.TrainingRequestNotify,
-    queue: 'fitfriends.training.request',
+    queue: RabbitQueue.Request,
   })
   public async trainingRequestNotify(@Body() request: TrainingRequest) {
 

@@ -84,7 +84,7 @@ export class AuthenticationService {
 
   public async createUserToken(user: User, tokenInfo?: TokenLogin) {
     if (tokenInfo && tokenInfo.token && tokenInfo.userIdAuth === user._id.toString()) {
-      return {current_access_token: tokenInfo.token,  description: 'The user is logged in' }
+      return {accessToken: tokenInfo.token,  description: 'The user is logged in' }
     }
 
     const accessTokenPayload = createJWTPayload(user);

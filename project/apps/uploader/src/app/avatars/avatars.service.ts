@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { uploaderConfig } from '@project/config/config-uploader';
 import { ConfigType } from '@nestjs/config';
-import {  RabbitRouting } from '@project/shared/shared-types';
+import {  RabbitExchange, RabbitRouting } from '@project/shared/shared-types';
 
 @Injectable()
 export class AvatarsService {
@@ -14,7 +14,7 @@ export class AvatarsService {
 
   public async userAvatars(userId:string, fileId: string) {
     return this.rabbitClient.request<string>(
-      {exchange: 'fitfriends.uploader',
+      {exchange: RabbitExchange.Uploader,
       routingKey: RabbitRouting.UserAvatars,
       payload: {userId, fileId}}
     );
@@ -22,7 +22,7 @@ export class AvatarsService {
 
   public async coachCertificate(coachId:string, fileId: string) {
     return this.rabbitClient.request<string>(
-      {exchange: 'fitfriends.uploader',
+      {exchange: RabbitExchange.Uploader,
       routingKey: RabbitRouting.CoachCertificate,
       payload: {coachId, fileId}}
     );
@@ -31,7 +31,7 @@ export class AvatarsService {
 
   public async userBackgroundImg(userId:string, fileId: string) {
     return this.rabbitClient.request<string>(
-      {exchange: 'fitfriends.uploader',
+      {exchange: RabbitExchange.Uploader,
       routingKey: RabbitRouting.UserBackgroundImg,
       payload: {userId, fileId}}
     );

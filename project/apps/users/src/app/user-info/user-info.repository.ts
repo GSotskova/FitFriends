@@ -1,11 +1,12 @@
 import { CRUDRepository } from '@project/util/util-types';
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from './user-info.entity';
-import { QuestionnaireCoach, QuestionnaireUser, SomeObject, User } from '@project/shared/shared-types';
+import { QuestionnaireCoach, QuestionnaireUser, User } from '@project/shared/shared-types';
 import { UserModel } from './user-info.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { UsersQuery } from '@project/shared/shared-query';
+import { getUsersQuery } from '@project/util/util-core';
 
 @Injectable()
 export class UserRepository implements CRUDRepository<UserEntity, string, User> {
@@ -129,19 +130,7 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
   }
 
   public async findAll(query: UsersQuery): Promise<User[]> {
-    const {limit, userRole, location, trainingType, levelTraining, sortDate, page}= query;
-    const pageNum = page? (page-1) : 0;
-    const skip = pageNum*limit;
-
-    const objFiltr: SomeObject = {};
-      if (query.location) {objFiltr.location = location;}
-      if (query.levelTraining) {objFiltr.levelTraining = levelTraining;}
-      if (query.userRole) {objFiltr.userRole = userRole;}
-      if (query.trainingType) {objFiltr.trainingType = { "$in": trainingType };}
-
-    const objSort: SomeObject = {};
-      if (query.sortDate) {objSort.createdAt =  sortDate}
-      else {objSort.createdAt = 1}
+   const objQuery = getUsersQuery(query);
 
       const usersInfo =  await this.userModel
      .aggregate([
@@ -172,7 +161,7 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
           as: 'resultCoach'
         },
       },
-     { "$unwind": {"path": "$resultCoach","preserveNullAndEmptyArrays": false}
+     { "$unwind": {"path": "$resultCoach","preserveNullAndEmptyArrays": true}
      },
      { $addFields: {
       levelTraining: {
@@ -202,10 +191,10 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
 }
 },
 
-     { $match: objFiltr},
-     { $sort: objSort},
-     { $limit: skip + limit},
-     { $skip:  skip }
+     { $match: objQuery.objFiltr},
+     { $sort: objQuery.objSort},
+     { $limit: objQuery.limitNumber},
+     { $skip:  objQuery.skip }
      ])
     .exec();
 

@@ -7,7 +7,7 @@ import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { CreateTrainingDTO, EditTrainingDTO } from '@project/shared/shared-dto';
 import { TrainingRdo } from './rdo/training-info.rdo';
 import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
-import { DataNotifyTraining, RabbitRouting, TrainingForSend } from '@project/shared/shared-types';
+import { DataNotifyTraining, RabbitExchange, RabbitQueue, RabbitRouting, TrainingForSend } from '@project/shared/shared-types';
 
 
 
@@ -78,9 +78,9 @@ export class TrainingInfoController {
 
 
   @RabbitRPC({
-    exchange: 'fitfriends.training',
+    exchange: RabbitExchange.Training,
     routingKey: RabbitRouting.GeNewtTraining,
-    queue: 'fitfriends.training.newtraining',
+    queue: RabbitQueue.Newtraining,
   })
   public async getNewTraining(dataNotifyTraining: DataNotifyTraining) : Promise<TrainingForSend[]> {
     const listTraining = await this.trainingService.getListTraingAfterDate(dataNotifyTraining.dateNotify, dataNotifyTraining.coaches);
@@ -92,9 +92,9 @@ export class TrainingInfoController {
   }
 
   @RabbitRPC({
-    exchange: 'fitfriends.uploader',
+    exchange: RabbitExchange.Uploader,
     routingKey: RabbitRouting.TrainingImg,
-    queue: 'fitfriends.uploader.posts',
+    queue: RabbitQueue.Image,
   })
   public async trainingImg({trainingId, fileId}) {
     const postUpd = await this.trainingService.changeImg(trainingId, fileId)
@@ -102,9 +102,9 @@ export class TrainingInfoController {
   }
 
   @RabbitRPC({
-    exchange: 'fitfriends.uploader',
+    exchange: RabbitExchange.Uploader,
     routingKey: RabbitRouting.TrainingVideo,
-    queue: 'fitfriends.uploader.video',
+    queue: RabbitQueue.Video,
   })
   public async trainingVideo({trainingId, fileId}) {
     const postUpd = await this.trainingService.changeVideo(trainingId, fileId)

@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
-import { RabbitRouting } from '@project/shared/shared-types';
+import { RabbitExchange, RabbitQueue, RabbitRouting } from '@project/shared/shared-types';
 import { MailService } from '../mail/mail.service';
 import { UserNotifyService } from './user-notify.service';
 import { NotifyUserDto } from '@project/shared/shared-dto';
@@ -13,9 +13,9 @@ export class UserNotifyController {
   ) {}
 
   @RabbitSubscribe({
-    exchange: 'fitfriends.notify',
+    exchange: RabbitExchange.Notify,
     routingKey: RabbitRouting.AddUserNotify,
-    queue: 'fitfriends.notify.user',
+    queue: RabbitQueue.NotifyUser,
   })
   public async create(dto: NotifyUserDto) {
     this.userNotifyService.addNotifyUser(dto);

@@ -1,11 +1,12 @@
 import { CRUDRepository } from '@project/util/util-types';
 import { Injectable } from '@nestjs/common';
-import { SomeObject, Order } from '@project/shared/shared-types';
+import { Order } from '@project/shared/shared-types';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { TrainingOrdersQuery } from '@project/shared/shared-query';
 import { TrainingOrdersEntity } from './training-orders.entity';
 import { TrainingOrdersModel } from './training-orders.model';
+import { getTrainingOrdersQuery } from '@project/util/util-core';
 
 @Injectable()
 export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEntity, string, Order> {
@@ -29,19 +30,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
   }
 
   public async findByCoachId(coachId: string, query: TrainingOrdersQuery): Promise<Order[]> {
-    const {limit, sortCount, sortPrice, sortDate, page}= query;
-    const pageNum = page? (page-1) : 0;
-    const skip = pageNum*limit;
-
-    const objSort: SomeObject = {};
-    const keys = Object.keys(query);
-    keys.forEach(key => {
-      key === 'sortCount'? objSort.trainingCount = sortCount : '';
-      key === 'sortPrice'? objSort.totalPrice = sortPrice : '';
-      key === 'sortDate'? objSort.createdAt = sortDate : '';
-    });
-
-
+    const objQuery = getTrainingOrdersQuery(query);
     return this.ordersModel
     .aggregate([
         {$match: { $and: [
@@ -101,25 +90,15 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
         }
     },
       { $unset: 'result' },
-      { $sort:  objSort },
-      { $limit: skip + limit},
-      { $skip:  skip }
+      { $sort:  objQuery.objSort },
+      { $limit: objQuery.limitNumber},
+      { $skip:  objQuery.skip }
      ])
     .exec();
   }
 
   public async findByUserId(userId: string, query: TrainingOrdersQuery): Promise<Order[]> {
-    const {limit, sortCount, sortPrice, sortDate, page}= query;
-    const pageNum = page? (page-1) : 0;
-    const skip = pageNum*limit;
-
-    const objSort: SomeObject = {};
-    const keys = Object.keys(query);
-    keys.forEach(key => {
-      key === 'sortCount'? objSort.trainingCount = sortCount : '';
-      key === 'sortPrice'? objSort.totalPrice = sortPrice : '';
-      key === 'sortDate'? objSort.createdAt = sortDate : objSort.createdAt = 1;
-    });
+    const objQuery = getTrainingOrdersQuery(query);
     return this.ordersModel
     .aggregate([
         {$match: { $and: [
@@ -180,9 +159,9 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
         }
     },
       { $unset: 'result' },
-      { $sort:  objSort },
-      { $limit: skip + limit},
-      { $skip:  skip }
+      { $sort:  objQuery.objSort },
+      { $limit: objQuery.limitNumber},
+      { $skip:  objQuery.skip }
      ])
     .exec();
   }

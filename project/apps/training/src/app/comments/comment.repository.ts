@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CommentEntity } from './comment.entity';
-import { Comment, SomeObject } from '@project/shared/shared-types';
-import { DEFAULT_LIST_COUNT_LIMIT, DefaultQuery } from '@project/shared/shared-query';
+import { Comment } from '@project/shared/shared-types';
+import { DefaultQuery } from '@project/shared/shared-query';
 import { InjectModel } from '@nestjs/mongoose';
 import { CommentModel } from './comments.model';
 import { Model } from 'mongoose';
+import { getDefaultQuery } from '@project/util/util-core';
 
 @Injectable()
 export class CommentRepository {
@@ -19,18 +20,14 @@ export class CommentRepository {
 
 
   public async findByTrainingId(trainingId: string, query?: DefaultQuery): Promise<Comment[] > {
-    const limitNumber = query? query.limit : DEFAULT_LIST_COUNT_LIMIT
-    const pageNum = query? (query.page-1) : 0;
-    const skip = pageNum*limitNumber ;
-    const objSort: SomeObject = {};
-    if (query.sortDate) {objSort.createdAt =  query.sortDate}
-    else {objSort.createdAt = 1}
+
+    const objQuery= getDefaultQuery(query)
 
     return this.commentModel
       .find({trainingId: trainingId})
-      .sort(objSort)
-      .skip(skip)
-      .limit( limitNumber )
+      .sort(objQuery.objSort)
+      .skip(objQuery.skip)
+      .limit(objQuery.limitNumber + objQuery.limitNumber)
       .exec();
   }
 

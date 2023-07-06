@@ -1,11 +1,12 @@
 import { CRUDRepository } from '@project/util/util-types';
 import { Injectable } from '@nestjs/common';
 import { TrainingEntity } from './training-info.entity';
-import { SomeObject, Training } from '@project/shared/shared-types';
+import { Training } from '@project/shared/shared-types';
 import { TrainingModel } from './training-info.model';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { TrainingCatalogQuery, TrainingQuery } from '@project/shared/shared-query';
+import { getTrainingCatalogQuery, getTrainingQuery } from '@project/util/util-core';
 
 @Injectable()
 export class TrainingRepository implements CRUDRepository<TrainingEntity, string, Training> {
@@ -29,74 +30,23 @@ export class TrainingRepository implements CRUDRepository<TrainingEntity, string
   }
 
   public async findByCoachId(coachId: string, query: TrainingQuery): Promise<Training[]> {
-    const {limit, price, caloriesReset, rating, sortDate, trainingTime, page}= query;
-    const pageNum = page? (page-1) : 0;
-
-    const objSort: SomeObject = {};
-      if (query.sortDate) {objSort.createdAt =  sortDate}
-      else {objSort.createdAt = 1}
-
-    const objFiltr: SomeObject = {};
-      if (query.price) {
-          objFiltr.price =  { "$gte": price[0],
-                               "$lte": price[1],
-                             };
-                            }
-      if (query.caloriesReset) {
-        objFiltr.caloriesReset =  { "$gte": caloriesReset[0],
-                                    "$lte": caloriesReset[1],
-                                  };
-                               }
-      if (query.rating) {
-        objFiltr.rating =  { "$gte": rating[0],
-                              "$lte": rating[1],
-                           };
-                        }
-      if (query.trainingTime) {objFiltr.trainingTime = { "$in": trainingTime };}
+    const objQuery = getTrainingQuery(query);
 
     return this.trainingModel
-    .find({...objFiltr, coachId: coachId})
-    .sort(objSort)
-    .limit( limit )
-    .skip(pageNum * limit)
+    .find({...objQuery.objFiltr, coachId: coachId})
+    .sort(objQuery.objSort)
+    .limit(objQuery.limitNumber)
+    .skip(objQuery.skip)
     .exec();
   }
 
   public async findCatalog(query: TrainingCatalogQuery): Promise<Training[]> {
-    const {limit, price, caloriesReset, rating, trainingType, sortPrice, sortDate, page}= query;
-    const pageNum = page? (page-1) : 0;
-
-    const objFiltr: SomeObject = {};
-      if (query.price) {
-          objFiltr.price =  { "$gte": price[0],
-                               "$lte": price[1],
-                             };
-                            }
-      if (query.caloriesReset) {
-        objFiltr.caloriesReset =  { "$gte": caloriesReset[0],
-                                    "$lte": caloriesReset[1],
-                                  };
-                               }
-      if (query.rating) {
-        objFiltr.rating =  { "$gte": rating[0],
-                              "$lte": rating[1],
-                           };
-                        }
-      if (query.trainingType) {objFiltr.trainingType = { "$in": trainingType };}
-
-      const objSort: SomeObject = {};
-      const keys = Object.keys(query);
-      keys.forEach(key => {
-        key === 'sortPrice'? objSort.sortPrice = sortPrice : '';
-        key === 'sortDate'? objSort.createdAt = sortDate : objSort.createdAt = 1;
-      });
-
-
+   const objQuery = getTrainingCatalogQuery(query);
     return this.trainingModel
-    .find({...objFiltr})
-    .sort(objSort)
-    .limit( limit )
-    .skip(pageNum * limit)
+    .find({...objQuery.objFiltr})
+    .sort(objQuery.objSort)
+    .limit(objQuery.limitNumber )
+    .skip(objQuery.skip)
     .exec();
   }
 
