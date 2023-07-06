@@ -1,0 +1,301 @@
+# Регистрация новых пользователей. Тренер
+POST http://localhost:4000/api/users/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "coach3@notfound.local",
+  "userName": "Михайлова Елена",
+  "password": "1234567",
+  "sex": "female",
+  "dateBirth": "1999-02-22",
+  "role": "coach",
+  "description": "Михайлова Елена Петровна",
+  "location": "Удельная",
+  "levelTraining": "любитель",
+  "trainingType": ["йога", "аэробика"],
+  "successCoach": "Ооочень крутой тренер",
+  "isPersonal": true
+  }
+
+###
+
+# Регистрация новых пользователей. Пользователь
+POST http://localhost:4000/api/users/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "user3@notfound.local",
+  "userName": "Кузнецов Александр",
+  "password": "1234567",
+  "sex": "male",
+  "dateBirth": "2000-02-22",
+  "role": "user",
+  "description": "Кузнецов Александр Юрьевич",
+  "location": "Пионерская",
+  "levelTraining": "новичок",
+  "trainingType": ["йога"],
+  "trainingTime": "10-30 мин",
+  "caloriesReset": 1200,
+  "caloriesSpend": 1500,
+  "isReady": true
+  }
+
+###
+# @name login
+POST http://localhost:4000/api/users/login HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "email": "coach1@notfound.local",
+  "password": "1234567"
+}
+###
+@authToken = {{login.response.body.accessToken}}
+@refrhToken = {{login.response.body.refreshToken}}
+###
+###Загрузка аватара
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:4000/api/files/avatar
+###Загрузка фонового изображения
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:4000/api/files/user/background
+
+# Обновление токенов
+POST http://localhost:4000/api/users/refresh HTTP/1.1
+Authorization: Bearer {{refrhToken}}
+
+###
+# Удаление refresh token
+POST http://localhost:4000/api/users/refresh/delete HTTP/1.1
+Authorization: Bearer {{refrhToken}}
+
+###
+
+# Детальная информация о пользователе (Карточка пользователя)
+GET http://localhost:4000/api/users/6497fd0eaaa5a02715264c9b HTTP/1.1
+Authorization: Bearer {{authToken}}
+###
+
+
+#  Редактирование информации о пользователе
+POST http://localhost:4000/api/users/edit HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "location": "Спортивная"
+  }
+###
+
+# Список (каталог) пользователей
+GET http://localhost:4000/api/users?trainingType=йога,бокс&levelTraining=любитель&limit=15&page=1 HTTP/1.1
+Authorization: Bearer {{authToken}}
+###
+# Список (каталог) пользователей
+GET http://localhost:4000/api/users HTTP/1.1
+Authorization: Bearer {{authToken}}
+###
+# Список оповещений
+GET http://localhost:4000/api/users/notify/show HTTP/1.1
+Authorization: Bearer {{authToken}}
+###
+
+# Удаление оповещения
+DELETE http://localhost:4000/api/users/notify/delete/64a3aa0e0d2bef5e279d9dfd HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+###
+
+
+##################     ЛИЧНЫЙ КАБИНЕТ ПОЛЬЗОВАТЕЛЯ    ###################
+
+
+#  Добавить друга
+POST http://localhost:4000/api/user/friends/add/6497fd0eaaa5a02715264c9b HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+###
+
+#  Удалить пользователя из друзей
+POST http://localhost:4000/api/user/friends/delete/649866f6dac052e861589f59 HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+###
+
+#  Список друзей пользователя
+GET http://localhost:4000/api/user/friends/show HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+###
+
+# Создание заказа
+POST http://localhost:4000/api/user/orders/create HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "trainingId": "64a406e9c4d605ea3e822df6",
+  "trainingCount": 3,
+  "paymentOption": "visa"
+}
+###
+
+# Списание тренировки
+POST http://localhost:4000/api/user/orders/reduce/64a44ab58cc4fa6456f4121e HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+###
+
+# Создание запроса на персональную/совместную тренировку
+POST http://localhost:4000/api/user/request/training/create HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "userId": "649da3544f4fc537d512a656",
+  "statusRequest": "на рассмотрении",
+  "typeRequest": "совместная тренировка"
+}
+###
+
+
+# Изменений статуса заявки
+POST http://localhost:4000/api/user/request/update/64a44b118cc4fa6456f4122c HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "statusRequest": "принят"
+}
+###
+
+# Баланс пользователя
+GET http://localhost:4000/api/user/orders?sortDate=asc&sortPrice=desc HTTP/1.1
+Authorization: Bearer {{authToken}}
+###
+
+# Удаление заказа
+DELETE http://localhost:4000/api/user/orders/delete/64a44aa08cc4fa6456f4121a HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+###
+
+# Подписка на получение уведомлений по email на появление новых тренировок определённого тренера
+POST http://localhost:4000/api/user/subscription/create HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "coachId": "649866f6dac052e861589f59"
+}
+
+###
+
+# Отмена подписки на других пользователей.
+DELETE  http://localhost:4000/api/user/subscription/delete HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "coachId": "649866f6dac052e861589f59"
+}
+###
+# Рассылка почтовых уведомлений на email о новых тренировках
+GET http://localhost:4000/api/user/notify/newtraining HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+##################     ЛИЧНЫЙ КАБИНЕТ ТРЕНЕРА    ###################
+
+
+# Создание тренировки
+POST http://localhost:4000/api/coach/training/create HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "nameTraining": "Тренировка 1",
+  "levelTraining": "профессионал",
+  "trainingType": "кроссфит",
+  "trainingTime": "30-50 мин",
+  "price": 2400,
+  "caloriesReset": 3000,
+  "descriptionTraining": "Тренировка кроссфит",
+  "sex": "female",
+  "isSpecialOffer": true
+}
+###
+# Редактирование  тренировки
+POST http://localhost:4000/api/coach/training/edit/64a447e28cc4fa6456f411fa HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "price": 2700
+}
+###
+
+### Загрузка фонового изображение для тренировки
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:4000/api/files/image/training/64a447e28cc4fa6456f411fa
+
+### Загрузка видео тренировки
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F file="@/C:/fit_img/Video_HTML_Academy_1.mp4" http://localhost:4000/api/files/video/training/649afe8c1b6c87810dbb07bf
+
+###Загрузка сертификатов
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F file="@/C:/fit_img/1.pdf" http://localhost:4000/api/files/coach/certificate
+
+
+# Детальная информация о тренировке
+GET http://localhost:4000/api/coach/training/64a406e9c4d605ea3e822df6 HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+###
+
+# Список тренировок
+GET http://localhost:4000/api/coach/training/show/list?price=10,3000&sortDate=1 HTTP/1.1
+Authorization: Bearer {{authToken}}
+###
+
+# Список заказов для тренера
+GET http://localhost:4000/api/coach/orders?sortPrice=desc&sortDate=desc HTTP/1.1
+Authorization: Bearer {{authToken}}
+###
+
+#  Список друзей тренера
+GET http://localhost:4000/api/coach/friends/show HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+###
+
+#  Удалиться из списка друзей
+POST http://localhost:4000/api/coach/friends/delete/649809159b59277aa0c615a7 HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+###
+
+
+###########      ОБЩИЕ ЗАПРОСЫ     ####################
+
+
+# Каталог тренировок
+GET http://localhost:4000/api/training/catalog?sortDate=desc&price=10,4000 HTTP/1.1
+Authorization: Bearer {{authToken}}
+###
+
+# Добавить комментарий
+POST http://localhost:4000/api/training/comments/create/64a406e9c4d605ea3e822df6 HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "message": "Не впечатлило............................................................................................",
+  "ratingTraining": 1
+}
+###
+
+
+# Список комментариев
+GET http://localhost:4000/api/training/comments/64a406e9c4d605ea3e822df6 HTTP/1.1
+Authorization: Bearer {{authToken}}
+###

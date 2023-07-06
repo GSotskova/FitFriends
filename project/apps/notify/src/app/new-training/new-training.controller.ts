@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
-import { RabbitRouting } from '@project/shared/shared-types';
+import { RabbitExchange, RabbitQueue, RabbitRouting } from '@project/shared/shared-types';
 import { MailService } from '../mail/mail.service';
 import { NewTrainingService } from './new-training.service';
 import { NotifyTrainingDto } from '@project/shared/shared-dto';
@@ -13,9 +13,9 @@ export class NewTrainingController {
   ) {}
 
   @RabbitSubscribe({
-    exchange: 'fitfriends.notify',
+    exchange: RabbitExchange.Notify,
     routingKey: RabbitRouting.AddNotifyTraining,
-    queue: 'fitfriends.notify.training',
+    queue: RabbitQueue.Training,
   })
   public async create(dto: NotifyTrainingDto) {
     this.newTrainingService.addNotifyTraining(dto);

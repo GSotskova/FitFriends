@@ -3,3 +3,4 @@ export * from './lib/db'
 export * from './lib/brokers';
 export * from './lib/mail';
 export * from './lib/jwt';
+export * from './lib/query';

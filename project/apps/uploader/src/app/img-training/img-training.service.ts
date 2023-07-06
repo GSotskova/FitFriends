@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { uploaderConfig } from '@project/config/config-uploader';
 import { ConfigType } from '@nestjs/config';
-import {  RabbitRouting } from '@project/shared/shared-types';
+import {  RabbitExchange, RabbitRouting } from '@project/shared/shared-types';
 
 @Injectable()
 export class ImgTrainingService {
@@ -14,7 +14,7 @@ export class ImgTrainingService {
 
   public async trainingImg(trainingId:string, fileId: string) {
     return this.rabbitClient.request<string>(
-      {exchange: 'fitfriends.uploader',
+      {exchange: RabbitExchange.Uploader,
       routingKey: RabbitRouting.TrainingImg,
       payload: {trainingId, fileId}}
     );
@@ -22,7 +22,7 @@ export class ImgTrainingService {
 
   public async trainingVideo(trainingId:string, fileId: string) {
     return this.rabbitClient.request<string>(
-      {exchange: 'fitfriends.uploader',
+      {exchange: RabbitExchange.Uploader,
       routingKey: RabbitRouting.TrainingVideo,
       payload: {trainingId, fileId}}
     );

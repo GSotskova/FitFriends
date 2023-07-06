@@ -59,33 +59,30 @@ export class UserService {
     }
 
 
-    public async createTestData(user, questionnaire) {
-      const entityTest = new UserEntity(user)
-      const userEntity = await entityTest.setPassword(user.password)
-      const newUser = await this.userRepository.create(userEntity);
-      if (user.role === UserRole.Coach) {
-        const questionnaireNew = await this.questionnaireCoachRepository.create(questionnaire)
-        return {newUser, questionnaireNew}
-      }
-      else {
-        const questionnaireNew = await this.questionnaireUserRepository.create(questionnaire)
-        return {newUser, questionnaireNew}
-      }
+  public async createTestData(user, questionnaire) {
+    const entityTest = new UserEntity(user)
+    const userEntity = await entityTest.setPassword(user.password)
+    const newUser = await this.userRepository.create(userEntity);
+    if (user.role === UserRole.Coach) {
+      const questionnaireNew = await this.questionnaireCoachRepository.create(questionnaire)
+      return {newUser, questionnaireNew}
     }
+    const questionnaireNew = await this.questionnaireUserRepository.create(questionnaire)
+    return {newUser, questionnaireNew}
+  }
 
 
   public getGeneralUserEntity(createDto: CreateUserDto, editDto?: EditUserDto, user?: User) : UserEntity {
     if(createDto) {
-    const item =  {
-      userName: createDto.userName, email: createDto.email,
-      avatar: '', passwordHash: '',
-      sex: createDto.sex, dateBirth: dayjs(createDto.dateBirth).toDate(),
-      role: createDto.role, description: createDto.description,
-      location: createDto.location, backgroundImg: ''
-    };
+      const item =  {
+        userName: createDto.userName, email: createDto.email,
+        avatar: '', passwordHash: '',
+        sex: createDto.sex, dateBirth: dayjs(createDto.dateBirth).toDate(),
+        role: createDto.role, description: createDto.description,
+        location: createDto.location, backgroundImg: ''
+      };
     return new UserEntity(item)
   }
-  else {
     const item =  {
       userName: editDto.userName,email: user.email,
       avatar: editDto.avatar, passwordHash: user.passwordHash,
@@ -94,7 +91,6 @@ export class UserService {
       location: editDto.location, backgroundImg: editDto.backgroundImg
     };
     return new UserEntity(item)
-  }
   }
 
   public getUserEntity(userId :string, dto: CreateUserDto | EditUserDto) : QuestionnaireUserEntity {
