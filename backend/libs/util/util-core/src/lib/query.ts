@@ -57,7 +57,7 @@ export const getTrainingCatalogQuery = (query: TrainingCatalogQuery ) => {
                                           "$lte": caloriesReset[1],
                                        };
                           }
-      if (rating) { objFiltr['rating'] = rating};
+      if (rating) { objFiltr['rating'] = rating}
       if (trainingType) {objFiltr['trainingType'] = { "$in": trainingType };}
 
   const objSort: SomeObject = {};
@@ -83,7 +83,7 @@ export const getTrainingOrdersQuery = (query: TrainingOrdersQuery ) => {
     keys.forEach(key => {
       key === 'sortCount'? objSort['trainingCount'] = sortCount : '';
       key === 'sortPrice'? objSort['totalPrice'] = sortPrice : '';
-      key === 'sortDate'? objSort['createdAt'] = sortDate : '';
+      key === 'sortDate'? objSort['createdAt'] = sortDate : objSort['createdAt'] = 1;
     });
 
 
@@ -114,7 +114,7 @@ export const getTrainingQuery = (query: TrainingQuery ) => {
                                         "$lte": caloriesReset[1],
                                       };
                                }
-      if (rating) {objFiltr['rating'] =  rating};
+      if (rating) {objFiltr['rating'] =  rating}
       if (trainingTime) {objFiltr['trainingTime'] = { "$in": trainingTime };}
 
 
