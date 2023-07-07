@@ -2,12 +2,14 @@
 FitFriends
 
 Запуск приложения:
-nx run users:serve (Пользователи: регистрация, авторизация, просмотр, друзья и т.д.)
-nx run training:serve (Тренировки, заказы, заявки на персональные/совместные, комментарии)
-nx run uploader:serve (Загрузка файлов: аватар, сертификаты и т.д.)
 nx run notify:serve (Оповещения)
 nx run bff:serve (Все запросы)
 nx run seed:serve (Первоначальное заполнение БД)
+nx run uploader:serve (Загрузка файлов: аватар, сертификаты и т.д.)
+nx run training:serve (Тренировки, заказы, заявки на персональные/совместные, комментарии)
+nx run users:serve (Пользователи: регистрация, авторизация, просмотр, друзья и т.д.)
+
+
 
 docker
 docker compose --file ./apps/users/docker-compose.dev.yml --project-name "fitfriends-users" up -d
