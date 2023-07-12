@@ -1,0 +1,30 @@
+{
+  "name": "fitfriends",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "object-assign": "^4.1.1",
+    "vary": "^1.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GSotskova/FitFriends.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GSotskova/FitFriends/issues"
+  },
+  "homepage": "https://github.com/GSotskova/FitFriends#readme",
+  "parserOptions": {
+    "project": [
+      "tsconfig.json"
+    ]
+  }
+}
