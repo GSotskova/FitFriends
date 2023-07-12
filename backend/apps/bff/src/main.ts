@@ -5,7 +5,7 @@
 
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-
+import cors from 'cors';
 import { AppModule } from './app/app.module';
 import { RequestIdInterceptor } from './app/interceptors/request-id.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -14,7 +14,8 @@ const  DEFAULT_PORT = 3333;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.use(cors());
+  
   const config = new DocumentBuilder()
   .setTitle('The "BFF" service')
   .setDescription('BFF service API')
