@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {NameSpace, AuthorizationStatus} from '../../constants';
+import {NameSpace, AuthorizationStatus, FormRegistration} from '../../constants';
 import {UserProcess} from '../../types/state';
-import {checkAuthAction, loginAction, logoutAction} from '../api-actions';
+import {checkAuthAction, loginAction, logoutAction, checkEmail} from '../api-actions';
 import { User, UserRegister, UserRole, UserSex } from '../../types/user';
 
 const initialState: UserProcess = {
@@ -18,7 +18,9 @@ const initialState: UserProcess = {
     description: '',
     location: '',
     password: ''
-  }
+  },
+  formRegistrType: FormRegistration.General,
+  existsEmail: false
 };
 
 export const userProcess = createSlice({
@@ -30,6 +32,9 @@ export const userProcess = createSlice({
     },
     setUserGeneralInfo: (state, action: PayloadAction<{userData: UserRegister}>) => {
       state.userData = action.payload.userData;
+    },
+    setFormType: (state, action: PayloadAction<{type: FormRegistration}>) => {
+      state.formRegistrType = action.payload.type;
     },
   },
   extraReducers: (builder) => {
@@ -52,8 +57,14 @@ export const userProcess = createSlice({
       .addCase(logoutAction.fulfilled, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.hasErrorLogin = false;
+      })
+      .addCase(checkEmail.fulfilled, (state, action) => {
+        state.existsEmail = false;
+      })
+      .addCase(checkEmail.rejected, (state) => {
+        state.existsEmail = true;
       });
   }
 });
 
-export const {loadAuthInfo, setUserGeneralInfo} = userProcess.actions;
+export const {loadAuthInfo, setUserGeneralInfo, setFormType} = userProcess.actions;

@@ -17,12 +17,10 @@ export enum AuthorizationStatus {
 
 
 export enum APIRoute {
-  Products = '/products',
   Login = '/users/login',
   Logout = '/users/logout',
   Register = '/users/create',
-  Edit = '/edit',
-  Delete = '/delete'
+  CheckEmail = '/users/check/email',
 }
 
 export enum NameSpace {
@@ -42,3 +40,8 @@ export enum HttpCode {
 }
 
 
+export enum FormRegistration {
+  General,
+  QuestionnaireCoach,
+  QuestionnaireUser
+}
