@@ -1,9 +1,10 @@
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
-import { USER_ROLE_ARR, USER_SEX_ARR, UserRole, UserRoleTxt, UserSex, UserSexTxt } from '../../types/user';
-import { STATION_METRO } from '../../types/station-metro.enum';
-import { setUserGeneralInfo } from '../../store/user-process/user-process';
-import { useAppDispatch } from '../../hooks';
-
+import { USER_ROLE_ARR, USER_SEX_ARR, UserRegister, UserRole, UserRoleTxt, UserSex, UserSexTxt } from '../../types/user';
+import { STATION_METRO, StationMetro } from '../../types/station-metro.enum';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { checkEmail } from '../../store/api-actions';
+import { getcheckEmail } from '../../store/user-process/selectors';
+import './user-registration-form.css';
 
 enum FormFieldName {
   userName = 'userName',
@@ -17,12 +18,15 @@ enum FormFieldName {
   password = 'password'
 }
 
-/*type UserRegistrationFormProps = {
+type UserRegistrationFormProps = {
  onSubmit: (userData: UserRegister) => void;
 };
-*/
-function UserRegistrationForm(): JSX.Element {
+
+
+const UserRegistrationForm = ({onSubmit}: UserRegistrationFormProps): JSX.Element => {
+
   const dispatch = useAppDispatch();
+  const isEmailExists = useAppSelector(getcheckEmail);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,16 +43,15 @@ function UserRegistrationForm(): JSX.Element {
       password: String(formData.get(FormFieldName.password)),
       location: String(currentMetro)
     };
-    // eslint-disable-next-line no-console
-    console.log('UserRegistrationForm', data);
+    if (!isEmailExists && currentMetro) {
+      onSubmit(data);
+    }
 
-    dispatch(setUserGeneralInfo({userData: data}));
   };
 
-  /* const navigate = useNavigate();
-  const routeChange = () => {
-    navigate(AppRoute.);
-  };*/
+  const handleInputEmail = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(checkEmail({login: evt.target.value, password: ' '}));
+  };
 
   const [photoUser, setPhoto] = useState<File | undefined>();
   const handlePhotoUpload = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -80,11 +83,10 @@ function UserRegistrationForm(): JSX.Element {
 
 
   const [isOpened, setIsOpened] = useState<boolean>(false);
-
   const handleToggleButtonClick = () => {
     setIsOpened((prevIsOpened) => !prevIsOpened);
   };
-  const [currentMetro, setMetro] = useState<string | null>(' ');
+  const [currentMetro, setMetro] = useState<string | null>(StationMetro.Petrogradskaya);
   const handleMetroChange = (evt: React.MouseEvent<HTMLLIElement>) => {
     setMetro(evt.currentTarget.innerText);
     evt.currentTarget.setAttribute('aria-selected', 'true');
@@ -126,6 +128,7 @@ function UserRegistrationForm(): JSX.Element {
                   type="file"
                   accept="image/png, image/jpeg"
                   ref={inputRef}
+                  required
                   onChange={handlePhotoUpload}
                 />
                 {photoUser ? (
@@ -152,25 +155,34 @@ function UserRegistrationForm(): JSX.Element {
             <div className="custom-input">
               <label><span className="custom-input__label">Имя</span>
                 <span className="custom-input__wrapper">
-                  <input type="text" name={FormFieldName.userName}/>
+                  <input type="text" name={FormFieldName.userName} required/>
                 </span>
               </label>
             </div>
             <div className="custom-input">
               <label><span className="custom-input__label">E-mail</span>
-                <span className="custom-input__wrapper">
-                  <input type="email" name={FormFieldName.email}/>
+                <span className="custom-input__wrapper custom-input--error">
+                  <input
+                    type="email"
+                    name={FormFieldName.email}
+                    onChange={handleInputEmail}
+                    required
+                  />
+                  {isEmailExists &&
+                <span className="custom-input__error">Пользователь с таким email уже зарегистрирован</span>}
                 </span>
+
               </label>
             </div>
             <div className="custom-input">
               <label><span className="custom-input__label">Дата рождения</span>
                 <span className="custom-input__wrapper">
-                  <input type="date" name={FormFieldName.dateBirth} max="2099-12-31"/>
+                  <input type="date" name={FormFieldName.dateBirth} max="2099-12-31" required/>
                 </span>
               </label>
             </div>
-            <div className={`custom-select ${isOpened ? 'is-open' : 'custom-select--not-selected'} not-empty`}><span className="custom-select__label">Ваша локация</span>
+            <div className={`custom-select ${isOpened ? 'is-open' : 'custom-select--not-selected'} not-empty`}>
+              <span className="custom-select__label">Ваша локация</span>
               <button
                 className="custom-select__button"
                 type="button"
@@ -184,9 +196,10 @@ function UserRegistrationForm(): JSX.Element {
                   </svg>
                 </span>
               </button>
-              {isOpened && (
-                <ul className="custom-select__list" role="listbox">
-                  {STATION_METRO.map((el) => (
+
+              <ul className="custom-select__list" role="listbox" >
+                {STATION_METRO.map((el) =>
+                  (
                     <li
                       key={el}
                       role="option"
@@ -198,13 +211,20 @@ function UserRegistrationForm(): JSX.Element {
                       {el}
                     </li>
                   ))}
-                </ul>
-              )}
+              </ul>
+
             </div>
             <div className="custom-input">
               <label><span className="custom-input__label">Пароль</span>
                 <span className="custom-input__wrapper">
-                  <input type="password" name={FormFieldName.password} autoComplete="off" required/>
+                  <input
+                    type="password"
+                    name={FormFieldName.password}
+                    autoComplete="off"
+                    required
+                    minLength={6}
+                    maxLength={12}
+                  />
                 </span>
               </label>
             </div>
@@ -213,13 +233,26 @@ function UserRegistrationForm(): JSX.Element {
                 {USER_SEX_ARR.map((el) => (
                   <div className="custom-toggle-radio__block" key={el}>
                     <label htmlFor={el}>
-                      <input
-                        type="radio"
-                        id={el}
-                        name="sex"
-                        value={el}
-                        onChange={handleSexChange}
-                      />
+                      {el === UserSexTxt.Male ?
+                        (
+                          <input
+                            type="radio"
+                            id={el}
+                            name="sex"
+                            value={el}
+                            required
+                            onChange={handleSexChange}
+                          />
+                        )
+                        : (
+                          <input
+                            type="radio"
+                            id={el}
+                            name="sex"
+                            value={el}
+                            onChange={handleSexChange}
+                          />
+                        )}
                       <span className="custom-toggle-radio__icon"></span>
                       <span className="custom-toggle-radio__label">{el}</span>
                     </label>
@@ -236,14 +269,29 @@ function UserRegistrationForm(): JSX.Element {
               {USER_ROLE_ARR.map((el) => (
                 <div className="role-btn" key={el}>
                   <label>
-                    <input
-                      className="visually-hidden"
-                      type="radio"
-                      name="role"
-                      value={el}
-                      id={el}
-                      onChange={handleRoleChange}
-                    />
+                    {el === UserRoleTxt.Coach
+                      ? (
+                        <input
+                          className="radio-visually-hidden"
+                          type="radio"
+                          name="role"
+                          value={el}
+                          id={el}
+                          required
+                          onChange={handleRoleChange}
+                        />
+                      )
+                      :
+                      (
+                        <input
+                          className="radio-visually-hidden"
+                          type="radio"
+                          name="role"
+                          value={el}
+                          id={el}
+                          onChange={handleRoleChange}
+                        />
+                      )}
                     <span className="role-btn__icon">
                       <svg width="12" height="13" aria-hidden="true">
                         <use xlinkHref={el === UserRoleTxt.Coach ? '#icon-cup' : '#icon-weight'}></use>
@@ -263,6 +311,7 @@ function UserRegistrationForm(): JSX.Element {
                 value="user-agreement"
                 name="user-agreement"
                 onChange={handleAgreementChange}
+                required
               />
               <span className="sign-up__checkbox-icon">
                 <svg width="9" height="6" aria-hidden="true">
@@ -274,7 +323,6 @@ function UserRegistrationForm(): JSX.Element {
           <button
             className="btn sign-up__button"
             type="submit"
-          //  onClick={routeChange}
           >
             Продолжить
           </button>
@@ -284,6 +332,6 @@ function UserRegistrationForm(): JSX.Element {
 
 
   );
-}
+};
 
 export default UserRegistrationForm;

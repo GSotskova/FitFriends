@@ -1,8 +1,20 @@
+import QuestionnaireCoachForm from '../../components/questionnaire-coach-form/questionnaire-coach-form';
+import QuestionnaireUserForm from '../../components/questionnaire-user-form/questionnaire-user-form';
 import UserRegistrationForm from '../../components/user-registration-form/user-registration-form';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getUserGeneralInfo } from '../../store/user-process/selectors';
+import { setUserGeneralInfo } from '../../store/user-process/user-process';
+import { UserRegister, UserRole } from '../../types/user';
 
 
 function RegistrationPage(): JSX.Element {
 
+  const dispatch = useAppDispatch();
+  const userDataCurrent = useAppSelector(getUserGeneralInfo);
+
+  const handleFormSubmit = (userData: UserRegister) => {
+    dispatch(setUserGeneralInfo({userData}));
+  };
 
   return (
     <div className="wrapper">
@@ -22,7 +34,12 @@ function RegistrationPage(): JSX.Element {
                 <h1 className="popup-form__title">Регистрация</h1>
               </div>
               <div className="popup-form__form">
-                <UserRegistrationForm />
+                {!userDataCurrent?.email &&
+                (<UserRegistrationForm onSubmit={handleFormSubmit} />)}
+                {(userDataCurrent?.email && userDataCurrent?.role === UserRole.Coach) &&
+                  (<QuestionnaireCoachForm />) }
+                {(userDataCurrent?.email && userDataCurrent?.role === UserRole.User) &&
+                  (<QuestionnaireUserForm />)}
               </div>
             </div>
           </div>

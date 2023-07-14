@@ -120,4 +120,13 @@ public async deleteNotifyById(@Req() req: Request, @Param('id', MongoidValidatio
   return data;
 }
 
+
+@Post('check/email')
+public async checkEmail(@Body() email: string) {
+  console.log('check/email', email)
+  const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Auth}/check/email`, email);
+  console.log('check/email', data)
+  return data;
+}
+
 }

@@ -2,7 +2,7 @@ import axios, {AxiosInstance, AxiosRequestConfig, AxiosError} from 'axios';
 import {getToken} from './token';
 
 
-const BACKEND_URL = 'http://localhost:4000';
+const BACKEND_URL = 'http://localhost:4000/api';
 const REQUEST_TIMEOUT = 5000;
 
 export const createAPI = (): AxiosInstance => {

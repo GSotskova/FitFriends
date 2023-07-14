@@ -81,6 +81,14 @@ export class AuthenticationService {
     return userEntity.toObject();
   }
 
+  public async checkEmail(email: string) {
+    const existUser = await this.userRepository.findByEmail(email);
+    if (existUser) {
+      throw new ConflictException(AuthErrorMsg.UserExists);
+        }
+    return {email: null}
+  }
+
 
   public async createUserToken(user: User, tokenInfo?: TokenLogin) {
     if (tokenInfo && tokenInfo.token && tokenInfo.userIdAuth === user._id.toString()) {

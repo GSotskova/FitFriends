@@ -94,6 +94,15 @@ export class AuthenticationController {
     return payload;
   }
 
+  @Post('check/email')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Check email'
+  })
+  public async checkEmail(@Body() body) {
+    return this.authService.checkEmail(body.email);
+  }
+
   @UseGuards(CheckJwtAuthGuard)
   @Post('isauth')
   @ApiResponse({

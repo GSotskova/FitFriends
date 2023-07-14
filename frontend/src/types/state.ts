@@ -1,5 +1,5 @@
 import {store} from '../store/index';
-import {AuthorizationStatus} from '../constants';
+import {AuthorizationStatus, FormRegistration} from '../constants';
 import {User, UserRegister} from './user';
 
 export type UserProcess = {
@@ -7,6 +7,8 @@ export type UserProcess = {
   authInfo: User | null;
   hasErrorLogin: boolean;
   userData: UserRegister;
+  formRegistrType: FormRegistration;
+  existsEmail: boolean;
 };
 
 
