@@ -36,7 +36,7 @@ function RegistrationPage(): JSX.Element {
         {(userDataCurrent?.email && userDataCurrent?.role === UserRole.Coach) &&
                   (<QuestionnaireCoachForm userData={userDataCurrent} avatarImg={avatarImg}/>) }
         {(userDataCurrent?.email && userDataCurrent?.role === UserRole.User) &&
-                  (<QuestionnaireUserForm />)}
+                  (<QuestionnaireUserForm userData={userDataCurrent} avatarImg={avatarImg}/>)}
       </main>
     </div>
 
