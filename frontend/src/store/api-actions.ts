@@ -6,7 +6,9 @@ import {APIRoute, AppRoute} from '../constants';
 import {saveToken, dropToken} from '../services/token';
 import {redirectToRoute} from './action';
 import {loadAuthInfo} from '../store/user-process/user-process';
-import { User } from '../types/user.js';
+import { User, UserGeneral, FileType } from '../types/user';
+import { QuestionnaireCoach } from '../types/questionnaire';
+import { adaptAvatarToServer, adaptCertificateToServer, adaptCoachToServer } from '../utils/adapters/adaptersToServer';
 
 
 export const checkAuthAction = createAsyncThunk<User, undefined, {
@@ -29,8 +31,8 @@ export const loginAction = createAsyncThunk<void, AuthData, {
 }>(
   'user/login',
   async ({login: email, password}, {dispatch, extra: api}) => {
-    const {data: {token}} = await api.post<User>(APIRoute.Login, {email, password});
-    saveToken(token);
+    const {data: {accessToken}} = await api.post<User>(APIRoute.Login, {email, password});
+    saveToken(accessToken);
     const {data} = await api.get<User>(APIRoute.Login);
     dispatch(loadAuthInfo({authInfo: data}));
     dispatch(redirectToRoute(AppRoute.Intro));
@@ -64,15 +66,26 @@ export const logoutAction = createAsyncThunk<void, undefined, {
     dropToken();
   },
 );
-/*
-export const registerUser = createAsyncThunk<void, UserRegister, {
+
+export const registerCoach = createAsyncThunk<void, UserGeneral & QuestionnaireCoach & FileType, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
  }>(
-   'user/register',
-   async (userRegister: UserRegister, { dispatch, extra: api }) => {
-     const { data } = await api.post<{ id: string }>(APIRoute.Register, adaptUserToServer(userRegister));
-     dispatch(redirectToRoute(AppRoute.Login));
+   'coach/register',
+   async (newCoach: UserGeneral & QuestionnaireCoach & FileType, { dispatch, extra: api }) => {
+     const { data } = await api.post<{ id: string }>(APIRoute.Register, adaptCoachToServer(newCoach));
+
+     const {data: {accessToken}} = await api.post<User>(APIRoute.Login, {email: newCoach.email, password: newCoach.password});
+     saveToken(accessToken);
+     if (data && newCoach.avatarImg?.name && newCoach.fileCertificate?.name) {
+       const postAvatarApiRoute = `${APIRoute.Files}/avatar`;
+       await api.post(postAvatarApiRoute, adaptAvatarToServer(newCoach.avatarImg));
+
+       const postCertificateApiRoute = `${APIRoute.Files}/coach/certificate`;
+       await api.post(postCertificateApiRoute, adaptCertificateToServer(newCoach.fileCertificate));
+     }
+     dispatch(redirectToRoute(AppRoute.Intro));
    });
-*/
+
+

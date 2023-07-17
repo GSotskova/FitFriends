@@ -22,9 +22,9 @@ export class FileRepository {
       .exec();
   }
 
-  public async findByObjectId(id: string): Promise<File | null> {
+  public async findByObjectId(id: string, appName: string): Promise<File | null> {
     return this.fileModel
-      .findOne({ objectId: id})
+      .findOne({ objectId: id, appName})
       .exec();
   }
   public async update(id:string, item: FileEntity): Promise<File | null> {

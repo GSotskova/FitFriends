@@ -1,30 +1,28 @@
+import { LevelTraining, TrainingTime, TrainingType } from './questionnaire';
 import { StationMetro } from './station-metro.enum';
 
 export type User = {
   userName: string;
   email: string;
-  avatar: string;
+  accessToken: string;
+}
+
+export type UserGeneral = {
+  userName: string;
+  email: string;
+  avatar?: string;
   sex: UserSex;
   dateBirth: string;
   role: UserRole;
   description: string;
   location: StationMetro;
-  backgroundImg?: string;
-  token: string;
-}
-
-export type UserRegister = {
-  userName: string;
-  email: string;
-  avatar: string;
-  sex: UserSex;
-  dateBirth: string;
-  role: UserRole;
-  description: string;
-  location: string;
   password: string;
 }
 
+export type FileType = {
+  avatarImg?: File;
+  fileCertificate?: File;
+}
 
 export enum UserSex {
   Male = 'male',
@@ -49,3 +47,23 @@ export enum UserRoleTxt {
   User = 'Я хочу тренироваться',
 }
 export const USER_ROLE_ARR = [UserRoleTxt.Coach, UserRoleTxt.User];
+
+export type UserFullInfo = {
+  userName: string;
+  email: string;
+  avatar?: string;
+  sex: UserSex;
+  dateBirth: string;
+  role: UserRole;
+  description: string;
+  location: StationMetro;
+  levelTraining: LevelTraining;
+  trainingType: TrainingType[];
+  certificate?: string;
+  successCoach: string;
+  isPersonal: boolean;
+  trainingTime: TrainingTime;
+  caloriesReset: number;
+  caloriesSpend: number;
+  isReady: boolean;
+}

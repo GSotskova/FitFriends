@@ -58,10 +58,10 @@ export class UploaderController {
   @UseInterceptors(CoachIdInterceptor)
   @UseInterceptors(RoleCoachInterceptor)
   @Post('/coach/certificate')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('certificate'))
   public async postCertificate(@Req() req: Request, @UploadedFile() file: Express.Multer.File) {
     const formData = new FormData();
-    formData.append('file', Buffer.from(file.buffer), {filename: file.originalname, contentType: file.mimetype});
+    formData.append('certificate', Buffer.from(file.buffer), {filename: file.originalname, contentType: file.mimetype});
 
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Uploads}/certificate/${req.body['coachId']}`,
     formData,
@@ -76,11 +76,11 @@ export class UploaderController {
   @UseInterceptors(RoleCoachInterceptor)
   @Post('/image/training/:id')
   @UseInterceptors(UseridTrainingInterceptor)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('image'))
   public async postImage(@UploadedFile() file: Express.Multer.File,@Param('id') id: string) {
 
     const formData = new FormData();
-     formData.append('file', Buffer.from(file.buffer), {filename: file.originalname,contentType: file.mimetype});
+     formData.append('image', Buffer.from(file.buffer), {filename: file.originalname,contentType: file.mimetype});
 
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Uploads}/image/${id}`,
     formData,
@@ -95,11 +95,11 @@ export class UploaderController {
   @UseInterceptors(RoleCoachInterceptor)
   @Post('/video/training/:id')
   @UseInterceptors(UseridTrainingInterceptor)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('video'))
   public async postVideo(@UploadedFile() file: Express.Multer.File,@Param('id') id: string) {
 
     const formData = new FormData();
-     formData.append('file', Buffer.from(file.buffer), {filename: file.originalname,contentType: file.mimetype});
+     formData.append('video', Buffer.from(file.buffer), {filename: file.originalname,contentType: file.mimetype});
 
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Uploads}/video/${id}`,
     formData,

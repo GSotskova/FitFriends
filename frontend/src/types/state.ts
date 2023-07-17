@@ -1,12 +1,13 @@
 import {store} from '../store/index';
 import {AuthorizationStatus, FormRegistration} from '../constants';
-import {User, UserRegister} from './user';
+import {User, UserFullInfo, UserGeneral} from './user';
 
 export type UserProcess = {
   authorizationStatus: AuthorizationStatus;
   authInfo: User | null;
   hasErrorLogin: boolean;
-  userData: UserRegister;
+  userData: UserGeneral | null;
+  userFullInfo: UserFullInfo | null;
   formRegistrType: FormRegistration;
   existsEmail: boolean;
 };

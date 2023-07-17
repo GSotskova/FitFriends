@@ -11,7 +11,7 @@ export interface User {
   sex: UserSex;
   dateBirth: Date;
   role: UserRole;
-  description: string;
+  description?: string;
   location: StationMetro;
   backgroundImg?: string
 }

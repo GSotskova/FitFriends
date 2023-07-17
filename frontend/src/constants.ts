@@ -19,8 +19,10 @@ export enum AuthorizationStatus {
 export enum APIRoute {
   Login = '/users/login',
   Logout = '/users/logout',
-  Register = '/users/create',
+  Register = '/users/register',
+  Files = '/files',
   CheckEmail = '/users/check/email',
+  Users = '/users',
 }
 
 export enum NameSpace {
@@ -44,4 +46,9 @@ export enum FormRegistration {
   General,
   QuestionnaireCoach,
   QuestionnaireUser
+}
+
+export const enum SuccessCoach {
+  MinLength = 10,
+  MaxLength = 140
 }

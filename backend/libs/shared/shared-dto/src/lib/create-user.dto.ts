@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ArrayMaxSize, IsEmail, IsEnum, IsISO8601, IsInt, IsNotEmpty, IsString, Max, MaxLength, Min, MinLength, ValidateIf } from 'class-validator';
+import { ArrayMaxSize, IsEmail, IsEnum, IsISO8601, IsInt, IsNotEmpty, IsOptional, IsString, Max, MaxLength, Min, MinLength, ValidateIf } from 'class-validator';
 import { LevelTraining, StationMetro, TrainingTime, TrainingType, UserRole, UserSex } from "@project/shared/shared-types";
 import { CaloriesReset, CaloriesSpend, DescriptionUser, MAX_TRAINING_COUNT, PasswordLength, SuccessCoach } from "./dto.constants";
 
@@ -54,7 +54,8 @@ export class CreateUserDto  {
   })
   @MinLength(DescriptionUser.MinLength)
   @MaxLength(DescriptionUser.MaxLength)
-  public description!: string;
+  @IsOptional()
+  public description?: string;
 
   @ApiProperty({
     description: 'Metro station',

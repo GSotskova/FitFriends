@@ -48,7 +48,6 @@ export class FileService {
 
   public async saveFile(file: Express.Multer.File, appName: string, objectId: string) {
     const writedFile = await this.writeFile(file);
-
     const newFile = new FileEntity({
       size: file.size,
       hashName: writedFile.hashName,
@@ -59,7 +58,7 @@ export class FileService {
       objectId: objectId
     });
 
-    const existsFile = await this.fileRepository.findByObjectId(objectId);
+    const existsFile = await this.fileRepository.findByObjectId(objectId, appName);
     if (existsFile){
       return await this.fileRepository.update(existsFile.id, newFile)
     }

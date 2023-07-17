@@ -2,23 +2,14 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NameSpace, AuthorizationStatus, FormRegistration} from '../../constants';
 import {UserProcess} from '../../types/state';
 import {checkAuthAction, loginAction, logoutAction, checkEmail} from '../api-actions';
-import { User, UserRegister, UserRole, UserSex } from '../../types/user';
+import { User, UserFullInfo, UserGeneral } from '../../types/user';
 
 const initialState: UserProcess = {
   authorizationStatus: AuthorizationStatus.Unknown,
   authInfo: null,
   hasErrorLogin: false,
-  userData: {
-    userName: '',
-    email: '',
-    avatar: '',
-    sex: UserSex.None,
-    dateBirth: '',
-    role: UserRole.Coach,
-    description: '',
-    location: '',
-    password: ''
-  },
+  userData: null,
+  userFullInfo: null,
   formRegistrType: FormRegistration.General,
   existsEmail: false
 };
@@ -30,8 +21,11 @@ export const userProcess = createSlice({
     loadAuthInfo: (state, action: PayloadAction<{authInfo: User}>) => {
       state.authInfo = action.payload.authInfo;
     },
-    setUserGeneralInfo: (state, action: PayloadAction<{userData: UserRegister}>) => {
+    setUserGeneralInfo: (state, action: PayloadAction<{userData: UserGeneral}>) => {
       state.userData = action.payload.userData;
+    },
+    setUserFullInfo: (state, action: PayloadAction<{userFullinfo: UserFullInfo}>) => {
+      state.userFullInfo = action.payload.userFullinfo;
     },
     setFormType: (state, action: PayloadAction<{type: FormRegistration}>) => {
       state.formRegistrType = action.payload.type;
@@ -67,4 +61,4 @@ export const userProcess = createSlice({
   }
 });
 
-export const {loadAuthInfo, setUserGeneralInfo, setFormType} = userProcess.actions;
+export const {loadAuthInfo, setUserGeneralInfo, setUserFullInfo, setFormType} = userProcess.actions;
