@@ -7,8 +7,8 @@ import {saveToken, dropToken} from '../services/token';
 import {redirectToRoute} from './action';
 import {loadAuthInfo} from '../store/user-process/user-process';
 import { User, UserGeneral, FileType } from '../types/user';
-import { QuestionnaireCoach } from '../types/questionnaire';
-import { adaptAvatarToServer, adaptCertificateToServer, adaptCoachToServer } from '../utils/adapters/adaptersToServer';
+import { QuestionnaireCoach, QuestionnaireUser } from '../types/questionnaire';
+import { adaptAvatarToServer, adaptCertificateToServer, adaptCoachToServer, adaptUserToServer } from '../utils/adapters/adaptersToServer';
 
 
 export const checkAuthAction = createAsyncThunk<User, undefined, {
@@ -24,7 +24,7 @@ export const checkAuthAction = createAsyncThunk<User, undefined, {
 );
 
 
-export const loginAction = createAsyncThunk<void, AuthData, {
+export const loginUser = createAsyncThunk<void, AuthData, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
@@ -33,8 +33,6 @@ export const loginAction = createAsyncThunk<void, AuthData, {
   async ({login: email, password}, {dispatch, extra: api}) => {
     const {data: {accessToken}} = await api.post<User>(APIRoute.Login, {email, password});
     saveToken(accessToken);
-    const {data} = await api.get<User>(APIRoute.Login);
-    dispatch(loadAuthInfo({authInfo: data}));
     dispatch(redirectToRoute(AppRoute.Intro));
   },
 );
@@ -88,4 +86,22 @@ export const registerCoach = createAsyncThunk<void, UserGeneral & QuestionnaireC
      dispatch(redirectToRoute(AppRoute.Intro));
    });
 
+
+export const registerUser = createAsyncThunk<void, UserGeneral & QuestionnaireUser & FileType, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+ }>(
+   'user/register',
+   async (newUser: UserGeneral & QuestionnaireUser & FileType, { dispatch, extra: api }) => {
+     const { data } = await api.post<{ id: string }>(APIRoute.Register, adaptUserToServer(newUser));
+
+     const {data: {accessToken}} = await api.post<User>(APIRoute.Login, {email: newUser.email, password: newUser.password});
+     saveToken(accessToken);
+     if (data && newUser.avatarImg?.name) {
+       const postAvatarApiRoute = `${APIRoute.Files}/avatar`;
+       await api.post(postAvatarApiRoute, adaptAvatarToServer(newUser.avatarImg));
+     }
+     dispatch(redirectToRoute(AppRoute.Intro));
+   });
 

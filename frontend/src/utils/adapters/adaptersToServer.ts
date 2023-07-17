@@ -1,5 +1,5 @@
 import { UserGeneral } from '../../types/user';
-import { QuestionnaireCoach } from '../../types/questionnaire';
+import { QuestionnaireCoach, QuestionnaireUser } from '../../types/questionnaire';
 import { CreateUserDto } from '../../dto/user/create-user.dto';
 
 
@@ -16,6 +16,23 @@ export const adaptCoachToServer =
     trainingType: user.trainingType,
     successCoach: user.successCoach,
     isPersonal: user.isPersonal
+  });
+
+export const adaptUserToServer =
+  (user: UserGeneral & QuestionnaireUser): CreateUserDto => ({
+    userName: user.userName,
+    email: user.email,
+    password: user.password,
+    sex: user.sex,
+    dateBirth: user.dateBirth.toString(),
+    role: user.role,
+    location: user.location,
+    levelTraining: user.levelTraining,
+    trainingTime: user.trainingTime,
+    trainingType: user.trainingType,
+    caloriesReset: user.caloriesReset,
+    caloriesSpend: user.caloriesSpend,
+    isReady: user.isReady
   });
 
 export const adaptAvatarToServer =

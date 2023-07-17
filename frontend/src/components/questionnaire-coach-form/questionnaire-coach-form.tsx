@@ -35,16 +35,30 @@ function QuestionnaireCoachForm({userData, avatarImg}: UserData): JSX.Element {
       avatarImg: avatarImg,
       fileCertificate: fileCertificate,
     };
+
     // eslint-disable-next-line no-console
     console.log(data);
-    dispatch(registerCoach(data));
+    if (!isNotTrainingType) {
+      dispatch(registerCoach(data));
+    }
   };
 
   const [currentTrainingType, setCurrentTrainingType] = useState<TrainingType[]>([]);
-  const handleTrTypeChange = (evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const [isNotTrainingType, setIsNotTrainingType] = useState(false);
+  const handleTrTypeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const {value} = evt.target;
-    setCurrentTrainingType([...currentTrainingType, value as TrainingType]);
-    evt.target.setAttribute('checked', 'true');
+    const isChecked = currentTrainingType.find((el) => el === value);
+    if (isChecked) {
+      const currentArr = currentTrainingType.filter((el) => el !== value);
+      setCurrentTrainingType(currentArr);
+      evt.target.removeAttribute('checked');
+      currentArr.length === 0 ? setIsNotTrainingType(true) : setIsNotTrainingType(false);
+    }
+    else {
+      (currentTrainingType.length > 2 ) ? setIsNotTrainingType(true) : setIsNotTrainingType(false);
+      setCurrentTrainingType([...currentTrainingType, value as TrainingType]);
+      evt.target.setAttribute('checked', 'true');
+    }
   };
 
   const [currentlevelTraining, setCurrentlevelTraining] = useState<LevelTraining>(LevelTraining.Beginner);
@@ -93,7 +107,7 @@ function QuestionnaireCoachForm({userData, avatarImg}: UserData): JSX.Element {
               <div className="questionnaire-coach">
                 <h1 className="visually-hidden">Опросник</h1>
                 <div className="questionnaire-coach__wrapper">
-                  <div className="questionnaire-coach__block"><span className="questionnaire-coach__legend">Ваша специализация (тип) тренировок</span>
+                  <div className="questionnaire-coach__block custom-input--error"><span className="questionnaire-coach__legend">Ваша специализация (тип) тренировок</span>
                     <div className="specialization-checkbox questionnaire-coach__specializations">
                       {TRAINING_ARR.map((el) => (
                         <div className="btn-checkbox" key={el}>
@@ -111,6 +125,8 @@ function QuestionnaireCoachForm({userData, avatarImg}: UserData): JSX.Element {
                         </div>
                       ))}
                     </div>
+                    {isNotTrainingType &&
+                          <span className="custom-input__error">Необходимо выбрать 1-3 значений</span>}
                   </div>
                   <div className="questionnaire-coach__block"><span className="questionnaire-coach__legend">Ваш уровень</span>
                     <div className="custom-toggle-radio custom-toggle-radio--big questionnaire-coach__radio">
@@ -118,13 +134,27 @@ function QuestionnaireCoachForm({userData, avatarImg}: UserData): JSX.Element {
                         (
                           <div className="custom-toggle-radio__block" key={el}>
                             <label>
-                              <input
-                                type="radio"
-                                name="level"
-                                id={el}
-                                value={el}
-                                onChange={handleLevelChange}
-                              />
+                              {el === LevelTraining.Beginner ?
+                                (
+                                  <input
+                                    type="radio"
+                                    name="level"
+                                    id={el}
+                                    value={el}
+                                    required
+                                    onChange={handleLevelChange}
+                                  />
+                                )
+                                :
+                                (
+                                  <input
+                                    type="radio"
+                                    name="level"
+                                    id={el}
+                                    value={el}
+                                    onChange={handleLevelChange}
+                                  />
+                                )}
                               <span className="custom-toggle-radio__icon"></span>
                               <span className="custom-toggle-radio__label">{el}</span>
                             </label>

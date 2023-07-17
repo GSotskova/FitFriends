@@ -7,10 +7,9 @@ export type QuestionnaireCoach = {
 }
 
 export type QuestionnaireUser = {
-  userId: string;
-  levelTraining: LevelTraining;
+  levelTraining?: LevelTraining;
   trainingType: TrainingType[];
-  trainingTime: TrainingTime;
+  trainingTime?: TrainingTime;
   caloriesReset: number;
   caloriesSpend: number;
   isReady: boolean;
@@ -22,6 +21,7 @@ export enum TrainingTime {
   Time80 = '50-80 мин',
   Time100 = '80-100 мин'
 }
+export const TRAINING_TIME = Object.values(TrainingTime);
 
 export enum TrainingType {
   Yoga = 'йога',
