@@ -26,7 +26,7 @@ export class FileController {
 
 
   @Post('upload/image/:id')
-  @UseInterceptors(FileInterceptor('file', {fileFilter: imageFileFilter}))
+  @UseInterceptors(FileInterceptor('image', {fileFilter: imageFileFilter}))
   public async uploadImg(@UploadedFile() file: Express.Multer.File, @Param('id', MongoidValidationPipe) id: string) {
     const newFile = await this.fileService.saveFile(file, 'image', id);
     await this.imgTrainingService.trainingImg(id, newFile.id);
@@ -35,7 +35,7 @@ export class FileController {
   }
 
   @Post('upload/video/:id')
-  @UseInterceptors(FileInterceptor('file', {fileFilter: videoFileFilter}))
+  @UseInterceptors(FileInterceptor('video', {fileFilter: videoFileFilter}))
   public async uploadVideo(@UploadedFile() file: Express.Multer.File, @Param('id', MongoidValidationPipe) id: string) {
     const newFile = await this.fileService.saveFile(file, 'video', id);
     await this.imgTrainingService.trainingVideo(id, newFile.id);
@@ -53,16 +53,16 @@ export class FileController {
   }
 
   @Post('upload/background/:userId')
-  @UseInterceptors(FileInterceptor('file', {fileFilter: imageFileFilter}))
+  @UseInterceptors(FileInterceptor('background', {fileFilter: imageFileFilter}))
   public async userBackgroundImg(@UploadedFile() file: Express.Multer.File, @Param('userId', MongoidValidationPipe) userId: string) {
-    const newFile = await this.fileService.saveFile(file, 'avatar', userId);
+    const newFile = await this.fileService.saveFile(file, 'background', userId);
     await this.avatarsService.userBackgroundImg(userId, newFile.id);
     const path = `${this.applicationConfig.serveRoot}${newFile.path}`;
     return fillObject(UploadedFileRdo, Object.assign(newFile, { path }));
   }
 
   @Post('upload/certificate/:coachId')
-  @UseInterceptors(FileInterceptor('file', {fileFilter: pdfFileFilter}))
+  @UseInterceptors(FileInterceptor('certificate', {fileFilter: pdfFileFilter}))
   public async coachCertificate(@UploadedFile() file: Express.Multer.File, @Param('coachId') coachId: string) {
     const newFile = await this.fileService.saveFile(file, 'certificate', coachId);
     await this.avatarsService.coachCertificate(coachId, newFile.id);

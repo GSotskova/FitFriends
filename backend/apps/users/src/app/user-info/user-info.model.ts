@@ -47,9 +47,7 @@ export class UserModel extends Document implements User {
   })
   public role: UserRole;
 
-  @Prop({
-    required: true,
-  })
+  @Prop()
   public description: string;
 
   @Prop({
