@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
-import { USER_ROLE_ARR, USER_SEX_ARR, UserGeneral, UserRole, UserRoleTxt, UserSex, UserSexTxt } from '../../types/user';
+import { USER_ROLE_ARR, USER_SEX_ARR, UserGeneral, UserRole, UserRoleTxt, UserSex } from '../../types/user';
 import { STATION_METRO, StationMetro } from '../../types/station-metro.enum';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { checkEmail } from '../../store/api-actions';
@@ -65,19 +65,7 @@ const UserRegistrationForm = ({onSubmit}: UserRegistrationFormProps): JSX.Elemen
   const [currentSex, setSex] = useState(UserSex.None);
   const handleSexChange = (evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {value} = evt.target;
-    let sex = UserSex.None;
-    switch ( value ) {
-      case UserSexTxt.Male:
-        sex = UserSex.Male;
-        break;
-      case UserSexTxt.Female:
-        sex = UserSex.Female;
-        break;
-      default:
-        sex = UserSex.None;
-        break;
-    }
-    setSex(sex);
+    setSex(value as UserSex);
     evt.target.setAttribute('checked', 'true');
   };
 
@@ -111,7 +99,6 @@ const UserRegistrationForm = ({onSubmit}: UserRegistrationFormProps): JSX.Elemen
     setAgreement(true);
     evt.target.setAttribute('checked', 'true');
   };
-
 
   return (
     <div className="popup-form popup-form--sign-up">
@@ -161,7 +148,15 @@ const UserRegistrationForm = ({onSubmit}: UserRegistrationFormProps): JSX.Elemen
                   <div className="custom-input">
                     <label><span className="custom-input__label">Имя</span>
                       <span className="custom-input__wrapper">
-                        <input type="text" name={FormFieldName.userName} required/>
+                        <input
+                          type="text"
+                          name={FormFieldName.userName}
+                          minLength={1}
+                          maxLength={15}
+                          pattern="[A-Za-zА-Яа-яЁё]"
+                          title="Только буквы русского/английского алфавита"
+                          required
+                        />
                       </span>
                     </label>
                   </div>
@@ -236,7 +231,7 @@ const UserRegistrationForm = ({onSubmit}: UserRegistrationFormProps): JSX.Elemen
                       {USER_SEX_ARR.map((el) => (
                         <div className="custom-toggle-radio__block" key={el}>
                           <label htmlFor={el}>
-                            {el === UserSexTxt.Male ?
+                            {el === UserSex.Male ?
                               (
                                 <input
                                   type="radio"

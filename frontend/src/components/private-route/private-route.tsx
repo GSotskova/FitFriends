@@ -1,19 +1,25 @@
-import {Navigate} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus} from '../../constants';
+import { Navigate } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../constants';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getAuthorizationStatus } from '../../store/user-process/selectors';
+import { fetchCoachTrainings } from '../../store/api-actions';
 
 type PrivateRouteProps = {
-  authorizationStatus: AuthorizationStatus;
+  restrictedFor: AuthorizationStatus;
+  redirectTo: AppRoute;
   children: JSX.Element;
 }
 
-function PrivateRoute(props: PrivateRouteProps): JSX.Element {
-  const {authorizationStatus, children} = props;
+const PrivateRoute = ({ children, restrictedFor, redirectTo }: PrivateRouteProps): JSX.Element => {
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
+  const dispatch = useAppDispatch();
+  dispatch(fetchCoachTrainings());
   return (
-    authorizationStatus === AuthorizationStatus.Auth
+    authorizationStatus !== restrictedFor
       ? children
-      : <Navigate to={AppRoute.Login} />
+      : <Navigate to={redirectTo} />
   );
-}
+};
 
 export default PrivateRoute;

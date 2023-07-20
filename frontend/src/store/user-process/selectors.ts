@@ -8,4 +8,4 @@ export const getAuthInfo = (state: State): User | null => state[NameSpace.User].
 export const getHasErrorLogin = (state: State): boolean => state[NameSpace.User].hasErrorLogin;
 export const getcheckEmail = (state: State): boolean => state[NameSpace.User].existsEmail;
 export const getUserGeneralInfo = (state: State): UserGeneral | null => state[NameSpace.User].userData;
-export const getUserFullInfo = (state: State): UserFullInfo | null => state[NameSpace.User].userFullInfo;
+export const getUserFullInfo = (state: State): UserFullInfo => state[NameSpace.User].userFullInfo;

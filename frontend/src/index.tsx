@@ -6,6 +6,9 @@ import { ToastContainer } from 'react-toastify';
 import { store } from './store';
 import HistoryRouter from '../src/components/history-route/history-route';
 import browserHistory from './browser-history';
+import { fetchUser } from './store/api-actions';
+
+store.dispatch(fetchUser());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

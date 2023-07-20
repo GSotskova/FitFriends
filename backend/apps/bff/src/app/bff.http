@@ -6,7 +6,7 @@ Content-Type: application/json
   "email": "coach4@notfound.local",
   "userName": "Михайлова Елена",
   "password": "1234567",
-  "sex": "female",
+  "sex": "Женский",
   "dateBirth": "1999-02-22",
   "role": "coach",
   "description": "Михайлова Елена Петровна",
@@ -27,7 +27,7 @@ Content-Type: application/json
   "email": "user3@notfound.local",
   "userName": "Кузнецов Александр",
   "password": "1234567",
-  "sex": "male",
+  "sex": "Мужской",
   "dateBirth": "2000-02-22",
   "role": "user",
   "description": "Кузнецов Александр Юрьевич",
@@ -47,7 +47,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "email": "coach4@notfound.local",
+  "email": "coach1@notfound.local",
   "password": "1234567"
 }
 ###
@@ -58,6 +58,12 @@ Content-Type: application/json
 ###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:4000/api/files/avatar
 ###Загрузка фонового изображения
 ###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:4000/api/files/user/background
+
+# Получение информации о пользователе
+GET  http://localhost:4000/api/users/login/auth HTTP/1.1
+Authorization: Bearer {{authToken}}
+
+###
 
 # Обновление токенов
 POST http://localhost:4000/api/users/refresh HTTP/1.1
@@ -80,7 +86,7 @@ Authorization: Bearer {{refrhToken}}
 ###
 
 # Детальная информация о пользователе (Карточка пользователя)
-GET http://localhost:4000/api/users/6497fd0eaaa5a02715264c9b HTTP/1.1
+GET http://localhost:4000/api/users/649809159b59277aa0c615a7 HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 
@@ -308,3 +314,6 @@ Content-Type: application/json
 GET http://localhost:4000/api/training/comments/64a406e9c4d605ea3e822df6 HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
+
+# Get file by ID
+GET http://localhost:4000/api/files/64b7fc617417f6f160831f15 HTTP/1.1
