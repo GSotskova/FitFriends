@@ -5,7 +5,8 @@ export enum AppRoute {
   Products = '/products',
   NotFound = '/404',
   Add = '/add',
-  Edit = '/edit'
+  Edit = '/edit',
+  AccountCoach = '/coach/account'
 
 }
 
@@ -22,12 +23,14 @@ export enum APIRoute {
   Register = '/users/register',
   Files = '/files',
   CheckEmail = '/users/check/email',
+  CheckUser= '/users/login/auth',
   Users = '/users',
+  CoachTraining = 'coach/training',
 }
 
 export enum NameSpace {
-  DataProducts = 'DATA_PRODUCTS',
-  DataProduct = 'DATA_PRODUCT',
+  DataTrainings = 'DATA_TRAININGS',
+  DataTraining = 'DATA_TRAINING',
   Sort = 'SORT',
   User = 'USER'
 }
@@ -49,6 +52,11 @@ export enum FormRegistration {
 }
 
 export const enum SuccessCoach {
+  MinLength = 10,
+  MaxLength = 140
+}
+
+export const enum DescriptionLn {
   MinLength = 10,
   MaxLength = 140
 }

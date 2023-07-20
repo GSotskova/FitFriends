@@ -1,15 +1,35 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NameSpace, AuthorizationStatus, FormRegistration} from '../../constants';
 import {UserProcess} from '../../types/state';
-import {checkAuthAction, loginUser, logoutAction, checkEmail} from '../api-actions';
-import { User, UserFullInfo, UserGeneral } from '../../types/user';
+import {checkAuthAction, loginUser, logoutAction, checkEmail, fetchUser} from '../api-actions';
+import { User, UserFullInfo, UserGeneral, UserRole, UserSex } from '../../types/user';
+import { StationMetro } from '../../types/station-metro.enum';
+import { LevelTraining, TrainingTime } from '../../types/questionnaire';
 
 const initialState: UserProcess = {
   authorizationStatus: AuthorizationStatus.Unknown,
   authInfo: null,
   hasErrorLogin: false,
   userData: null,
-  userFullInfo: null,
+  userFullInfo: {
+    id: '',
+    userName: '',
+    email: '',
+    sex: UserSex.None,
+    dateBirth: '',
+    role: UserRole.Coach,
+    description: '',
+    location: StationMetro.Pionerskaya,
+    levelTraining: LevelTraining.Beginner,
+    trainingType: [],
+    successCoach: '',
+    isPersonal: false,
+    trainingTime: TrainingTime.Time30,
+    caloriesReset: 0,
+    caloriesSpend: 0,
+    isReady: false
+  },
+  isUserLoading: false,
   formRegistrType: FormRegistration.General,
   existsEmail: false
 };
@@ -24,8 +44,8 @@ export const userProcess = createSlice({
     setUserGeneralInfo: (state, action: PayloadAction<{userData: UserGeneral}>) => {
       state.userData = action.payload.userData;
     },
-    setUserFullInfo: (state, action: PayloadAction<{userFullinfo: UserFullInfo}>) => {
-      state.userFullInfo = action.payload.userFullinfo;
+    setUserFullInfo: (state, action: PayloadAction<{userFullInfo: UserFullInfo}>) => {
+      state.userFullInfo = action.payload.userFullInfo;
     },
     setFormType: (state, action: PayloadAction<{type: FormRegistration}>) => {
       state.formRegistrType = action.payload.type;
@@ -57,6 +77,16 @@ export const userProcess = createSlice({
       })
       .addCase(checkEmail.rejected, (state) => {
         state.existsEmail = true;
+      })
+      .addCase(fetchUser.pending, (state) => {
+        state.isUserLoading = true;
+      })
+      .addCase(fetchUser.fulfilled, (state, action) => {
+        state.userFullInfo = action.payload;
+        state.isUserLoading = false;
+      })
+      .addCase(fetchUser.rejected, (state) => {
+        state.isUserLoading = false;
       });
   }
 });

@@ -33,6 +33,22 @@ export class UsersController {
     return data;
   }
 
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  @Get('login/auth')
+  public async loginUser(@Req() req: Request, @Body() body) {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${body.userId}`, {
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    });
+    if (data.avatar) {
+    const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${data.avatar}`);
+    return {...data, avatarImgStr: path};
+    }
+    return data;
+}
+
   @Post('refresh')
   public async refreshToken(@Req() req: Request) {
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Auth}/refresh`, null, {
@@ -67,6 +83,8 @@ export class UsersController {
     });
     return data;
 }
+
+
 
   @UseGuards(CheckAuthGuard)
   @Post('edit')

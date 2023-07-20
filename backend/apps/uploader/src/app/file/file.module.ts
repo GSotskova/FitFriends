@@ -10,14 +10,14 @@ import { getRabbitMQOptions } from '@project/util/util-core';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { AvatarsModule } from '../avatars/avatars.module';
 import { ImgTrainingModule } from '../img-training/img-training.module';
-
+import { join } from 'path';
 
 @Module({
   imports: [
     ServeStaticModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const rootPath = configService.get<string>('application.uploadDirectory');
+        const rootPath =  configService.get<string>('application.uploadDirectory');
         const serveRoot = configService.get<string>('application.serveRoot');
         return [{
           rootPath,

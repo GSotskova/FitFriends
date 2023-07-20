@@ -5,28 +5,28 @@ Content-Type: application/json
 {
   "user1": {
     "data": {"_id": "6497fd0eaaa5a02715264c9b","userName":"Петров Петр","email":"coach1@notfound.local","avatar":"",
-              "password":"1234567","sex":"male","dateBirth":"2023-06-30T11:02:01.422Z","role":"coach","description":"Петров Петр - супер тренер",
+              "password":"1234567","sex":"Мужской","dateBirth":"2023-06-30T11:02:01.422Z","role":"coach","description":"Петров Петр - супер тренер",
               "location":"Петроградская","backgroundImg":""},
     "questionnaire": { "userId": "6497fd0eaaa5a02715264c9b", "levelTraining": "любитель", "trainingType": ["йога", "аэробика"],
                       "successCoach": "Ооочень крутой тренер",  "isPersonal": true}
     },
   "user2" : {
     "data": { "_id":"649809159b59277aa0c615a7","userName":"Иванов Иван","email":"user1@notfound.local","avatar":"",
-              "password":"1234567","sex":"male","dateBirth":"2023-06-29T18:08:53.717Z","role":"user","description":"Иванов Иван Иванович",
+              "password":"1234567","sex":"Мужской","dateBirth":"2023-06-29T18:08:53.717Z","role":"user","description":"Иванов Иван Иванович",
               "location":"Звёздная","backgroundImg":""},
     "questionnaire": {"userId": "649809159b59277aa0c615a7", "levelTraining": "новичок", "trainingType": ["йога", "бег"], "trainingTime": "10-30 мин",
                       "caloriesReset": 1200, "caloriesSpend": 1500, "isReady": true}
     },
   "user3" : {
     "data": {"_id":"649866f6dac052e861589f59","userName":"Николаева Елена","email":"coach2@notfound.local","avatar":"",
-              "password":"1234567","sex":"female","dateBirth":"2023-06-29T18:16:22.131Z","role":"coach","description":"Елена - отличный тренер",
+              "password":"1234567","sex":"Женский","dateBirth":"2023-06-29T18:16:22.131Z","role":"coach","description":"Елена - отличный тренер",
               "location":"Спортивная","backgroundImg":""},
     "questionnaire": { "userId": "649866f6dac052e861589f59", "levelTraining": "новичок", "trainingType": ["йога", "стрейчинг", "бег"],
                       "successCoach": "Отличнейший тренер, обращайтесь",  "isPersonal": true}
     },
   "user4" : {
     "data": {"_id":"649da3544f4fc537d512a656","userName":"Иванова Ирина","email":"user2@notfound.local","avatar":"",
-              "password":"1234567","sex":"female","dateBirth":"1999-02-21T21:00:00Z","role":"user","description":"Иванова Ирина Ивановна",
+              "password":"1234567","sex":"Женский","dateBirth":"1999-02-21T21:00:00Z","role":"user","description":"Иванова Ирина Ивановна",
               "location":"Удельная","backgroundImg":""},
     "questionnaire": {"userId": "649da3544f4fc537d512a656", "levelTraining": "профессионал", "trainingType": ["йога", "аэробика", "бег"], "trainingTime": "80-100 мин",
                       "caloriesReset": 1200, "caloriesSpend": 1500, "isReady": true}

@@ -21,8 +21,12 @@ export class UserService {
   ) {}
 
     public async getUser(id: string) {
-    return this.userRepository.findById(id);
-  }
+     const existUser = await  this.userRepository.findById(id);
+    if (existUser.role === UserRole.Coach) {
+       return this.userRepository.getInfoCoach(existUser._id);
+      }
+      return this.userRepository.getInfoUser(existUser._id);
+    }
 
 
   public async getUsers(query: UsersQuery) {

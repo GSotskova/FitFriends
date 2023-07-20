@@ -1,6 +1,7 @@
-import { UserGeneral } from '../../types/user';
+import { UserEdit, UserGeneral } from '../../types/user';
 import { QuestionnaireCoach, QuestionnaireUser } from '../../types/questionnaire';
 import { CreateUserDto } from '../../dto/user/create-user.dto';
+import { EditUserDto } from '../../dto/user/edit-user.dto';
 
 
 export const adaptCoachToServer =
@@ -34,6 +35,20 @@ export const adaptUserToServer =
     caloriesSpend: user.caloriesSpend,
     isReady: user.isReady
   });
+
+export const adaptUserEditToServer =
+  (user: UserEdit): EditUserDto => ({
+    userName: user.userName,
+    sex: user.sex,
+    location: user.location,
+    levelTraining: user.levelTraining,
+    trainingTime: user.trainingTime,
+    trainingType: user.trainingType,
+    caloriesReset: user.caloriesReset,
+    caloriesSpend: user.caloriesSpend,
+    isReady: user.isReady
+  });
+
 
 export const adaptAvatarToServer =
   (file: File) => {

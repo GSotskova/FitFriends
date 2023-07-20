@@ -49,7 +49,10 @@ export class UserInfoController {
   })
   public async show(@Param('id', MongoidValidationPipe) id: string) {
     const existUser = await this.userService.getUser(id);
-    return fillObject(UserInfoRdo, existUser);
+    if (existUser.role === UserRole.Coach) {
+      return fillObject(NewCoachRdo, existUser);
+      }
+      return fillObject(NewUserRdo, existUser);
   }
 
 

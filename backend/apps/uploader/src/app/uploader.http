@@ -1,5 +1,5 @@
 # Get file by ID
-GET http://localhost:3336/api/files/643ce69f6fd7fc73120410c1 HTTP/1.1
+GET http://localhost:3336/api/files/64b818f0b76a0e1ec22c8264 HTTP/1.1
 
 ###
 

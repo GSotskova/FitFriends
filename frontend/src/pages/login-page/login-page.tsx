@@ -1,12 +1,20 @@
 import {useRef, FormEvent} from 'react';
-import { useAppDispatch } from '../../hooks';
+import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { loginUser } from '../../store/api-actions';
+import { getHasErrorLogin } from '../../store/user-process/selectors';
 
 function LoginPage(): JSX.Element {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const dispatch = useAppDispatch();
+  const isErrorLogin = useAppSelector(getHasErrorLogin);
+
+  if (isErrorLogin) {
+    toast.warn('Сервер не доступен. Попробуйте зайти позднее');
+  }
+
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     if (emailRef.current !== null && passwordRef.current !== null) {
