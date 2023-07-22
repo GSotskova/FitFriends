@@ -36,6 +36,15 @@ export class CoachAccountController {
   @Get('training/show/list')
   public async showList(@Body() coachId: string, @Query() query: TrainingQuery) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Training}/show/list`, {params : query, data: coachId});
+    await Promise.all(data.map(async (el) => {
+      if (el.photoTraning) {
+        const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${el.photoTraning}`);
+
+        console.log(path, el.photoTraning)
+        el.photoTraningPath = path;
+        }
+       }));
+
    return data;
   }
 

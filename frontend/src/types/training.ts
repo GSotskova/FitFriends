@@ -5,6 +5,7 @@ export type Training = {
   id: string;
   nameTraining: string;
   photoTraning: string;
+  photoTraningPath?: string;
   levelTraining: LevelTraining;
   trainingType: TrainingType;
   trainingTime: TrainingTime;
@@ -22,6 +23,7 @@ export type Training = {
 export type NewTraining = {
   nameTraining: string;
   photoTraning: string;
+  photoTraningPath?: string;
   levelTraining: LevelTraining;
   trainingType: TrainingType;
   trainingTime: TrainingTime;
@@ -34,4 +36,15 @@ export type NewTraining = {
   coachId: string;
   isSpecialOffer: boolean;
   createdAt: Date;
+}
+
+
+export type Query = {
+  limit?: string;
+  price?: number[];
+  caloriesReset?: number[];
+  rating?: number[];
+  trainingTime?: TrainingTime[];
+  page?: number;
+  sortDate?: string;
 }

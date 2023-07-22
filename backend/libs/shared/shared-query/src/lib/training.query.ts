@@ -26,11 +26,10 @@ export class TrainingQuery {
   @IsOptional()
   public caloriesReset?: string;
 
-  @IsInt({})
-  @Min(RatingQuery.MinCount)
-  @Max(RatingQuery.MaxCount)
+  @Transform(({ value }) => {if (typeof value === "string") {return value.split(',').map((el: string) => el)} return value })
+  @IsArray({})
   @IsOptional()
-  public rating?: number;
+  public rating?: string;
 
   @Transform(({ value }) => {if (typeof value === "string") {return value.split(',').map((el: string) => el)} return value })
   @IsArray({})

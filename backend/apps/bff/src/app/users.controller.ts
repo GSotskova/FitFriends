@@ -44,7 +44,7 @@ export class UsersController {
     });
     if (data.avatar) {
     const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${data.avatar}`);
-    return {...data, avatarImgStr: path};
+    return {...data, avatarPath: path};
     }
     return data;
 }

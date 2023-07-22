@@ -132,7 +132,7 @@ const CoachInfo = ({user}: Props): JSX.Element => {
               {photoUser ? (
                 <img src={URL.createObjectURL(photoUser)} width={98} height={98} alt='user avatar' />
               ) : (
-                <img src={user.avatarImgStr} width={98} height={98} alt='user avatar' />
+                <img src={user.avatarPath} width={98} height={98} alt='user avatar' />
               )}
 
             </span>

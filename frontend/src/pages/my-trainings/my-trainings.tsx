@@ -1,27 +1,84 @@
-import { useEffect } from 'react';
-//import { useParams} from 'react-router-dom';
+import {useState, useEffect} from 'react';
+import MultiRangeSlider, { ChangeResult } from 'multi-range-slider-react';
 import Header from '../../components/header/header';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getTrainings } from '../../store/trainings-data/selectors';
 import { fetchCoachTrainings } from '../../store/api-actions';
 import TrainingItem from '../../components/training-item/training-item';
+import { Query } from '../../types/training';
+import { TRAINING_TIME, TrainingTime } from '../../types/questionnaire';
+
 
 function MyTrainingsPage() {
- // const params = useParams();
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchCoachTrainings);
-
-  }, [dispatch]);
-
-
   const trainings = useAppSelector(getTrainings);
-console.log('MyTrainingsPage',trainings);
+
+  const [query, setQuery] = useState<Query | undefined>();
+  const [formValue, setValue] = useState({
+    minPrice: 0, maxPrice: 10000,
+    minCalories: 1000, maxCalories: 5000,
+    minRating: 0, maxRating: 5
+  });
+
+  const [sliderValue, setSliderValue] = useState({
+    minPrice: 0, maxPrice: 10000,
+    minCalories: 1000, maxCalories: 5000,
+    minRating: 0, maxRating: 5
+  });
+
+  const handleFilterChange = (evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+
+    const {value, name} = evt.target;
+    setValue({...formValue, [name]: value});
+
+    if (name === 'minPrice' && Number(value) <= formValue.maxPrice) {
+      setQuery({...query, price:[Number(value), formValue.maxPrice]});
+      // setSliderValue({...sliderValue, minPrice: Number(value), maxPrice: formValue.maxPrice});
+    }
+    if (name === 'maxPrice' && Number(value) >= formValue.minPrice) {
+      setQuery({...query, price:[formValue.minPrice, Number(value)]});
+      //setSliderValue({...sliderValue, minPrice: formValue.minPrice, maxPrice: Number(value)});
+    }
+    if ((name === 'maxPrice' && Number(value) === 0 && formValue.minPrice === 0)
+      || (name === 'minPrice' && Number(value) === 0 && formValue.maxPrice === 0)) {
+      setQuery({...query, price: undefined});
+    }
+
+    if (name === 'minCalories' && Number(value) <= formValue.maxCalories) {
+      setQuery({...query, caloriesReset:[Number(value), formValue.minCalories]});
+    }
+    if (name === 'maxCalories' && Number(value) >= formValue.minCalories) {
+      setQuery({...query, caloriesReset:[formValue.minCalories, Number(value)]});
+    }
+    if ((name === 'maxCalories' && Number(value) === 0 && formValue.minCalories === 0)
+      || (name === 'minCalories' && Number(value) === 0 && formValue.maxCalories === 0)) {
+      setQuery({...query, caloriesReset: undefined});
+    }
+
+    if (name === 'duration') {
+      const isChecked = !!(query && query?.trainingTime && query?.trainingTime.find((el) => el === value as TrainingTime));
+      if (isChecked && query.trainingTime) {
+        const currentArr = query.trainingTime.filter((el) => el !== value);
+        evt.target.removeAttribute('checked');
+        currentArr.length === 0 ? setQuery({...query, trainingTime: undefined}) : setQuery({...query, trainingTime: currentArr});
+      }
+      else {
+        const currentArr = query && query.trainingTime ? query.trainingTime : [];
+        setQuery({...query, trainingTime: [...currentArr, value as TrainingTime]});
+        evt.target.setAttribute('checked', 'true');
+      }
+    }
+  };
+
+
+  useEffect(()=>{
+    dispatch(fetchCoachTrainings(query));
+  }, [dispatch, query]);
+
+
   if (!trainings) {
     return null;
   }
-
   return (
     <div className="wrapper">
       <Header />
@@ -44,87 +101,139 @@ console.log('MyTrainingsPage',trainings);
                       <h4 className="my-training-form__block-title">Цена, ₽</h4>
                       <div className="filter-price">
                         <div className="filter-price__input-text filter-price__input-text--min">
-                          <input type="number" id="text-min" name="text-min" value="0"/>
-                          <label htmlFor="text-min">от</label>
+                          <input
+                            type="number"
+                            id="minPrice"
+                            name="minPrice"
+                            value={formValue.minPrice}
+                            onChange={handleFilterChange}
+                          />
+                          <label htmlFor="minPrice">от</label>
                         </div>
                         <div className="filter-price__input-text filter-price__input-text--max">
-                          <input type="number" id="text-max" name="text-max" value="3200"/>
-                          <label htmlFor="text-max">до</label>
+                          <input
+                            type="number"
+                            id="maxPrice"
+                            name="maxPrice"
+                            value={formValue.maxPrice}
+                            onChange={handleFilterChange}
+                          />
+                          <label htmlFor="maxPrice">до</label>
                         </div>
                       </div>
                       <div className="filter-range">
-                        <div className="filter-range__scale">
-                          <div className="filter-range__bar"><span className="visually-hidden">Полоса прокрутки</span></div>
-                        </div>
-                        <div className="filter-range__control">
-                          <button className="filter-range__min-toggle"><span className="visually-hidden">Минимальное значение</span></button>
-                          <button className="filter-range__max-toggle"><span className="visually-hidden">Максимальное значение</span></button>
-                        </div>
+                        <MultiRangeSlider
+                          min={0}
+                          max={10000}
+                          step={100}
+                          style={{border: 'none', boxShadow: 'none', padding: '15px 10px'}}
+                          ruler='false'
+                          barLeftColor='black'
+                          barInnerColor='black'
+                          barRightColor='black'
+                          thumbLeftColor='black'
+                          thumbRightColor='black'
+                          minValue={sliderValue.minPrice}
+                          maxValue={sliderValue.maxPrice}
+                          onInput={(e: ChangeResult) => {
+                            setSliderValue({...sliderValue, minPrice: e.minValue, maxPrice: e.maxValue});
+                            setQuery({...query, price:[Number(e.minValue), Number(e.maxValue)]});
+                          }}
+                        />
                       </div>
                     </div>
                     <div className="my-training-form__block my-training-form__block--calories">
                       <h4 className="my-training-form__block-title">Калории</h4>
                       <div className="filter-calories">
                         <div className="filter-calories__input-text filter-calories__input-text--min">
-                          <input type="number" id="text-min-cal" name="text-min-cal"/>
-                          <label htmlFor="text-min-cal">от</label>
+                          <input
+                            type="number"
+                            id="minCalories"
+                            name="minCalories"
+                            value={formValue.minCalories}
+                            onChange={handleFilterChange}
+                          />
+                          <label htmlFor="minCalories">от</label>
                         </div>
                         <div className="filter-calories__input-text filter-calories__input-text--max">
-                          <input type="number" id="text-max-cal" name="text-max-cal"/>
-                          <label htmlFor="text-max-cal">до</label>
+                          <input
+                            type="number"
+                            id="maxCalories"
+                            name="maxCalories"
+                            value={formValue.maxCalories}
+                            onChange={handleFilterChange}
+                          />
+                          <label htmlFor="maxCalories">до</label>
                         </div>
                       </div>
                       <div className="filter-range">
-                        <div className="filter-range__scale">
-                          <div className="filter-range__bar"><span className="visually-hidden">Полоса прокрутки</span></div>
-                        </div>
-                        <div className="filter-range__control">
-                          <button className="filter-range__min-toggle"><span className="visually-hidden">Минимальное значение</span></button>
-                          <button className="filter-range__max-toggle"><span className="visually-hidden">Максимальное значение</span></button>
-                        </div>
+                        <MultiRangeSlider
+                          min={1000}
+                          max={5000}
+                          step={100}
+                          style={{border: 'none', boxShadow: 'none', padding: '15px 10px'}}
+                          ruler='false'
+                          barLeftColor='black'
+                          barInnerColor='black'
+                          barRightColor='black'
+                          thumbLeftColor='black'
+                          thumbRightColor='black'
+                          minValue={formValue.minCalories}
+                          maxValue={formValue.maxCalories}
+                          onChange={(e: ChangeResult) => {
+                            setValue({...formValue, minCalories: e.minValue, maxCalories: e.maxValue});
+                            setQuery({...query, caloriesReset:[Number(e.minValue), Number(e.maxValue)]});
+                          }}
+                        />
                       </div>
                     </div>
                     <div className="my-training-form__block my-training-form__block--raiting">
                       <h4 className="my-training-form__block-title">Рейтинг</h4>
                       <div className="filter-raiting">
-                        <div className="filter-raiting__scale">
-                          <div className="filter-raiting__bar"><span className="visually-hidden">Полоса прокрутки</span></div>
-                        </div>
-                        <div className="filter-raiting__control">
-                          <button className="filter-raiting__min-toggle"><span className="visually-hidden">Минимальное значение</span></button><span>0</span>
-                          <button className="filter-raiting__max-toggle"><span className="visually-hidden">Максимальное значение</span></button><span>5</span>
-                        </div>
+                        <MultiRangeSlider
+                          min={0}
+                          max={5}
+                          step={1}
+                          style={{border: 'none', boxShadow: 'none', padding: '15px 10px'}}
+                          ruler='false'
+                          barLeftColor='black'
+                          barInnerColor='black'
+                          barRightColor='black'
+                          thumbLeftColor='black'
+                          thumbRightColor='black'
+                          minValue={formValue.minRating}
+                          maxValue={formValue.maxRating}
+                          onChange={(e: ChangeResult) => {
+                            setValue({...formValue, minRating: e.minValue, maxRating: e.maxValue});
+                            setQuery({...query, rating:[Number(e.minValue), Number(e.maxValue)]});
+                          }}
+                        />
                       </div>
                     </div>
                     <div className="my-training-form__block my-training-form__block--duration">
                       <h4 className="my-training-form__block-title">Длительность</h4>
                       <ul className="my-training-form__check-list">
-                        <li className="my-training-form__check-list-item">
-                          <div className="custom-toggle custom-toggle--checkbox">
-                            <label>
-                              <input type="checkbox" value="duration-1" name="duration"/>
-                              <span className="custom-toggle__icon">
-                                <svg width="9" height="6" aria-hidden="true">
-                                  <use xlinkHref="#arrow-check"></use>
-                                </svg>
-                              </span>
-                              <span className="custom-toggle__label">10 мин - 30 мин</span>
-                            </label>
-                          </div>
-                        </li>
-                        <li className="my-training-form__check-list-item">
-                          <div className="custom-toggle custom-toggle--checkbox">
-                            <label>
-                              <input type="checkbox" value="duration-1" name="duration" checked/>
-                              <span className="custom-toggle__icon">
-                                <svg width="9" height="6" aria-hidden="true">
-                                  <use xlinkHref="#arrow-check"></use>
-                                </svg>
-                              </span>
-                              <span className="custom-toggle__label">30 мин - 50 мин</span>
-                            </label>
-                          </div>
-                        </li>
+                        {TRAINING_TIME.map((el) => (
+                          <li className="my-training-form__check-list-item" key={el}>
+                            <div className="custom-toggle custom-toggle--checkbox">
+                              <label>
+                                <input
+                                  type="checkbox"
+                                  name="duration"
+                                  value={el}
+                                  id={el}
+                                  onChange={handleFilterChange}
+                                />
+                                <span className="custom-toggle__icon">
+                                  <svg width="9" height="6" aria-hidden="true">
+                                    <use xlinkHref="#arrow-check"></use>
+                                  </svg>
+                                </span>
+                                <span className="custom-toggle__label">{el}</span>
+                              </label>
+                            </div>
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </form>

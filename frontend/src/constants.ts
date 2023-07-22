@@ -2,7 +2,6 @@ export enum AppRoute {
   Login = '/login',
   Intro = '/',
   Registration = '/registration',
-  Products = '/products',
   NotFound = '/404',
   Add = '/add',
   Edit = '/edit',

@@ -16,7 +16,7 @@ export class TrainingService {
   ) {}
 
   public async create(dto: CreateTrainingDTO) {
-    const trainingEntity = new TrainingEntity({...dto, photoTraning: ' ',videoTraning:' ', rating: 0 });
+    const trainingEntity = new TrainingEntity({...dto, rating: 0 });
     return this.trainingRepository.create(trainingEntity);
 
   }
@@ -84,7 +84,7 @@ export class TrainingService {
 
 
     public async createTestData(training) {
-      const trainingEntity = new TrainingEntity({...training, photoTraning: ' ',videoTraning:' '});
+      const trainingEntity = new TrainingEntity(training);
       return this.trainingRepository.create(trainingEntity);
 
     }

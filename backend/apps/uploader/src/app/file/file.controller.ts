@@ -75,9 +75,7 @@ export class FileController {
   @Get(':fileId')
   public async show(@Param('fileId', MongoidValidationPipe) fileId: string) {
     const existFile = await this.fileService.getFile(fileId);
-    const path = `${this.applicationConfig.serveRoot}${existFile.path}`;
-   // return fillObject(UploadedFileRdo, Object.assign(existFile, { path }));
-   //res.sendFile(path, { root: 'frontend' });
+    const path = `http://localhost:${process.env.PORT}${this.applicationConfig.serveRoot}${existFile.path}`;
     return  {path} ;
 
   }

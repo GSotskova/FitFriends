@@ -114,7 +114,10 @@ export const getTrainingQuery = (query: TrainingQuery ) => {
                                         "$lte": caloriesReset[1],
                                       };
                                }
-      if (rating) {objFiltr['rating'] =  rating}
+      if (rating) {objFiltr['rating'] =  { "$gte": rating[0],
+                                           "$lte": rating[1],
+                                         }
+                                        }
       if (trainingTime) {objFiltr['trainingTime'] = { "$in": trainingTime };}
 
 

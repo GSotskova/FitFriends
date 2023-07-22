@@ -10,7 +10,7 @@ import { QuestionnaireCoach, QuestionnaireUser } from '../types/questionnaire';
 import { adaptAvatarToServer, adaptCertificateToServer, adaptCoachToServer, adaptUserEditToServer, adaptUserToServer } from '../utils/adapters/adaptersToServer';
 import { adaptUserToClient } from '../utils/adapters/adaptersToClient';
 import { setUserFullInfo } from './user-process/user-process';
-import { NewTraining, Training } from '../types/training';
+import { NewTraining, Query, Training } from '../types/training';
 
 
 export const checkAuthAction = createAsyncThunk<User, undefined, {
@@ -160,16 +160,19 @@ export const fetchUser = createAsyncThunk<UserFullInfo, undefined, {
         }
       });
 
-export const fetchCoachTrainings = createAsyncThunk<Training[], undefined, {
+export const fetchCoachTrainings = createAsyncThunk<Training[], Query | undefined, {
         dispatch: AppDispatch;
         state: State;
         extra: AxiosInstance; }>(
           'training/fetchCoachTrainings',
-          async (_arg, {dispatch, extra: api}) => {
-            console.log('fetchCoachTrainings');
+          async (query, {dispatch, extra: api}) => {
             try {
-              const {data} = await api.get<Training[]>(`${APIRoute.CoachTraining}/show/list`);
-              console.log('fetchCoachTrainings', data);
+              const priceQuery = query && query.price ? `price=${query.price[0]},${query.price[1]}` : '';
+              const caloriesQuery = query && query.caloriesReset ? `&caloriesReset=${query.caloriesReset[0]},${query.caloriesReset[1]}` : '';
+              const trainingTimeQuery = query && query.trainingTime ? `&trainingTime=${query.trainingTime.join(',').trim()}` : '';
+              const rating = query && query.rating ? `&rating=${query.rating[0]},${query.rating[1]}` : '';
+
+              const {data} = await api.get<Training[]>(`${APIRoute.CoachTraining}/show/list?${priceQuery}${caloriesQuery}${trainingTimeQuery}${rating}`);
               return data;
             } catch (error) {
               return Promise.reject(error);
