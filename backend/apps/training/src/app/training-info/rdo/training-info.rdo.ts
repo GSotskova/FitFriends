@@ -81,6 +81,12 @@ export class TrainingRdo {
   @Expose()
   public createdAt: string;
 
+  @ApiProperty({
+    description: 'Photo traning',
+  })
+  @Expose()
+  public photoTraning: string;
+
 
   @ApiProperty({
     description: 'Error'

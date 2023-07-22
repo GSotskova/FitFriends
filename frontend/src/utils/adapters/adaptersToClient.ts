@@ -17,7 +17,7 @@ export const adaptUserToClient =
     userName: user.userName,
     email: user.email,
     avatar: user.avatar,
-    avatarImgStr: `http://localhost:3336${user.avatarImgStr ? user.avatarImgStr : ''}`,
+    avatarPath: user.avatarPath,
     sex: user.sex,
     dateBirth: user.dateBirth,
     role: user.role,

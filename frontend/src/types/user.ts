@@ -50,7 +50,7 @@ export type UserFullInfo = {
   userName: string;
   email: string;
   avatar?: string;
-  avatarImgStr?: string;
+  avatarPath?: string;
   sex: UserSex;
   dateBirth: string;
   role: UserRole;

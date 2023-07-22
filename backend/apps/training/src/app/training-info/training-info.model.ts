@@ -13,9 +13,7 @@ export class TrainingModel extends Document implements Training {
   })
   public nameTraining: string;
 
-  @Prop({
-    required: true,
-  })
+  @Prop()
   public photoTraning: string;
 
   @Prop({

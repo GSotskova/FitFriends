@@ -252,13 +252,13 @@ Content-Type: application/json
 ###
 
 ### Загрузка фонового изображение для тренировки
-###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:4000/api/files/image/training/64a447e28cc4fa6456f411fa
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F image="@/C:/fit_img/avatar-angelina.jpg" http://localhost:4000/api/files/image/training/64a447e28cc4fa6456f411fa
 
 ### Загрузка видео тренировки
-###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F file="@/C:/fit_img/Video_HTML_Academy_1.mp4" http://localhost:4000/api/files/video/training/649afe8c1b6c87810dbb07bf
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F video="@/C:/fit_img/Video_HTML_Academy_1.mp4" http://localhost:4000/api/files/video/training/649afe8c1b6c87810dbb07bf
 
 ###Загрузка сертификатов
-###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F file="@/C:/fit_img/1.pdf" http://localhost:4000/api/files/coach/certificate
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F certificate="@/C:/fit_img/1.pdf" http://localhost:4000/api/files/coach/certificate
 
 
 # Детальная информация о тренировке

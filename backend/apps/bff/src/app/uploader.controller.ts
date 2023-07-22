@@ -78,7 +78,6 @@ export class UploaderController {
   @UseInterceptors(UseridTrainingInterceptor)
   @UseInterceptors(FileInterceptor('image'))
   public async postImage(@UploadedFile() file: Express.Multer.File,@Param('id') id: string) {
-
     const formData = new FormData();
      formData.append('image', Buffer.from(file.buffer), {filename: file.originalname,contentType: file.mimetype});
 
