@@ -85,4 +85,10 @@ export class NewCoachRdo {
   })
   @Expose()
   public isPersonal: boolean;
+
+  @ApiProperty({
+    description: 'User description',
+  })
+  @Expose()
+  public description: string;
 }

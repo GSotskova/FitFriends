@@ -44,9 +44,16 @@ export class UsersController {
     });
     if (data.avatar) {
     const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${data.avatar}`);
-    return {...data, avatarPath: path};
+    data.avatarPath = path
     }
-    return data;
+    if (data.certificate) {
+      data.certificatesPath=[];
+      await Promise.all(data.certificate.map(async (el) => {
+         const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${el}`);
+         data.certificatesPath.push({certificateId: el, certificatePath: path});
+         }));
+      }
+    return {...data};
 }
 
   @Post('refresh')
@@ -141,9 +148,7 @@ public async deleteNotifyById(@Req() req: Request, @Param('id', MongoidValidatio
 
 @Post('check/email')
 public async checkEmail(@Body() email: string) {
-  console.log('check/email', email)
   const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Auth}/check/email`, email);
-  console.log('check/email', data)
   return data;
 }
 

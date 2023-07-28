@@ -1,4 +1,4 @@
-import {  Body, Controller, Delete, HttpStatus, Param, Post  } from '@nestjs/common';
+import {  Body, Controller, Delete, Get, HttpStatus, Param, Post  } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillObject } from '@project/util/util-core';
 import { TrainingRequestService } from './training-request.service';
@@ -36,6 +36,17 @@ export class TrainingRequestController {
   public async updateStatus(@Param('id', MongoidValidationPipe) id: string, @Body() body) {
     const updRequest = await this.requestService.updateStatus(id, body.statusRequest);
     return fillObject(TrainingRequestRdo, updRequest);
+  }
+
+  @ApiResponse({
+    type: TrainingRequestRdo,
+    status: HttpStatus.OK,
+    description: 'Update status'
+  })
+  @Get('show')
+  public async getRequest(@Body() body) {
+    const showRequest = await this.requestService.getRequest(body.initiatorId, body.coachId);
+    return fillObject(TrainingRequestRdo, showRequest);
   }
 
   @ApiResponse({

@@ -95,6 +95,12 @@ export class TrainingOrderRdo {
   public createdAt: string;
 
   @ApiProperty({
+    description: 'Training rating',
+  })
+  @Expose()
+  public rating: string;
+
+  @ApiProperty({
     description: 'Error'
   })
   @Expose()

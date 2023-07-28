@@ -48,7 +48,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "email": "user1@notfound.local",
+  "email": "coach1@notfound.local",
   "password": "1234567"
 }
 ###

@@ -87,7 +87,7 @@ export class CreateUserDto  {
   @ApiProperty({
     description: 'Coach Certificate'
   })
-  public certificate?: string;
+  public certificate?: string[];
 
   @ApiProperty({
     description: 'Merits of the coach'

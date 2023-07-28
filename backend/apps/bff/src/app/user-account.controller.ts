@@ -142,15 +142,5 @@ public async createTrainingRequest(@Req() req: Request, @Body() dto: CreateReque
   return data;
 }
 
-@UseGuards(CheckAuthGuard)
-@UseInterceptors(InintiatoridInterceptor)
-@UseInterceptors(RoleUserInterceptor)
-@Post('request/update/:id')
-public async editTrainingRequest(@Param('id', MongoidValidationPipe) id: string, @Body() statusRequest: string) {
-
-  const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Request}/update/${id}`, statusRequest);
-  return data;
-}
-
 
 }

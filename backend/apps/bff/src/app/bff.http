@@ -47,7 +47,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "email": "coach1@notfound.local",
+  "email": "user1@notfound.local",
   "password": "1234567"
 }
 ###
@@ -148,8 +148,8 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "trainingId": "64a406e9c4d605ea3e822df6",
-  "trainingCount": 3,
+  "trainingId": "64be11e2e2e8164413415f83",
+  "trainingCount": 1,
   "paymentOption": "visa"
 }
 ###
@@ -172,16 +172,6 @@ Content-Type: application/json
 }
 ###
 
-
-# Изменений статуса заявки
-POST http://localhost:4000/api/user/request/update/64a44b118cc4fa6456f4122c HTTP/1.1
-Authorization: Bearer {{authToken}}
-Content-Type: application/json
-
-{
-  "statusRequest": "принят"
-}
-###
 
 # Баланс пользователя
 GET http://localhost:4000/api/user/orders?sortDate=asc&sortPrice=desc HTTP/1.1
@@ -260,6 +250,8 @@ Content-Type: application/json
 ###Загрузка сертификатов
 ###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F certificate="@/C:/fit_img/1.pdf" http://localhost:4000/api/files/coach/certificate
 
+###Обновление сертификатов
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F "fileId"="64c253392fccace97ce6cc06" -F certificate="@/C:/fit_img/1.pdf" http://localhost:4000/api/files/coach/certificate/update
 
 # Детальная информация о тренировке
 GET http://localhost:4000/api/coach/training/64a406e9c4d605ea3e822df6 HTTP/1.1
@@ -289,6 +281,22 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 ###
 
+#  Удалиться сертификат
+DELETE http://localhost:4000/api/coach/certificate/delete/64c2dc114dd6d49ccee0c233 HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+###
+
+
+# Изменений статуса заявки
+POST http://localhost:4000/api/coach/request/update/64bd4332725e40ff5a96c3a1 HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "statusRequest": "принят"
+}
+###
 
 ###########      ОБЩИЕ ЗАПРОСЫ     ####################
 

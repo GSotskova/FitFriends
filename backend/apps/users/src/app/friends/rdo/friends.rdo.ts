@@ -2,13 +2,19 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Transform } from 'class-transformer';
 
 
-export class UserInfoRdo {
+export class FriendInfoRdo {
   @ApiProperty({
-    description: 'The uniq user ID',
+    description: 'The uniq ID',
   })
   @Expose({ name: '_id'})
   @Transform((value) => value.obj['_id'])
   public id: string;
+
+  @ApiProperty({
+    description: 'User Id'
+  })
+  @Expose()
+  public userId: string;
 
   @ApiProperty({
     description: 'User name',
@@ -62,6 +68,12 @@ export class UserInfoRdo {
   })
   @Expose()
   public location: string;
+
+  @ApiProperty({
+    description: 'Is ready for training'
+  })
+  @Expose()
+  public isReady: boolean;
 
 
   @ApiProperty({

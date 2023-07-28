@@ -26,6 +26,7 @@ export const adaptUserToClient =
     levelTraining: user.levelTraining,
     trainingType: user.trainingType,
     certificate: user.certificate,
+    certificatesPath: user.certificatesPath,
     successCoach: user.successCoach,
     isPersonal: user.isPersonal,
     trainingTime: user.trainingTime,
@@ -33,3 +34,20 @@ export const adaptUserToClient =
     caloriesSpend: user.caloriesSpend,
     isReady: user.isReady
   });
+
+/*export const adaptFriendsToClient =
+  (frineds: Friend[]): Friend[] =>
+    frineds
+      .map((frined: Friend)=>({
+        id: frined.id,
+        userName: frined.userName,
+        email: frined.email,
+        avatar: frined.avatar,
+        avatarPath: frined.avatarPath,
+        sex: frined.sex,
+        dateBirth: frined.dateBirth,
+        role: frined.role,
+        description: frined.description,
+        location: frined.location
+      }));
+*/

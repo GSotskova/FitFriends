@@ -59,8 +59,27 @@ export class FileService {
     });
 
     const existsFile = await this.fileRepository.findByObjectId(objectId, appName);
-    if (existsFile){
+    if (existsFile && appName!=='certificate'){
       return await this.fileRepository.update(existsFile.id, newFile)
+    }
+    return await this.fileRepository.create(newFile);
+  }
+
+  public async updateFile(file: Express.Multer.File, appName: string, objectId: string, fileId: string) {
+    const writedFile = await this.writeFile(file);
+    const newFile = new FileEntity({
+      size: file.size,
+      hashName: writedFile.hashName,
+      mimetype: file.mimetype,
+      originalName: file.originalname,
+      path: writedFile.path,
+      appName: appName,
+      objectId: objectId
+    });
+
+    const existsFile = await this.fileRepository.findById(fileId);
+    if (existsFile){
+      return await this.fileRepository.update(fileId, newFile)
     }
     return await this.fileRepository.create(newFile);
   }
@@ -73,5 +92,14 @@ export class FileService {
     }
 
     return existFile;
+  }
+
+  public async delete(id: string) {
+    const existOrder = await this.fileRepository.findById(id);
+
+    if (!existOrder) {
+      throw new NotFoundException(`File with ${id} not found.`);
+    }
+    return this.fileRepository.destroy(id);
   }
 }

@@ -55,7 +55,7 @@ export class NewUserRdo {
   })
   @Expose()
   public location: string;
-  
+
   @ApiProperty({
     description: 'The level of physical fitness of the user',
   })
@@ -92,4 +92,11 @@ export class NewUserRdo {
   })
   @Expose()
   public isReady: boolean;
+
+
+  @ApiProperty({
+    description: 'User description',
+  })
+  @Expose()
+  public description: string;
 }

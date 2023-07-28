@@ -7,6 +7,8 @@ import { fetchCoachTrainings } from '../../store/api-actions';
 import TrainingItem from '../../components/training-item/training-item';
 import { Query } from '../../types/training';
 import { TRAINING_TIME, TrainingTime } from '../../types/questionnaire';
+import { useNavigate } from 'react-router-dom';
+import { AppRoute } from '../../constants';
 
 
 function MyTrainingsPage() {
@@ -75,6 +77,11 @@ function MyTrainingsPage() {
     dispatch(fetchCoachTrainings(query));
   }, [dispatch, query]);
 
+  const navigate = useNavigate();
+  const routeChange = () =>{
+    const path = AppRoute.AccountCoach;
+    navigate(path);
+  };
 
   if (!trainings) {
     return null;
@@ -90,7 +97,11 @@ function MyTrainingsPage() {
               <div className="my-training-form">
                 <h2 className="visually-hidden">Мои тренировки Фильтр</h2>
                 <div className="my-training-form__wrapper">
-                  <button className="btn-flat btn-flat--underlined my-training-form__btnback" type="button">
+                  <button
+                    className="btn-flat btn-flat--underlined my-training-form__btnback"
+                    type="button"
+                    onClick={routeChange}
+                  >
                     <svg width="14" height="10" aria-hidden="true">
                       <use xlinkHref="#arrow-left"></use>
                     </svg><span>Назад</span>

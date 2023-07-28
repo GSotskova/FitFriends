@@ -45,9 +45,27 @@ export class QuestionnaireCoachRepository implements CRUDRepository<Questionnair
       .exec();
   }
 
-  public async updateCertificate(coachId: string, fileId: string): Promise<QuestionnaireCoach | null> {
+  public async updateCertificate(coachId: string, certificateId: string): Promise<QuestionnaireCoach | null> {
+    const coachInfo = await this.questionnaireCoachModel.findOne({userId: coachId}).exec();
+    const existsFile = coachInfo.certificate.includes(certificateId);
+    if(!existsFile) {
+    const certificates = [...coachInfo.certificate, certificateId];
     return this.questionnaireCoachModel
-      .findOneAndUpdate({userId: coachId}, {certificate: fileId}, {new: true})
+      .findOneAndUpdate({userId: coachId}, {certificate: certificates}, {new: true})
       .exec();
+    }
+  }
+
+  public async deleteCertificate(coachId: string, certificateId: string): Promise<QuestionnaireCoach | null> {
+    const coachInfo = await this.questionnaireCoachModel.findOne({userId: coachId}).exec();
+    const existsFile = coachInfo.certificate.includes(certificateId);
+    if(existsFile) {
+      console.log(coachInfo.certificate)
+    const certificates = coachInfo.certificate.filter((el)=> el !== certificateId);
+    console.log(certificates)
+    return this.questionnaireCoachModel
+      .findOneAndUpdate({userId: coachId}, {certificate: certificates}, {new: true})
+      .exec();
+    }
   }
 }

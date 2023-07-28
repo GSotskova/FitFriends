@@ -3,7 +3,6 @@ import { StationMetro } from './station-metro.enum';
 
 export type User = {
   id: string;
-  sub?: string;
   userName: string;
   email: string;
   accessToken: string;
@@ -23,9 +22,15 @@ export type UserGeneral = {
 
 export type FileType = {
   avatarImg?: File;
+  certificateId?: string;
+  fileVideoTraning?: File;
   fileCertificate?: File;
 }
 
+export type CertificateType = {
+ certificateId: string;
+ certificatePath: string;
+}
 
 export enum UserSex {
   Male = 'Мужской',
@@ -58,7 +63,8 @@ export type UserFullInfo = {
   location: StationMetro;
   levelTraining: LevelTraining;
   trainingType: TrainingType[];
-  certificate?: string;
+  certificate: string[];
+  certificatesPath: CertificateType[];
   successCoach: string;
   isPersonal: boolean;
   trainingTime: TrainingTime;
@@ -82,3 +88,18 @@ export type UserEdit = {
   caloriesSpend?: number;
   isReady?: boolean;
 }
+
+export type Friend = {
+  id: string;
+  userName: string;
+  avatar: string;
+  avatarPath: string;
+  email: string;
+  sex: UserSex;
+  dateBirth: string;
+  role: UserRole;
+  description: string;
+  location: StationMetro;
+  requestPersonal: boolean;
+  requestId?: string;
+};

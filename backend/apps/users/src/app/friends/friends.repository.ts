@@ -56,6 +56,7 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
     {
       $project:{
           _id : 1,
+          userId: "$result._id",
           createdAt: {$dateToString:{format:"%Y-%m-%d %H:%M:%S",date:"$createdAt"}},
           userName : "$result.userName",
           email : "$result.email",
@@ -98,6 +99,7 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
     {
       $project:{
           _id : 1,
+          userId: '$userId',
           createdAt: {$dateToString:{format:"%Y-%m-%d %H:%M:%S",date:"$createdAt"}},
           userName : "$result.userName",
           email : "$result.email",

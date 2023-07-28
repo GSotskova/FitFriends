@@ -63,6 +63,10 @@ export class UserService {
     }
 
 
+  public async deleteCertificate(userId: string, certificateId: string) {
+    return this.questionnaireCoachRepository.deleteCertificate(userId, certificateId);
+  }
+
   public async createTestData(user, questionnaire) {
     const entityTest = new UserEntity(user)
     const userEntity = await entityTest.setPassword(user.password)

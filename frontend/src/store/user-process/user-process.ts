@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NameSpace, AuthorizationStatus, FormRegistration} from '../../constants';
 import {UserProcess} from '../../types/state';
-import {checkAuthAction, loginUser, logoutAction, checkEmail, fetchUser} from '../api-actions';
+import {checkAuthAction, loginUser, checkEmail, fetchUser, updateCertificate, postCertificate, deleteCertificate} from '../api-actions';
 import { User, UserFullInfo, UserGeneral, UserRole, UserSex } from '../../types/user';
 import { StationMetro } from '../../types/station-metro.enum';
 import { LevelTraining, TrainingTime } from '../../types/questionnaire';
@@ -27,11 +27,14 @@ const initialState: UserProcess = {
     trainingTime: TrainingTime.Time30,
     caloriesReset: 0,
     caloriesSpend: 0,
-    isReady: false
+    isReady: false,
+    certificate: [],
+    certificatesPath: []
   },
   isUserLoading: false,
   formRegistrType: FormRegistration.General,
-  existsEmail: false
+  existsEmail: false,
+  hasErrorPostCertificate: false
 };
 
 export const userProcess = createSlice({
@@ -68,10 +71,6 @@ export const userProcess = createSlice({
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.hasErrorLogin = true;
       })
-      .addCase(logoutAction.fulfilled, (state) => {
-        state.authorizationStatus = AuthorizationStatus.NoAuth;
-        state.hasErrorLogin = false;
-      })
       .addCase(checkEmail.fulfilled, (state, action) => {
         state.existsEmail = false;
       })
@@ -87,6 +86,24 @@ export const userProcess = createSlice({
       })
       .addCase(fetchUser.rejected, (state) => {
         state.isUserLoading = false;
+      })
+      .addCase(updateCertificate.fulfilled, (state, action) => {
+        state.hasErrorPostCertificate = false;
+      })
+      .addCase(updateCertificate.rejected, (state) => {
+        state.hasErrorPostCertificate = true;
+      })
+      .addCase(postCertificate.fulfilled, (state) => {
+        state.hasErrorPostCertificate = false;
+      })
+      .addCase(postCertificate.rejected, (state) => {
+        state.hasErrorPostCertificate = true;
+      })
+      .addCase(deleteCertificate.fulfilled, (state) => {
+        state.hasErrorPostCertificate = false;
+      })
+      .addCase(deleteCertificate.rejected, (state) => {
+        state.hasErrorPostCertificate = true;
       });
   }
 });

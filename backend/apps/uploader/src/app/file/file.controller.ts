@@ -1,4 +1,4 @@
-import { Controller, UploadedFile, UseInterceptors, Get, Param, Inject, Post } from '@nestjs/common';
+import { Controller, UploadedFile, UseInterceptors, Get, Param, Inject, Post, Body, Delete } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 import 'multer';
@@ -65,12 +65,27 @@ export class FileController {
   @UseInterceptors(FileInterceptor('certificate', {fileFilter: pdfFileFilter}))
   public async coachCertificate(@UploadedFile() file: Express.Multer.File, @Param('coachId') coachId: string) {
     const newFile = await this.fileService.saveFile(file, 'certificate', coachId);
+    console.log('certificate', newFile)
     await this.avatarsService.coachCertificate(coachId, newFile.id);
     const path = `${this.applicationConfig.serveRoot}${newFile.path}`;
     return fillObject(UploadedFileRdo, Object.assign(newFile, { path }));
   }
 
+  @Post('upload/certificate/update/:coachId')
+  @UseInterceptors(FileInterceptor('certificate', {fileFilter: pdfFileFilter}))
+  public async coachCertificateUpd(@UploadedFile() file: Express.Multer.File, @Param('coachId') coachId: string, @Body() body) {
+    console.log(file, body.certificateId)
+    const updfile = await this.fileService.updateFile(file, 'certificate', coachId, body.certificateId);
+    console.log('certificate', updfile)
+    await this.avatarsService.coachCertificate(coachId, updfile.id);
+    const path = `${this.applicationConfig.serveRoot}${updfile.path}`;
+    return fillObject(UploadedFileRdo, Object.assign(updfile, { path }));
+  }
 
+  @Delete('delete/certificate/:certificateId')
+  public async delete(@Param('certificateId', MongoidValidationPipe) certificateId: string) {
+   return await this.fileService.delete(certificateId);
+  }
 
   @Get(':fileId')
   public async show(@Param('fileId', MongoidValidationPipe) fileId: string) {

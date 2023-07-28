@@ -18,7 +18,7 @@ export class TrainingRequestService {
      // return {error: USER_IS_INITIATOR}
      throw new NotFoundException(USER_IS_INITIATOR);
     }
-    
+
     const requestEntity = new TrainingRequestEntity(dto);
     return this.requestRepository.create(requestEntity);
   }
@@ -32,6 +32,14 @@ export class TrainingRequestService {
       return existsRequests
     }
     return this.requestRepository.updateStatus(id, newStatus);
+  }
+
+  public async getRequest(initiatorId: string, coachId: string) {
+    const existsRequests = await this.requestRepository.findId(initiatorId, coachId)
+    if (!existsRequests) {
+      return {error: REQUEST_NOT_FOUND}
+    }
+    return this.requestRepository.findById(existsRequests._id);
   }
 
   public async delete(id: string) {

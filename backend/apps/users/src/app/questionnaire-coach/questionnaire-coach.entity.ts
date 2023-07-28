@@ -4,7 +4,7 @@ export class QuestionnaireCoachEntity implements QuestionnaireCoach {
   public userId: string;
   public levelTraining: LevelTraining;
   public trainingType: TrainingType[];
-  public certificate: string;
+  public certificate: string[];
   public successCoach: string;
   public isPersonal: boolean;
 

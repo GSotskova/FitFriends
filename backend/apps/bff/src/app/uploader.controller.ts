@@ -1,4 +1,4 @@
-import { Controller,  Param,  Post,   Req,   UseFilters, UseGuards, UseInterceptors, UploadedFile, Get } from '@nestjs/common';
+import { Controller,  Param,  Post,   Req,   UseFilters, UseGuards, UseInterceptors, UploadedFile, Get, Body } from '@nestjs/common';
 import { AxiosExceptionFilter } from './filters/axios-exception.filter';
 import { HttpService } from '@nestjs/axios';
 import { ApplicationServiceURL } from './app.config';
@@ -64,6 +64,25 @@ export class UploaderController {
     formData.append('certificate', Buffer.from(file.buffer), {filename: file.originalname, contentType: file.mimetype});
 
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Uploads}/certificate/${req.body['coachId']}`,
+    formData,
+    {headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return data;
+  }
+
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(CoachIdInterceptor)
+  @UseInterceptors(RoleCoachInterceptor)
+  @Post('/coach/certificate/update')
+  @UseInterceptors(FileInterceptor('certificate'))
+  public async updateCertificate(@Req() req: Request, @UploadedFile() file: Express.Multer.File, @Body() body) {
+    console.log(file, 'certificateId', body.certificateId)
+    const formData = new FormData();
+    formData.append('certificate', Buffer.from(file.buffer), {filename: file.originalname, contentType: file.mimetype});
+    formData.append('certificateId', body.certificateId);
+    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Uploads}/certificate/update/${req.body['coachId']}`,
     formData,
     {headers: {
         'Content-Type': 'multipart/form-data'

@@ -1,7 +1,7 @@
 import {  Controller, Get, HttpStatus, Param, Post, Query, Req, UseGuards  } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillObject } from '@project/util/util-core';
-import { UserInfoRdo } from '../user-info/rdo/user-info.rdo';
+import { FriendInfoRdo } from '../friends/rdo/friends.rdo';
 import { FriendService } from './friends.service';
 import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { NotifyMessage, RequestWithTokenPayload } from '@project/shared/shared-types';
@@ -47,26 +47,26 @@ export class FriendController {
 
   @UseGuards(JwtAuthGuard)
    @ApiResponse({
-    type: UserInfoRdo,
+    type: FriendInfoRdo,
     status: HttpStatus.OK,
     description: 'Show list friends for user'
   })
   @Get('user')
   public async showFriendsForUser(@Req() { user: payload }: RequestWithTokenPayload, @Query() query: DefaultQuery) {
     const friends = await this.friendService.getFriends(payload.sub, query);
-    return fillObject(UserInfoRdo, friends);
+    return fillObject(FriendInfoRdo, friends);
   }
 
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
-    type: UserInfoRdo,
+    type: FriendInfoRdo,
     status: HttpStatus.OK,
     description: 'Show list friends for coach'
   })
   @Get('coach')
   public async showFriendsForCoach(@Req() { user: payload }: RequestWithTokenPayload, @Query() query: DefaultQuery) {
     const friends = await this.friendService.getUsers(payload.sub, query);
-    return fillObject(UserInfoRdo, friends);
+    return fillObject(FriendInfoRdo, friends);
   }
 
   @UseGuards(JwtAuthGuard)

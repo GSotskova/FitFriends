@@ -8,10 +8,20 @@ const TrainingItem = ({training}: Props): JSX.Element => (
   <div className="thumbnail-training">
     <div className="thumbnail-training__inner">
       <div className="thumbnail-training__image">
-        <picture>
-          <source type="image/webp"/>
-          <img src={training.photoTraningPath} width="330" height="190" alt=""/>
-        </picture>
+        {training.photoTraningPath &&
+        (
+          <picture>
+            <source type="image/webp"/>
+            <img src={training.photoTraningPath} width="330" height="190" alt=""/>
+          </picture>
+        )}
+        {!training.photoTraningPath &&
+        (
+          <picture>
+            <source type="image/webp" srcSet="img/content/thumbnails/training-06.webp, img/content/thumbnails/training-06@2x.webp 2x"/>
+            <img src="img/content/thumbnails/training-06.jpg" srcSet="img/content/thumbnails/training-06@2x.jpg 2x" width="330" height="190" alt=""/>
+          </picture>
+        )}
       </div>
       <p className="thumbnail-training__price">{training.price === 0 ? 'Бесплатно' : training.price}
       </p>

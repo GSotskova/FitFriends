@@ -46,7 +46,9 @@ export const adaptUserEditToServer =
     trainingType: user.trainingType,
     caloriesReset: user.caloriesReset,
     caloriesSpend: user.caloriesSpend,
-    isReady: user.isReady
+    isReady: user.isReady,
+    isPersonal: user.isPersonal,
+    description: user.description
   });
 
 
@@ -56,11 +58,21 @@ export const adaptAvatarToServer =
     formData.append('file', file, file.name);
     return formData;
   };
-
 export const adaptCertificateToServer =
-  (file: File) => {
+  (file: File, certificateId?: string) => {
     const formData = new FormData();
     formData.append('certificate', file, file.name);
+    if(certificateId) {
+      formData.append('certificateId', certificateId);
+    }
+    return formData;
+  };
+
+
+export const adaptVideoToServer =
+  (file: File) => {
+    const formData = new FormData();
+    formData.append('video', file, file.name);
     return formData;
   };
 
