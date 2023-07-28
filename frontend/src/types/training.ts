@@ -22,7 +22,7 @@ export type Training = {
 
 export type NewTraining = {
   nameTraining: string;
-  photoTraning: string;
+  photoTraning?: string;
   photoTraningPath?: string;
   levelTraining: LevelTraining;
   trainingType: TrainingType;
@@ -31,11 +31,10 @@ export type NewTraining = {
   caloriesReset: number;
   descriptionTraining: string;
   sex: UserSex;
-  videoTraning: string;
-  rating: number;
-  coachId: string;
-  isSpecialOffer: boolean;
-  createdAt: Date;
+  videoTraning?: string;
+  videoTraningPath?: string;
+  rating?: number;
+  isSpecialOffer?: boolean;
 }
 
 
@@ -47,4 +46,13 @@ export type Query = {
   trainingTime?: TrainingTime[];
   page?: number;
   sortDate?: string;
+  sortCount?: string;
+  sortPrice?: string;
+}
+
+export enum StatusRequest
+ {
+  Pending = 'на рассмотрении',
+  Rejected = 'отклонён',
+  Accepted = 'принят',
 }

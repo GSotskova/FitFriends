@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ApplicationServiceURL } from './app.config';
 import { Request } from 'express';
@@ -10,6 +10,7 @@ import { CheckAuthGuard } from './guards/check-auth.guard';
 import { RoleCoachInterceptor } from './interceptors/role-coach.interceptor';
 import { UseridTrainingInterceptor } from './interceptors/userid-tarining.interceptor';
 import { CoachIdInterceptor } from './interceptors/coachId.interceptor';
+import { StatusRequest, TypeRequest } from '@project/shared/shared-types';
 
 
 
@@ -39,8 +40,6 @@ export class CoachAccountController {
     await Promise.all(data.map(async (el) => {
       if (el.photoTraning) {
         const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${el.photoTraning}`);
-
-        console.log(path, el.photoTraning)
         el.photoTraningPath = path;
         }
        }));
@@ -69,6 +68,7 @@ export class CoachAccountController {
   @UseInterceptors(CoachIdInterceptor)
   @Get('orders')
   public async showOrders(@Body() coachId: string, @Query() query: TrainingOrdersQuery) {
+    console.log(query);
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Orders}/show/list`, {params : query, data: coachId});
    return data;
   }
@@ -76,13 +76,27 @@ export class CoachAccountController {
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(CoachIdInterceptor)
   @Get('friends/show')
-  public async showFriends(@Req() req: Request, @Query() query: DefaultQuery) {
+  public async showFriends(@Req() req: Request, @Query() query: DefaultQuery, @Body() body) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Friends}/coach`, {
       params : query,
       headers: {
         'Authorization': req.headers['authorization']
       }
     });
+
+    await Promise.all(data.map(async (el) => {
+      if (el.avatar) {
+        const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${el.avatar}`);
+        el.avatarPath = path;
+        }
+        const initiatorId = el.userId;
+        const coachId = body.coachId;
+        const requestTraining  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Request}/show`,{data: {initiatorId, coachId}} );
+        if (requestTraining.data.statusRequest === StatusRequest.Pending && requestTraining.data.typeRequest === TypeRequest.Personal) {
+          el.requestPersonal = true
+          el.requestId = requestTraining.data.id
+        }
+       }));
    return data;
   }
 
@@ -98,4 +112,30 @@ export class CoachAccountController {
     });
    return data;
   }
+
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(RoleCoachInterceptor)
+  @UseInterceptors(CoachIdInterceptor)
+  @Delete('certificate/delete/:certificateId')
+  public async deleteCertificate(@Req() req: Request, @Param('certificateId', MongoidValidationPipe) certificateId: string,  @Body() body) {
+    console.log(body.coachId, certificateId)
+    const { data } = await this.httpService.axiosRef.delete(`${ApplicationServiceURL.Users}/certificate/delete/${certificateId}`, {
+      data: {coachId: body.coachId},
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    });
+   return data;
+  }
+
+
+@UseGuards(CheckAuthGuard)
+@UseInterceptors(CoachIdInterceptor)
+@UseInterceptors(RoleCoachInterceptor)
+@Post('request/update/:id')
+public async editTrainingRequest(@Param('id', MongoidValidationPipe) id: string, @Body() statusRequest: string) {
+
+  const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Request}/update/${id}`, statusRequest);
+  return data;
+}
 }

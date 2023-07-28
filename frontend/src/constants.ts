@@ -1,6 +1,7 @@
 export enum AppRoute {
   Login = '/login',
   Intro = '/',
+  Main = '/main',
   Registration = '/registration',
   NotFound = '/404',
   Add = '/add',
@@ -24,6 +25,8 @@ export enum APIRoute {
   CheckEmail = '/users/check/email',
   CheckUser= '/users/login/auth',
   Users = '/users',
+  User = '/user',
+  Coach = 'coach',
   CoachTraining = 'coach/training',
 }
 
@@ -31,7 +34,10 @@ export enum NameSpace {
   DataTrainings = 'DATA_TRAININGS',
   DataTraining = 'DATA_TRAINING',
   Sort = 'SORT',
-  User = 'USER'
+  User = 'USER',
+  DataFriends = 'DATA_FRIENDS',
+  DataOrders = 'DATA_ORDERS',
+  DataRequest = 'DATA_REQUEST',
 }
 
 export enum HttpCode {

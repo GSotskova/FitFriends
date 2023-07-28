@@ -115,6 +115,17 @@ export class UserInfoController {
   }
 
 
+  @UseGuards(JwtAuthGuard)
+  @Delete('certificate/delete/:id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Delete certificate by ID'
+  })
+  public async deleteCertificate(@Body() body, @Param('id', MongoidValidationPipe) id: string) {
+    return this.userService.deleteCertificate(body.coachId, id);
+  }
+
+
   @RabbitRPC({
     exchange: RabbitExchange.Uploader,
     routingKey: RabbitRouting.CoachCertificate,

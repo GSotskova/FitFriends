@@ -1,7 +1,8 @@
 import {store} from '../store/index';
 import {AuthorizationStatus, FormRegistration} from '../constants';
-import {User, UserFullInfo, UserGeneral} from './user';
+import {User, UserFullInfo, UserGeneral, Friend} from './user';
 import { Training } from './training';
+import { Order } from './order';
 
 export type UserProcess = {
   authorizationStatus: AuthorizationStatus;
@@ -12,6 +13,7 @@ export type UserProcess = {
   formRegistrType: FormRegistration;
   existsEmail: boolean;
   isUserLoading: boolean;
+  hasErrorPostCertificate: boolean;
 };
 
 export type TrainingData = {
@@ -20,6 +22,24 @@ export type TrainingData = {
   hasError: boolean;
   isTrainingLoading: boolean;
   training: Training | null;
+  hasErrorPost: boolean;
+};
+
+export type FriendData = {
+  friends: Friend[];
+  isFriendsDataLoading: boolean;
+  hasError: boolean;
+  hasErrorPost: boolean;
+};
+
+export type OrderData = {
+  orders: Order[];
+  isOrdersDataLoading: boolean;
+  hasError: boolean;
+  hasErrorPost: boolean;
+};
+
+export type RequestData = {
   hasErrorPost: boolean;
 };
 

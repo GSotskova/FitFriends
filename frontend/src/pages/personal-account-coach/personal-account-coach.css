@@ -1,0 +1,21 @@
+ .conteiner-revers {
+  display: flex;
+  flex-direction: column;
+  max-width: 1042px;
+}
+
+
+.personal-account-coach__controls {
+  order: 0;
+  margin-bottom: 30px;
+  margin-top: 0;
+  padding: 0;
+}
+
+.conteiner1 {
+  order: 1;
+}
+
+.personal-account-coach__label-wrapper {
+  margin-bottom: 0;
+}

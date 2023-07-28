@@ -12,7 +12,6 @@ type Props = {
 
 const CoachInfo = ({user}: Props): JSX.Element => {
   const dispatch = useAppDispatch();
-
   const [isEditForm, setSignEditForm] = useState<boolean>(false);
   const handleEditButtonClick = () => {
     setSignEditForm((prevIsEditForm) => !prevIsEditForm);
@@ -59,7 +58,8 @@ const CoachInfo = ({user}: Props): JSX.Element => {
   const handleInfoChange = (evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value} = evt.target;
     if (name === 'isPersonal') {
-      setInfo({...currentInfo, isPersonal: !currentInfo.isPersonal});
+      const signPersonal = !currentInfo.isPersonal;
+      setInfo({...currentInfo, isPersonal: signPersonal});
     } else {
       setInfo({...currentInfo, [name]: value});
     }

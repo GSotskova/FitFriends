@@ -25,7 +25,6 @@ export const trainingsData = createSlice({
       })
       .addCase(fetchCoachTrainings.fulfilled, (state, action) => {
         state.trainings = action.payload;
-        console.log('fetchCoachTrainings')
         state.isTrainingsDataLoading = false;
       })
       .addCase(fetchCoachTrainings.rejected, (state) => {
