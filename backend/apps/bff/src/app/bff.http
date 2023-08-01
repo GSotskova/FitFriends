@@ -106,7 +106,7 @@ GET http://localhost:4000/api/users?trainingType=йога,бокс&levelTraining
 Authorization: Bearer {{authToken}}
 ###
 # Список (каталог) пользователей
-GET http://localhost:4000/api/users HTTP/1.1
+GET http://localhost:4000/api/users?userRole=user HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 # Список оповещений
@@ -287,22 +287,11 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 ###
 
-
-# Изменений статуса заявки
-POST http://localhost:4000/api/coach/request/update/64bd4332725e40ff5a96c3a1 HTTP/1.1
-Authorization: Bearer {{authToken}}
-Content-Type: application/json
-
-{
-  "statusRequest": "принят"
-}
-###
-
 ###########      ОБЩИЕ ЗАПРОСЫ     ####################
 
 
 # Каталог тренировок
-GET http://localhost:4000/api/training/catalog?sortDate=desc&price=10,4000 HTTP/1.1
+GET http://localhost:4000/api/training/catalog?sortPrice=asc HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 
@@ -325,3 +314,14 @@ Authorization: Bearer {{authToken}}
 
 # Get file by ID
 GET http://localhost:4000/api/files/64b7fc617417f6f160831f15 HTTP/1.1
+###
+
+# Изменений статуса заявки
+POST http://localhost:4000/api/users/request/update/64bd4332725e40ff5a96c3a1 HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "statusRequest": "принят"
+}
+###

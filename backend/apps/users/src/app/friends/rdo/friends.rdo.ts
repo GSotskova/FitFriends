@@ -75,6 +75,12 @@ export class FriendInfoRdo {
   @Expose()
   public isReady: boolean;
 
+  @ApiProperty({
+    description: 'Training type'
+  })
+  @Expose()
+  public trainingType: string[];
+
 
   @ApiProperty({
     description: 'Comment created date',

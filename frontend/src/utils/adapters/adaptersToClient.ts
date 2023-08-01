@@ -7,6 +7,7 @@ export const adaptLoginToClient =
     id: user.id,
     userName: user.userName,
     email: user.email,
+    role: user.role,
     accessToken: user.token,
   });
 
@@ -35,19 +36,3 @@ export const adaptUserToClient =
     isReady: user.isReady
   });
 
-/*export const adaptFriendsToClient =
-  (frineds: Friend[]): Friend[] =>
-    frineds
-      .map((frined: Friend)=>({
-        id: frined.id,
-        userName: frined.userName,
-        email: frined.email,
-        avatar: frined.avatar,
-        avatarPath: frined.avatarPath,
-        sex: frined.sex,
-        dateBirth: frined.dateBirth,
-        role: frined.role,
-        description: frined.description,
-        location: frined.location
-      }));
-*/

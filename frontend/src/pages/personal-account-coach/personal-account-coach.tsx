@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import CoachInfo from '../../components/coach-info/coach-info';
+import UserInfo from '../../components/user-info/user-info';
 import Header from '../../components/header/header';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getUserFullInfo } from '../../store/user-process/selectors';
@@ -90,7 +90,7 @@ function AccountCoachPage(): JSX.Element {
           <div className="container">
             <div className="inner-page__wrapper">
               <h1 className="visually-hidden">Личный кабинет</h1>
-              <CoachInfo user={coachInfo}/>
+              <UserInfo user={coachInfo}/>
               <div className="inner-page__content">
                 <div className="personal-account-coach">
                   <div className="personal-account-coach__navigation">
@@ -171,7 +171,7 @@ function AccountCoachPage(): JSX.Element {
                     <Carousel
                       responsive={responsive}
                       arrows={false}
-                      containerClass="container conteiner1"
+                      containerClass="container conteiner_order"
                       focusOnSelect
                       pauseOnHover
                       showDots

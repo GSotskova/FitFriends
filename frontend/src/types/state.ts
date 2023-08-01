@@ -1,7 +1,7 @@
 import {store} from '../store/index';
 import {AuthorizationStatus, FormRegistration} from '../constants';
 import {User, UserFullInfo, UserGeneral, Friend} from './user';
-import { Training } from './training';
+import { Comment, Training } from './training';
 import { Order } from './order';
 
 export type UserProcess = {
@@ -13,15 +13,26 @@ export type UserProcess = {
   formRegistrType: FormRegistration;
   existsEmail: boolean;
   isUserLoading: boolean;
+  isUserCatalogLoading: boolean;
+  isAuthInfoLoading: boolean;
   hasErrorPostCertificate: boolean;
+  users: UserFullInfo[];
 };
 
 export type TrainingData = {
   trainings: Training[];
+  userTrainings: Training[];
   isTrainingsDataLoading: boolean;
   hasError: boolean;
   isTrainingLoading: boolean;
   training: Training | null;
+  hasErrorPost: boolean;
+};
+
+export type CommentData = {
+  comments: Comment[];
+  isCommentsDataLoading: boolean;
+  hasError: boolean;
   hasErrorPost: boolean;
 };
 

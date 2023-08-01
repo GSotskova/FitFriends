@@ -1,27 +1,20 @@
 import { Navigate } from 'react-router-dom';
-import { AppRoute, AuthorizationStatus, NameSpace } from '../../constants';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getAuthorizationStatus } from '../../store/user-process/selectors';
-import { fetchCoachFriends, fetchCoachOrders, fetchCoachTrainings } from '../../store/api-actions';
+import { AppRoute, AuthorizationStatus } from '../../constants';
+
 
 type PrivateRouteProps = {
   restrictedFor: AuthorizationStatus;
   redirectTo: AppRoute;
   children: JSX.Element;
-  nameSpace?: NameSpace;
+  verifyRole: boolean;
 }
 
-const PrivateRoute = ({ children, restrictedFor, redirectTo, nameSpace}: PrivateRouteProps): JSX.Element => {
-  const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  const dispatch = useAppDispatch();
-  if (nameSpace === NameSpace.DataTrainings ) {dispatch(fetchCoachTrainings());}
-  if (nameSpace === NameSpace.DataFriends ) {dispatch(fetchCoachFriends());}
-  if (nameSpace === NameSpace.DataOrders ) {dispatch(fetchCoachOrders());}
-  return (
-    authorizationStatus !== restrictedFor
-      ? children
-      : <Navigate to={redirectTo} />
-  );
+const PrivateRoute = ({ children, restrictedFor, redirectTo, verifyRole}: PrivateRouteProps): JSX.Element => {
+  console.log( 'PrivateRoute', restrictedFor , verifyRole, children);
+  return AuthorizationStatus.NoAuth !== restrictedFor && verifyRole
+    ? children
+    : <Navigate to={redirectTo} />;
 };
 
 export default PrivateRoute;
+

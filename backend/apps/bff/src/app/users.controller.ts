@@ -114,6 +114,12 @@ public async showList(@Req() req: Request, @Query() query: UsersQuery) {
       'Authorization': req.headers['authorization']
     }
   });
+  await Promise.all(data.map(async (el) => {
+    if (el.avatar) {
+      const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${el.avatar}`);
+      el.avatarPath = path;
+      }
+     }));
   return data;
 }
 
@@ -149,6 +155,15 @@ public async deleteNotifyById(@Req() req: Request, @Param('id', MongoidValidatio
 @Post('check/email')
 public async checkEmail(@Body() email: string) {
   const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Auth}/check/email`, email);
+  return data;
+}
+
+
+@UseGuards(CheckAuthGuard)
+@Post('request/update/:id')
+public async editTrainingRequest(@Param('id', MongoidValidationPipe) id: string, @Body() statusRequest: string) {
+
+  const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Request}/update/${id}`, statusRequest);
   return data;
 }
 

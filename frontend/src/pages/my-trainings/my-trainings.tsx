@@ -256,7 +256,9 @@ function MyTrainingsPage() {
                     {trainings.map((el) =>
                       (
                         <li className="my-trainings__item" key={el.id}>
-                          <TrainingItem training={el}/>
+                          <div className="thumbnail-training" key={el.id}>
+                            <TrainingItem training={el}/>
+                          </div>
                         </li>)
                     )}
                   </ul>

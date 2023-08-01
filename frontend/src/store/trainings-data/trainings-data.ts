@@ -1,10 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
 import {TrainingData} from '../../types/state';
-import {editTraining, fetchCoachTrainings, postTraining, fetchCoachTraining} from '../api-actions';
+import {editTraining, fetchCoachTrainings, postTraining, fetchCoachTraining, fetchUserTrainings, fetchCatalogTrainings} from '../api-actions';
 
 const initialState: TrainingData = {
   trainings: [],
+  userTrainings: [],
   isTrainingsDataLoading: false,
   hasError: false,
   isTrainingLoading: false,
@@ -28,6 +29,30 @@ export const trainingsData = createSlice({
         state.isTrainingsDataLoading = false;
       })
       .addCase(fetchCoachTrainings.rejected, (state) => {
+        state.isTrainingsDataLoading = false;
+        state.hasError = true;
+      })
+      .addCase(fetchUserTrainings.pending, (state) => {
+        state.isTrainingsDataLoading = true;
+        state.hasError = false;
+      })
+      .addCase(fetchUserTrainings.fulfilled, (state, action) => {
+        state.userTrainings = action.payload;
+        state.isTrainingsDataLoading = false;
+      })
+      .addCase(fetchUserTrainings.rejected, (state) => {
+        state.isTrainingsDataLoading = false;
+        state.hasError = true;
+      })
+      .addCase(fetchCatalogTrainings.pending, (state) => {
+        state.isTrainingsDataLoading = true;
+        state.hasError = false;
+      })
+      .addCase(fetchCatalogTrainings.fulfilled, (state, action) => {
+        state.trainings = action.payload;
+        state.isTrainingsDataLoading = false;
+      })
+      .addCase(fetchCatalogTrainings.rejected, (state) => {
         state.isTrainingsDataLoading = false;
         state.hasError = true;
       })

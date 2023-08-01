@@ -12,6 +12,7 @@ import { CreateOrderDto, CreateRequestDto, UserSubscriptionDto } from '@project/
 import { UseridOrderInterceptor } from './interceptors/userid-order.interceptor';
 import { InintiatoridInterceptor } from './interceptors/initiatorid.interceptor';
 import { UseridExistsInterceptor } from './interceptors/userid-exists.interceptor';
+import { TypeRequest } from '@project/shared/shared-types';
 
 
 
@@ -51,13 +52,35 @@ export class UserAccountController {
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(UseridInterceptor)
   @Get('friends/show')
-  public async showFriends(@Req() req: Request, @Query() query: DefaultQuery) {
+  public async showFriends(@Req() req: Request, @Query() query: DefaultQuery, @Body() body) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Friends}/user`, {
       params : query,
       headers: {
         'Authorization': req.headers['authorization']
       }
     });
+    await Promise.all(data.map(async (el) => {
+      if (el.avatar) {
+        const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${el.avatar}`);
+        el.avatarPath = path;
+        }
+        let initiatorId = el.userId;
+        const userId = body.userId;
+        const requestTraining  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Request}/show`,{data: {initiatorId, userId}} );
+        if (requestTraining.data.typeRequest === TypeRequest.Together){
+          el.requestTogether = true
+          el.requestStatus = requestTraining.data.statusRequest
+          el.requestId = requestTraining.data.id
+        }
+          initiatorId = body.userId;
+          const coachId = el.userId;
+          const requestTrainingCoach  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Request}/show`,{data: {initiatorId, coachId}} );
+          if (requestTrainingCoach.data.typeRequest === TypeRequest.Personal) {
+            el.requestPersonal = true
+            el.requestStatus = requestTraining.data.statusRequest
+            el.requestId = requestTraining.data.id
+          }
+       }));
    return data;
   }
 

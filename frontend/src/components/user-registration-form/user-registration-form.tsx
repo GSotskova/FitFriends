@@ -153,7 +153,7 @@ const UserRegistrationForm = ({onSubmit}: UserRegistrationFormProps): JSX.Elemen
                           name={FormFieldName.userName}
                           minLength={1}
                           maxLength={15}
-                          pattern="[A-Za-zА-Яа-яЁё]"
+                          pattern="^[A-Za-zА-Яа-яЁё\s]+$"
                           title="Только буквы русского/английского алфавита"
                           required
                         />

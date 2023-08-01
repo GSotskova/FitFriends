@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NameSpace, AuthorizationStatus, FormRegistration} from '../../constants';
 import {UserProcess} from '../../types/state';
-import {checkAuthAction, loginUser, checkEmail, fetchUser, updateCertificate, postCertificate, deleteCertificate} from '../api-actions';
+import {checkAuthAction, loginUser, checkEmail, fetchUser, updateCertificate, postCertificate, deleteCertificate, fetchUserCatalog} from '../api-actions';
 import { User, UserFullInfo, UserGeneral, UserRole, UserSex } from '../../types/user';
 import { StationMetro } from '../../types/station-metro.enum';
 import { LevelTraining, TrainingTime } from '../../types/questionnaire';
@@ -32,16 +32,19 @@ const initialState: UserProcess = {
     certificatesPath: []
   },
   isUserLoading: false,
+  isUserCatalogLoading: false,
+  isAuthInfoLoading: false,
   formRegistrType: FormRegistration.General,
   existsEmail: false,
-  hasErrorPostCertificate: false
+  hasErrorPostCertificate: false,
+  users: []
 };
 
 export const userProcess = createSlice({
   name: NameSpace.User,
   initialState,
   reducers: {
-    loadAuthInfo: (state, action: PayloadAction<{authInfo: User}>) => {
+    setAuthInfo: (state, action: PayloadAction<{authInfo: User}>) => {
       state.authInfo = action.payload.authInfo;
     },
     setUserGeneralInfo: (state, action: PayloadAction<{userData: UserGeneral}>) => {
@@ -56,12 +59,17 @@ export const userProcess = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(checkAuthAction.pending, (state, action) => {
+        state.isAuthInfoLoading = true;
+      })
       .addCase(checkAuthAction.fulfilled, (state, action) => {
         state.authorizationStatus = AuthorizationStatus.Auth;
         state.authInfo = action.payload;
+        state.isAuthInfoLoading = false;
       })
       .addCase(checkAuthAction.rejected, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;
+        state.isAuthInfoLoading = false;
       })
       .addCase(loginUser.fulfilled, (state) => {
         state.authorizationStatus = AuthorizationStatus.Auth;
@@ -87,6 +95,16 @@ export const userProcess = createSlice({
       .addCase(fetchUser.rejected, (state) => {
         state.isUserLoading = false;
       })
+      .addCase(fetchUserCatalog.pending, (state) => {
+        state.isUserCatalogLoading = true;
+      })
+      .addCase(fetchUserCatalog.fulfilled, (state, action) => {
+        state.users = action.payload;
+        state.isUserCatalogLoading = false;
+      })
+      .addCase(fetchUserCatalog.rejected, (state) => {
+        state.isUserCatalogLoading = false;
+      })
       .addCase(updateCertificate.fulfilled, (state, action) => {
         state.hasErrorPostCertificate = false;
       })
@@ -108,4 +126,4 @@ export const userProcess = createSlice({
   }
 });
 
-export const {loadAuthInfo, setUserGeneralInfo, setUserFullInfo, setFormType} = userProcess.actions;
+export const {setAuthInfo, setUserGeneralInfo, setUserFullInfo, setFormType} = userProcess.actions;

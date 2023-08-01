@@ -6,7 +6,10 @@ export enum AppRoute {
   NotFound = '/404',
   Add = '/add',
   Edit = '/edit',
-  AccountCoach = '/coach/account'
+  AccountCoach = '/coach/account',
+  AccountUser = '/user/account',
+  Training = '/training',
+  Users = '/users'
 
 }
 
@@ -28,16 +31,17 @@ export enum APIRoute {
   User = '/user',
   Coach = 'coach',
   CoachTraining = 'coach/training',
+  Training = 'training',
 }
 
 export enum NameSpace {
   DataTrainings = 'DATA_TRAININGS',
-  DataTraining = 'DATA_TRAINING',
   Sort = 'SORT',
   User = 'USER',
   DataFriends = 'DATA_FRIENDS',
   DataOrders = 'DATA_ORDERS',
   DataRequest = 'DATA_REQUEST',
+  DataComments = 'DATA_COMMENT'
 }
 
 export enum HttpCode {
@@ -65,3 +69,10 @@ export const enum DescriptionLn {
   MinLength = 10,
   MaxLength = 140
 }
+
+export const MAX_CALORIES_VALUE = 5000;
+export const COUNT_TRAINING_FOR_YOU = 9;
+export const COUNT_TRAINING_SPECIAL = 3;
+export const COUNT_USERS_READY = 8;
+export const SHOW_TRAINING_TYPE = 5;
+

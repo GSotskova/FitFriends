@@ -1,6 +1,6 @@
-import { IsNumber, IsOptional, IsArray, IsInt, Min, Max, IsIn } from 'class-validator';
+import { IsNumber, IsOptional, IsArray, Max, IsIn } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { DEFAULT_LIST_COUNT_LIMIT, RatingQuery } from './query.constants';
+import { DEFAULT_LIST_COUNT_LIMIT } from './query.constants';
 import { TrainingTime } from '@project/shared/shared-types';
 
 export class TrainingQuery {

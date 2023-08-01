@@ -64,6 +64,24 @@ export class UserInfoRdo {
   public location: string;
 
   @ApiProperty({
+    description: 'Training type'
+  })
+  @Expose()
+  public trainingType: string;
+
+  @ApiProperty({
+    description: 'Level training'
+  })
+  @Expose()
+  public levelTraining: string;
+
+  @ApiProperty({
+    description: 'Sign ready'
+  })
+  @Expose()
+  public isReady: string;
+
+  @ApiProperty({
     description: 'User created date',
   })
   @Expose()
