@@ -52,7 +52,27 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
         as: 'result'
       },
     },
-    { $unwind: '$result',},
+    { "$unwind": {"path": "$result", "preserveNullAndEmptyArrays": true} },
+    {
+      $lookup: {
+        from: 'questionnairesUser',
+        localField: 'friendId',
+        foreignField: 'userId',
+        as: 'resultUser'
+      },
+    },
+    { "$unwind": {"path": "$resultUser", "preserveNullAndEmptyArrays": true}
+    },
+    {
+      $lookup: {
+        from: 'questionnairesCoach',
+        localField: 'friendId',
+        foreignField: 'userId',
+        as: 'resultCoach'
+      },
+    },
+    { "$unwind": {"path": "$resultCoach", "preserveNullAndEmptyArrays": true}
+    },
     {
       $project:{
           _id : 1,
@@ -67,9 +87,36 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
           description : "$result.description",
           location : "$result.location",
           backgroundImg : "$result.backgroundImg",
+          trainingType : {
+            $cond: [
+              {
+                  "$ifNull": [
+                      "$resultUser.trainingType",
+                       false
+                  ]
+              },
+              "$resultUser.trainingType",
+              "$resultCoach.trainingType"
+          ]
+          },
+
+          isReady: {
+            $cond: [
+              {
+                  "$ifNull": [
+                      "$resultUser.isReady",
+                       false
+                  ]
+              },
+              "$resultUser.isReady",
+              "$resultCoach.isPersonal"
+          ]
+          }
       }
     },
     { $unset: 'result' },
+    { $unset: 'resultUser' },
+    { $unset: 'resultCoach' },
     { $sort:  objQuery.objSort },
     { $limit: objQuery.skip + objQuery.limitNumber},
     { $skip:  objQuery.skip }
@@ -95,7 +142,17 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
         as: 'result'
       },
     },
-    { $unwind: '$result',},
+    { "$unwind": {"path": "$result", "preserveNullAndEmptyArrays": true} },
+    {
+      $lookup: {
+        from: 'questionnairesUser',
+        localField: 'userId',
+        foreignField: 'userId',
+        as: 'resultUser'
+      },
+    },
+    { "$unwind": {"path": "$resultUser", "preserveNullAndEmptyArrays": true}
+    },
     {
       $project:{
           _id : 1,
@@ -110,6 +167,8 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
           description : "$result.description",
           location : "$result.location",
           backgroundImg : "$result.backgroundImg",
+          trainingType : "$resultUser.trainingType",
+          isReady : "$resultUser.isReady"
       }
     },
     { $unset: 'result' },

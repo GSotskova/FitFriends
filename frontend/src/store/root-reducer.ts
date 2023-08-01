@@ -5,13 +5,14 @@ import { trainingsData } from './trainings-data/trainings-data';
 import { friendsData } from './friends-data/friends-data';
 import { ordersData } from './orders-data/orders-data';
 import { requestData } from './request-data/request-data';
+import { commentsData } from './comment-data/comment-data';
 
 
 export const rootReducer = combineReducers({
   [NameSpace.User]: userProcess.reducer,
-  [NameSpace.DataTraining]: trainingsData.reducer,
   [NameSpace.DataTrainings]: trainingsData.reducer,
   [NameSpace.DataFriends]: friendsData.reducer,
   [NameSpace.DataOrders]: ordersData.reducer,
-  [NameSpace.DataRequest]: requestData.reducer
+  [NameSpace.DataRequest]: requestData.reducer,
+  [NameSpace.DataComments]: commentsData.reducer
 });

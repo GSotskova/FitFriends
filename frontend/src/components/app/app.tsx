@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 import { Route, Routes } from 'react-router-dom';
 import {useEffect} from 'react';
 import {useAppSelector, useAppDispatch} from '../../hooks';
-import { AppRoute, AuthorizationStatus, NameSpace } from '../../constants';
+import { AppRoute, AuthorizationStatus } from '../../constants';
 import IntroPage from '../../pages/intro-page/intro-page';
 import LoginPage from '../../pages/login-page/login-page';
 import RegistrationPage from '../../pages/registration-page/registration-page';
@@ -10,27 +11,80 @@ import PrivateRoute from '../private-route/private-route';
 import MyTrainingsPage from '../../pages/my-trainings/my-trainings';
 import CreateTrainingPage from '../../pages/create-training/create-training';
 import FriendsListPage from '../../pages/friends-list-coach/friends-list-coach';
-import { getAuthorizationStatus } from '../../store/user-process/selectors';
-import { fetchUser } from '../../store/api-actions';
+import { getAuthCheckedStatus, getAuthInfo, getAuthInfoDataLoadingStatus, getAuthorizationStatus, getSignUserLoading, getUserFullInfo } from '../../store/user-process/selectors';
+import { fetchCatalogTrainings, fetchCoachFriends, fetchCoachOrders, fetchCoachTrainings, fetchUser, fetchUserCatalog, fetchUserTrainings } from '../../store/api-actions';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import MyOrdersPage from '../../pages/my-orders/my-orders';
 import MainPage from '../../pages/main-page/main-page';
+import { UserRole } from '../../types/user';
+import CatalogTrainingsPage from '../../pages/catalog-trainings/catalog-trainings';
+import CatalogUsersPage from '../../pages/catalog-users/catalog-users';
+import LoadingScreen from '../../pages/loading-screen/loading-screen';
+import NotAuthRoute from '../not-auth-route/not-auth-route';
+import TrainingCardPage from '../../pages/training-card/training-card';
+import FriendsListUserPage from '../../pages/friends-list-user/friends-list-user';
 
 
 function App(): JSX.Element {
-  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(fetchUser());
-    }
-  }, [authorizationStatus, dispatch]);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isAuthChecked = useAppSelector(getAuthCheckedStatus);
+  const userData = useAppSelector(getAuthInfo);
+  const userFullInfo = useAppSelector(getUserFullInfo);
+  const isAuthInfoLoading = useAppSelector(getAuthInfoDataLoadingStatus);
+  const isUserLoading = useAppSelector(getSignUserLoading);
 
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.Auth ) {
+      dispatch(fetchUser());
+    } }, [authorizationStatus, dispatch]);
+
+
+  useEffect(() => {
+    if (userData?.role === UserRole.User) {
+      dispatch(fetchUserTrainings(userFullInfo));
+      dispatch(fetchCatalogTrainings());
+      dispatch(fetchUserCatalog());
+    }
+    if (userData?.role === UserRole.Coach && userData.id) {
+      dispatch(fetchCoachTrainings());
+      dispatch(fetchCoachFriends());
+      dispatch(fetchCoachOrders());
+      dispatch(fetchUserCatalog());
+    }
+  }, [dispatch, userData?.id, userData?.role, userFullInfo]);
+
+  if (!isAuthChecked || isAuthInfoLoading || isUserLoading) {
+    return (
+      <LoadingScreen />
+    );
+  }
   return (
     <Routes>
       <Route
         path={AppRoute.Main}
-        element={<MainPage />}
+        element={
+          <PrivateRoute
+            restrictedFor={authorizationStatus}
+            redirectTo={AppRoute.Login}
+            verifyRole={UserRole.User === userData?.role}
+
+          >
+            <MainPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={AppRoute.Users}
+        element={
+          <PrivateRoute
+            restrictedFor={authorizationStatus}
+            redirectTo={AppRoute.Login}
+            verifyRole={UserRole.User === userData?.role}
+          >
+            <CatalogUsersPage />
+          </PrivateRoute>
+        }
       />
       <Route
         path={AppRoute.Intro}
@@ -38,7 +92,14 @@ function App(): JSX.Element {
       />
       <Route
         path={AppRoute.Login}
-        element={<LoginPage />}
+        element={
+          <NotAuthRoute
+            restrictedFor={authorizationStatus}
+            userRole={userData?.role}
+          >
+            <LoginPage />
+          </NotAuthRoute>
+        }
       />
       <Route
         path={AppRoute.Registration}
@@ -47,7 +108,7 @@ function App(): JSX.Element {
       <Route
         path={AppRoute.AccountCoach}
         element={
-          <PrivateRoute restrictedFor={AuthorizationStatus.NoAuth} redirectTo={AppRoute.Login}>
+          <PrivateRoute restrictedFor={authorizationStatus} redirectTo={AppRoute.Login} verifyRole={UserRole.Coach === userData?.role}>
             <AccountCoachPage />
           </PrivateRoute>
         }
@@ -55,7 +116,11 @@ function App(): JSX.Element {
       <Route
         path={`${AppRoute.AccountCoach}/trainings`}
         element={
-          <PrivateRoute restrictedFor={AuthorizationStatus.NoAuth} redirectTo={AppRoute.Login} nameSpace={NameSpace.DataTrainings}>
+          <PrivateRoute
+            restrictedFor={authorizationStatus}
+            redirectTo={AppRoute.Login}
+            verifyRole={UserRole.Coach === userData?.role}
+          >
             <MyTrainingsPage />
           </PrivateRoute>
         }
@@ -63,7 +128,7 @@ function App(): JSX.Element {
       <Route
         path={`${AppRoute.AccountCoach}/orders`}
         element={
-          <PrivateRoute restrictedFor={AuthorizationStatus.NoAuth} redirectTo={AppRoute.Login} nameSpace={NameSpace.DataOrders}>
+          <PrivateRoute restrictedFor={authorizationStatus} redirectTo={AppRoute.Login} verifyRole={UserRole.Coach === userData?.role}>
             <MyOrdersPage />
           </PrivateRoute>
         }
@@ -71,7 +136,7 @@ function App(): JSX.Element {
       <Route
         path={`${AppRoute.AccountCoach}/trainings/create`}
         element={
-          <PrivateRoute restrictedFor={AuthorizationStatus.NoAuth} redirectTo={AppRoute.Login} nameSpace={NameSpace.DataTrainings}>
+          <PrivateRoute restrictedFor={authorizationStatus} redirectTo={AppRoute.Login} verifyRole={UserRole.Coach === userData?.role}>
             <CreateTrainingPage />
           </PrivateRoute>
         }
@@ -79,8 +144,40 @@ function App(): JSX.Element {
       <Route
         path={`${AppRoute.AccountCoach}/friends`}
         element={
-          <PrivateRoute restrictedFor={AuthorizationStatus.NoAuth} redirectTo={AppRoute.Login} nameSpace={NameSpace.DataFriends}>
+          <PrivateRoute restrictedFor={authorizationStatus} redirectTo={AppRoute.Login} verifyRole={UserRole.Coach === userData?.role}>
             <FriendsListPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={`${AppRoute.AccountUser}/friends`}
+        element={
+          <PrivateRoute restrictedFor={authorizationStatus} redirectTo={AppRoute.Login} verifyRole={UserRole.User === userData?.role}>
+            <FriendsListUserPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={`${AppRoute.Training}/catalog`}
+        element={
+          <PrivateRoute
+            restrictedFor={authorizationStatus}
+            redirectTo={AppRoute.Login}
+            verifyRole={UserRole.User === userData?.role}
+          >
+            <CatalogTrainingsPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={`${AppRoute.Training}/:id`}
+        element={
+          <PrivateRoute
+            restrictedFor={authorizationStatus}
+            redirectTo={AppRoute.Login}
+            verifyRole
+          >
+            <TrainingCardPage />
           </PrivateRoute>
         }
       />

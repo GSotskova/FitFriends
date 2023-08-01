@@ -1,7 +1,7 @@
 import { IsNumber, IsOptional, IsEnum, IsArray, Max, IsIn } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { DEFAULT_LIST_COUNT_LIMIT } from './query.constants';
-import {  StationMetro, LevelTraining, UserRole } from '@project/shared/shared-types';
+import {  LevelTraining, UserRole } from '@project/shared/shared-types';
 
 export class UsersQuery {
   @Transform(({ value } ) => +value || DEFAULT_LIST_COUNT_LIMIT)
@@ -19,10 +19,10 @@ export class UsersQuery {
   @IsOptional()
   public userRole?: UserRole;
 
-
-  @IsEnum(StationMetro)
+  @Transform(({ value }) => {if (typeof value === "string") {return value.split(',').map((el: string) => el)} return value })
+  @IsArray({})
   @IsOptional()
-  public location?: StationMetro;
+  public location?: string[];
 
   @Transform(({ value }) => {if (typeof value === "string") {return value.split(',').map((el: string) => el)} return value })
   @IsArray({})

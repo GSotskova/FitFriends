@@ -143,7 +143,7 @@ Authorization: Bearer {{authToken}}
 ###
 
 # Список друзей пользователя
-GET http://localhost:3333/api/friends/user?sortDate=desc HTTP/1.1
+GET http://localhost:3333/api/friends/user HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 

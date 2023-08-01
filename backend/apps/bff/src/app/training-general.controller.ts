@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ApplicationServiceURL } from './app.config';
 import { AxiosExceptionFilter } from './filters/axios-exception.filter';
@@ -35,10 +35,23 @@ export class TrainingGeneralController {
   }
 
   @UseGuards(CheckAuthGuard)
-  @UseInterceptors(RoleUserInterceptor)
   @Get('/comments/:id')
-  public async showCommentsByTraining(@Param('id') id: string, @Query() query: DefaultQuery) {
+  public async showCommentsByTraining(@Req() req: Request, @Param('id') id: string, @Query() query: DefaultQuery) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Comments}/${id}`, {params : query});
+    console.log(data)
+
+    await Promise.all(data.map(async (el) => {
+      const user = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${el.userId}`, {
+        headers: {
+          'Authorization': req.headers['authorization']
+        }
+      });
+      el.userName = user.data.userName;
+      if (user.data.avatar) {
+      const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${user.data.avatar}`);
+      el.avatarPath = path
+      }
+       }));
    return data;
   }
 

@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
-import FriendInfo from '../../components/friend-info/friend-info';
 import Header from '../../components/header/header';
 import { getFriends } from '../../store/friends-data/selectors';
 import { AppRoute } from '../../constants';
+import FriendItem from '../../components/friend-item/friend-item';
 
 
 function FriendsListPage(): JSX.Element {
@@ -37,7 +37,7 @@ function FriendsListPage(): JSX.Element {
                 {friends.map((el) =>
                   (
                     <li className="friends-list__item" key={el.id}>
-                      <FriendInfo user={el} />
+                      <FriendItem user={el} />
                     </li>)
                 )}
               </ul>

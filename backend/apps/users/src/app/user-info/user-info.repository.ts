@@ -141,7 +141,7 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
           pipeline: [
             { $addFields: { userId: { '$toObjectId': '$userId' }}},
             { $match: { $expr: { $eq: [ '$userId', '$$user_id' ] } } },
-            { $project: { levelTraining: 1, trainingType: 1}}
+            { $project: { levelTraining: 1, trainingType: 1, isReady: 1}}
           ],
           as: 'resultUser'
         },
@@ -187,6 +187,18 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
         "$resultUser.trainingType",
         "$resultCoach.trainingType"
     ]
+  },
+  isReady: {
+    $cond: [
+      {
+          "$ifNull": [
+              "$resultUser.isReady",
+               false
+          ]
+      },
+      "$resultUser.isReady",
+      " "
+  ]
   }
 }
 },

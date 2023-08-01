@@ -26,7 +26,7 @@ function MyOrdersPage(): JSX.Element {
     sortStr:' '
   });
   const handleSortPrice = () => {
-    const sortCount = sortData.currentSortCount? `&sortCount=${sortData.currentSortCount}` : '';
+    const sortCount = sortData.currentSortCount ? `&sortCount=${sortData.currentSortCount}` : '';
     setSort({
       ...sortData,
       nextSortPrice: sortData.nextSortPrice === 'desc' ? 'asc' : 'desc',
@@ -37,7 +37,7 @@ function MyOrdersPage(): JSX.Element {
     dispatch(fetchCoachOrders(sortData.sortStr));
   };
   const handleSortCount = () => {
-    const sortPrice = sortData.currentSortPrice? `&sortPrice=${sortData.currentSortPrice}` : '';
+    const sortPrice = sortData.currentSortPrice ? `&sortPrice=${sortData.currentSortPrice}` : '';
     setSort({
       ...sortData,
       nextSortCount: sortData.nextSortCount === 'desc' ? 'asc' : 'desc',

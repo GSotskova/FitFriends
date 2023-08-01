@@ -5,6 +5,7 @@ export type User = {
   id: string;
   userName: string;
   email: string;
+  role: UserRole;
   accessToken: string;
 }
 
@@ -49,6 +50,7 @@ export enum UserRoleTxt {
   User = 'Я хочу тренироваться',
 }
 export const USER_ROLE_ARR = [UserRoleTxt.Coach, UserRoleTxt.User];
+export const USER_ROLE_ARR_TYPE = [UserRole.Coach, UserRole.User];
 
 export type UserFullInfo = {
   id: string;
@@ -101,5 +103,16 @@ export type Friend = {
   description: string;
   location: StationMetro;
   requestPersonal: boolean;
+  requestTogether: boolean;
+  requestStatus: StatusRequest;
   requestId?: string;
+  trainingType: TrainingType[];
+  isReady: boolean;
 };
+
+export enum StatusRequest
+ {
+  Pending = 'на рассмотрении',
+  Rejected = 'отклонён',
+  Accepted = 'принят',
+}

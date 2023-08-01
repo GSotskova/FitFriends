@@ -1,0 +1,8 @@
+.loading-screen {
+    top: 30px;
+    left: 30px;
+    padding: 10px;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 32px;
+  }

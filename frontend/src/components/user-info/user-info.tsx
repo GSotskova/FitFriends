@@ -10,7 +10,7 @@ type Props = {
   user: UserFullInfo;
 }
 
-const CoachInfo = ({user}: Props): JSX.Element => {
+const UserInfo = ({user}: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const [isEditForm, setSignEditForm] = useState<boolean>(false);
   const handleEditButtonClick = () => {
@@ -374,4 +374,4 @@ const CoachInfo = ({user}: Props): JSX.Element => {
   );
 };
 
-export default CoachInfo;
+export default UserInfo;

@@ -1,6 +1,6 @@
-import { IsNumber, IsOptional, IsArray, IsInt, Min, Max, IsIn } from 'class-validator';
+import { IsNumber, IsOptional, IsArray,  Max, IsIn } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { DEFAULT_LIST_COUNT_LIMIT, RatingQuery } from './query.constants';
+import { DEFAULT_LIST_COUNT_LIMIT } from './query.constants';
 import { TrainingType } from '@project/shared/shared-types';
 
 export class TrainingCatalogQuery {
@@ -26,11 +26,10 @@ export class TrainingCatalogQuery {
   @IsOptional()
   public caloriesReset?: string;
 
-  @IsInt({})
-  @Min(RatingQuery.MinCount)
-  @Max(RatingQuery.MaxCount)
+  @Transform(({ value }) => {if (typeof value === "string") {return value.split(',').map((el: string) => el)} return value })
+  @IsArray({})
   @IsOptional()
-  public rating?: number;
+  public rating?: string;
 
   @Transform(({ value }) => {if (typeof value === "string") {return value.split(',').map((el: string) => el)} return value })
   @IsArray({})

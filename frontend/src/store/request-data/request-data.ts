@@ -14,13 +14,13 @@ export const requestData = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(acceptRequest.fulfilled, (state, action) => {
+      .addCase(acceptRequest.fulfilled, (state) => {
         state.hasErrorPost = false;
       })
       .addCase(acceptRequest.rejected, (state) => {
         state.hasErrorPost = true;
       })
-      .addCase(deleteRequest.fulfilled, (state, action) => {
+      .addCase(deleteRequest.fulfilled, (state) => {
         state.hasErrorPost = false;
       })
       .addCase(deleteRequest.rejected, (state) => {

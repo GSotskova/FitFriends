@@ -10,10 +10,10 @@ export const getUsersQuery = (query: UsersQuery ) => {
   const limitNumber = limitCount + skip
 
     const objFiltr: SomeObject = {};
-      if (location) {objFiltr['location'] = location;}
       if (levelTraining) {objFiltr['levelTraining'] = levelTraining;}
-      if (userRole) {objFiltr['userRole'] = userRole;}
+      if (userRole) {objFiltr['role'] = userRole;}
       if (trainingType) {objFiltr['trainingType'] = { "$in": trainingType };}
+      if (location) {objFiltr['location'] = { "$in": location };}
 
     const objSort: SomeObject = {};
       if (query.sortDate) {objSort['createdAt'] =  sortDate}
@@ -57,14 +57,18 @@ export const getTrainingCatalogQuery = (query: TrainingCatalogQuery ) => {
                                           "$lte": caloriesReset[1],
                                        };
                           }
-      if (rating) { objFiltr['rating'] = rating}
+      if (rating) {objFiltr['rating'] =  { "$gte": rating[0],
+                          "$lte": rating[1],
+                        }
+                       }
       if (trainingType) {objFiltr['trainingType'] = { "$in": trainingType };}
 
   const objSort: SomeObject = {};
   const keys = Object.keys(query);
+  if (keys.length === 0) {objSort['createdAt'] = 1}
     keys.forEach(key => {
-        key === 'sortPrice'? objSort['sortPrice'] = sortPrice : '';
-        key === 'sortDate'? objSort['createdAt'] = sortDate : objSort['createdAt'] = 1;
+        key === 'sortPrice'? objSort['price'] = sortPrice : '';
+        key === 'sortDate'? objSort['createdAt'] = sortDate : '';
       });
 
   return {limitNumber, skip, objSort, objFiltr}

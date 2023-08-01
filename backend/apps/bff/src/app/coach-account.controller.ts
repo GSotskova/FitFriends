@@ -58,8 +58,26 @@ export class CoachAccountController {
 
   @UseGuards(CheckAuthGuard)
   @Get('training/:id')
-  public async show(@Param('id', MongoidValidationPipe) id: string) {
+  public async show(@Req() req: Request, @Param('id', MongoidValidationPipe) id: string) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Training}/${id}`);
+    const coach = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${data.coachId}`, {
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    });
+    data.coachName = coach.data.userName;
+    if (coach.data.avatar) {
+    const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${coach.data.avatar}`);
+    data.coachAvataPath = path
+    }
+    if (data.photoTraning) {
+    const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${data.photoTraning}`);
+    data.photoTraningPath = path
+    }
+    if (data.videoTraning) {
+      const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${data.videoTraning}`);
+      data.videoTraningPath = path
+      }
    return data;
   }
 
@@ -128,14 +146,4 @@ export class CoachAccountController {
    return data;
   }
 
-
-@UseGuards(CheckAuthGuard)
-@UseInterceptors(CoachIdInterceptor)
-@UseInterceptors(RoleCoachInterceptor)
-@Post('request/update/:id')
-public async editTrainingRequest(@Param('id', MongoidValidationPipe) id: string, @Body() statusRequest: string) {
-
-  const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Request}/update/${id}`, statusRequest);
-  return data;
-}
 }

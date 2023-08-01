@@ -34,8 +34,7 @@ function QuestionnaireUserForm({userData, avatarImg}: UserData): JSX.Element {
       isReady: true,
       avatarImg: avatarImg
     };
-    // eslint-disable-next-line no-console
-    console.log(data);
+
     if (!isNotTrainingType) {
       dispatch(registerUser(data));
     }
