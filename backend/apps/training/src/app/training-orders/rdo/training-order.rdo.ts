@@ -10,6 +10,12 @@ export class TrainingOrderRdo {
   public id: string;
 
   @ApiProperty({
+    description: 'Training id',
+  })
+  @Expose()
+  public trainingId: string;
+
+  @ApiProperty({
     description: 'Training name',
   })
   @Expose()
@@ -99,6 +105,12 @@ export class TrainingOrderRdo {
   })
   @Expose()
   public rating: string;
+
+  @ApiProperty({
+    description: 'Error'
+  })
+  @Expose()
+  public isDone: boolean;
 
   @ApiProperty({
     description: 'Error'

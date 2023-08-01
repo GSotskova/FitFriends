@@ -46,6 +46,7 @@ export type FriendData = {
 export type OrderData = {
   orders: Order[];
   isOrdersDataLoading: boolean;
+  isOrdersUserDataLoading: boolean;
   hasError: boolean;
   hasErrorPost: boolean;
 };

@@ -24,6 +24,10 @@ export class TrainingOrdersQuery {
   @IsOptional()
   public sortPrice?: 'desc' | 'asc' | '1' | '-1';
 
+  @IsIn(['true', 'false'])
+  @IsOptional()
+  public isDone?: string;
+
   @Transform(({ value }) => +value)
   @IsOptional()
   public page?: number;

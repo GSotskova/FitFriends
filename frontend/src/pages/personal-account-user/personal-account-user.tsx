@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom';
 import Header from '../../components/header/header';
 import UserInfo from '../../components/user-info/user-info';
 import { useAppSelector } from '../../hooks';
 import { getUserFullInfo } from '../../store/user-process/selectors';
+import { AppRoute } from '../../constants';
 
 
 function AccountUserPage(): JSX.Element {
@@ -36,20 +38,26 @@ function AccountUserPage(): JSX.Element {
                     </form>
                   </div>
                   <div className="personal-account-user__additional-info">
-                    <a className="thumbnail-link thumbnail-link--theme-light" href="/">
+                    <Link
+                      className="thumbnail-link thumbnail-link--theme-light"
+                      to={`${AppRoute.AccountUser}/friends`}
+                    >
                       <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
                         <svg width="30" height="26" aria-hidden="true">
                           <use xlinkHref="#icon-friends"></use>
                         </svg>
                       </div><span className="thumbnail-link__text">Мои друзья</span>
-                    </a>
-                    <a className="thumbnail-link thumbnail-link--theme-light" href="/">
+                    </Link>
+                    <Link
+                      className="thumbnail-link thumbnail-link--theme-light"
+                      to={`${AppRoute.AccountUser}/orders`}
+                    >
                       <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
                         <svg width="30" height="26" aria-hidden="true">
                           <use xlinkHref="#icon-shopping-cart"></use>
                         </svg>
                       </div><span className="thumbnail-link__text">Мои покупки</span>
-                    </a>
+                    </Link>
                     <div className="thumbnail-spec-gym">
                       <div className="thumbnail-spec-gym__image">
                         <picture>

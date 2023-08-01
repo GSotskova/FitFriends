@@ -35,7 +35,9 @@ export const Action = {
   DELETE_FRIEND:  'coach/deleteFriend',
   POST_FRIEND:  'user/postFriend',
   FETCH_COACH_ORDERS:  'coach/fetchCoachOrders',
+  FETCH_USER_ORDERS:  'user/fetchUserOrders',
   POST_ORDER:  'user/postOrder',
+  REDUCE_ORDER:  'user/reduceOrder',
   ACCEPT_REQUEST:  'coach/acceptRequest',
   REJECT_REQUEST:  'coach/deleteRequest',
   FETCH_USER_TRAININGS: 'training/fetchUserTrainings',
@@ -203,6 +205,7 @@ export const editUser = createAsyncThunk<UserFullInfo, UserEdit & FileType, {
    }>(
      Action.EDIT_USER,
      async (updUser: UserEdit & FileType, { dispatch, extra: api }) => {
+       console.log('updUser', updUser);
        const { data } = await api.post<UserFullInfo>(`${APIRoute.Users}/edit`, adaptUserEditToServer(updUser));
        if (data && updUser.avatarImg?.name) {
          const postAvatarApiRoute = `${APIRoute.Files}/avatar`;
@@ -420,6 +423,21 @@ export const fetchCoachOrders = createAsyncThunk<Order[], string | undefined, {
                 });
 
 
+export const fetchUserOrders = createAsyncThunk<Order[], Query | undefined, {
+                  dispatch: AppDispatch;
+                  state: State;
+                  extra: AxiosInstance; }>(
+                    Action.FETCH_USER_ORDERS,
+                    async (query, {dispatch, extra: api}) => {
+                      try {
+                        const isDone = query && query.isDone ? `isDone=${query.isDone}` : '';
+                        const {data} = await api.get<Order[]>(`${APIRoute.User}/orders?${isDone}`);
+                        return data;
+                      } catch (error) {
+                        return Promise.reject(error);
+                      }
+                    });
+
 export const postOrder = createAsyncThunk<Order, NewOrder, {
                 dispatch: AppDispatch;
                 state: State;
@@ -428,6 +446,20 @@ export const postOrder = createAsyncThunk<Order, NewOrder, {
                   async (newOrder, {dispatch, extra: api}) => {
                     try {
                       const {data} = await api.post<Order>(`${APIRoute.User}/orders/create`, newOrder);
+                      return data;
+                    } catch (error) {
+                      return Promise.reject(error);
+                    }
+                  });
+
+export const reduceOrder = createAsyncThunk<Order, string, {
+                dispatch: AppDispatch;
+                state: State;
+                extra: AxiosInstance; }>(
+                  Action.REDUCE_ORDER,
+                  async (id, {dispatch, extra: api}) => {
+                    try {
+                      const {data} = await api.post<Order>(`${APIRoute.User}/orders/reduce/${id}`);
                       return data;
                     } catch (error) {
                       return Promise.reject(error);

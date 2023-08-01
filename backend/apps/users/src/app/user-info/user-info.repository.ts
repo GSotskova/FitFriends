@@ -202,7 +202,6 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
   }
 }
 },
-
      { $match: objQuery.objFiltr},
      { $sort: objQuery.objSort},
      { $limit: objQuery.limitNumber},

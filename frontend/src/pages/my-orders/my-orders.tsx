@@ -6,6 +6,7 @@ import { getOrders } from '../../store/orders-data/selectors';
 import { AppRoute } from '../../constants';
 import { useState } from 'react';
 import { fetchCoachOrders } from '../../store/api-actions';
+import { UserRole } from '../../types/user';
 
 function MyOrdersPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -95,7 +96,7 @@ function MyOrdersPage(): JSX.Element {
                 {orders.map((el) =>
                   (
                     <li className="my-orders__item" key={el.id}>
-                      <OrderItem order={el}/>
+                      <OrderItem order={el} currentUserRole={UserRole.Coach}/>
                     </li>)
                 )}
               </ul>

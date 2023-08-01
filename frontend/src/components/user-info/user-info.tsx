@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { LEVEL_TRAIN_ARR, LevelTraining, TRAINING_ARR, TrainingType } from '../../types/questionnaire';
-import { USER_SEX_ARR, UserFullInfo, UserSex } from '../../types/user';
+import { USER_SEX_ARR, UserFullInfo, UserRole, UserSex } from '../../types/user';
 import { STATION_METRO, StationMetro } from '../../types/station-metro.enum';
 import { DescriptionLn } from '../../constants';
 import { editUser } from '../../store/api-actions';
@@ -53,13 +53,16 @@ const UserInfo = ({user}: Props): JSX.Element => {
     }
   };
 
-  const USER_INFO = {userName: user.userName, description: user.description, isPersonal: user.isPersonal};
+  const USER_INFO = {
+    userName: user.userName, description: user.description,
+    isPersonal: user.role === UserRole.Coach ? user.isPersonal : user.isReady,
+    isReady: user.isReady};
   const [currentInfo, setInfo] = useState(USER_INFO);
   const handleInfoChange = (evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value} = evt.target;
     if (name === 'isPersonal') {
       const signPersonal = !currentInfo.isPersonal;
-      setInfo({...currentInfo, isPersonal: signPersonal});
+      setInfo({...currentInfo, isPersonal: signPersonal, isReady: signPersonal});
     } else {
       setInfo({...currentInfo, [name]: value});
     }
@@ -100,6 +103,7 @@ const UserInfo = ({user}: Props): JSX.Element => {
       userName: currentInfo.userName,
       description: currentInfo.description,
       isPersonal: currentInfo.isPersonal,
+      isReady: currentInfo.isPersonal,
       avatarImg: photoUser,
       levelTraining: currentAria.levelTr,
       sex: currentAria.sex,

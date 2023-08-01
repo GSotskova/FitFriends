@@ -1,41 +1,72 @@
-//import { useAppSelector } from '../../hooks';
-//import { getUserFullInfo } from '../../store/user-process/selectors';
+import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../hooks';
+import { getUserFullInfo } from '../../store/user-process/selectors';
+import { AppRoute } from '../../constants';
+import { UserRole } from '../../types/user';
 
 
-const Header = (): JSX.Element =>
+const Header = (): JSX.Element => {
+  const userInfo = useAppSelector(getUserFullInfo);
 
-//const coachInfo = useAppSelector(getUserFullInfo);
+  const navigate = useNavigate();
+  const routeMain = () =>{
+    if (userInfo.role === UserRole.Coach) {
+      const path = AppRoute.AccountCoach;
+      navigate(path);
+    }
+    const path = AppRoute.Main;
+    navigate(path);
+  };
 
-  (
+  const routeAccount = () =>{
+    if (userInfo.role === UserRole.Coach) {
+      const path = AppRoute.AccountCoach;
+      navigate(path);
+    }
+    const path = AppRoute.AccountUser;
+    navigate(path);
+  };
+
+  const routeFriends = () =>{
+    if (userInfo.role === UserRole.Coach) {
+      const path = `${AppRoute.AccountCoach}/friends`;
+      navigate(path);
+    }
+    const path = `${AppRoute.AccountUser}/friends`;
+    navigate(path);
+  };
+
+
+  return (
     <header className="header">
       <div className="container">
-        <a className="header__logo" href="index.html" aria-label="Переход на главную">
+        <button className="header__logo" aria-label="Переход на главную" onClick={routeMain}>
           <svg width="187" height="70" aria-hidden="true">
             <use xlinkHref="#logo"></use>
           </svg>
-        </a>
+        </button>
         <nav className="main-nav">
           <ul className="main-nav__list">
             <li className="main-nav__item">
-              <a className="main-nav__link is-active" href="/" aria-label="На главную">
+              <button className="main-nav__link is-active" onClick={routeMain} aria-label="На главную">
                 <svg width="18" height="18" aria-hidden="true">
                   <use xlinkHref="#icon-home"></use>
                 </svg>
-              </a>
+              </button>
             </li>
             <li className="main-nav__item">
-              <a className="main-nav__link" href="/" aria-label="Личный кабинет">
+              <button className="main-nav__link" onClick={routeAccount} aria-label="Личный кабинет">
                 <svg width="16" height="18" aria-hidden="true">
                   <use xlinkHref="#icon-user"></use>
                 </svg>
-              </a>
+              </button>
             </li>
             <li className="main-nav__item">
-              <a className="main-nav__link" href="/" aria-label="Друзья">
+              <button className="main-nav__link" onClick={routeFriends} aria-label="Друзья">
                 <svg width="22" height="16" aria-hidden="true">
                   <use xlinkHref="#icon-friends"></use>
                 </svg>
-              </a>
+              </button>
             </li>
             <li className="main-nav__item main-nav__item--notifications">
               <a className="main-nav__link" href="/" aria-label="Уведомления">
@@ -97,4 +128,5 @@ const Header = (): JSX.Element =>
       </div>
     </header>
   );
+};
 export default Header;
