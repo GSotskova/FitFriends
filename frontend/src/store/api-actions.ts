@@ -36,6 +36,7 @@ export const Action = {
   POST_FRIEND:  'user/postFriend',
   FETCH_COACH_ORDERS:  'coach/fetchCoachOrders',
   FETCH_USER_ORDERS:  'user/fetchUserOrders',
+  FETCH_USER_ORDER:  'user/fetchUserOrder',
   POST_ORDER:  'user/postOrder',
   REDUCE_ORDER:  'user/reduceOrder',
   ACCEPT_REQUEST:  'coach/acceptRequest',
@@ -432,6 +433,20 @@ export const fetchUserOrders = createAsyncThunk<Order[], Query | undefined, {
                       try {
                         const isDone = query && query.isDone ? `isDone=${query.isDone}` : '';
                         const {data} = await api.get<Order[]>(`${APIRoute.User}/orders?${isDone}`);
+                        return data;
+                      } catch (error) {
+                        return Promise.reject(error);
+                      }
+                    });
+
+export const fetchUserOrder = createAsyncThunk<Order, string, {
+                  dispatch: AppDispatch;
+                  state: State;
+                  extra: AxiosInstance; }>(
+                    Action.FETCH_USER_ORDER,
+                    async (id, {dispatch, extra: api}) => {
+                      try {
+                        const {data} = await api.get<Order>(`${APIRoute.User}/order/${id}`);
                         return data;
                       } catch (error) {
                         return Promise.reject(error);

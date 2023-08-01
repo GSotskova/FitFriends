@@ -1,9 +1,10 @@
 import { DescriptionLn } from '../../constants';
-import { useAppDispatch } from '../../hooks';
-import { editTraining } from '../../store/api-actions';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { editTraining, fetchUserOrder, reduceOrder } from '../../store/api-actions';
 import { Training } from '../../types/training';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { UserRole, UserSex } from '../../types/user';
+import { getOrder } from '../../store/orders-data/selectors';
 
 type Props = {
   training: Training;
@@ -24,6 +25,26 @@ enum FormFieldName {
 const TrainingForm = ({training, role}: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const isCoach = role === UserRole.Coach;
+  const currentOrder = useAppSelector(getOrder);
+
+  const [isDisabledTraining, setSignDisabledTraining] = useState<boolean>(currentOrder?.isDone || currentOrder?.isDone === undefined);
+  const [isHiddenStop, setSignHiddenStop] = useState<boolean>(false);
+  const handleStartButtonClick = () => {
+    if (currentOrder?.id && !isHiddenStop) {
+      dispatch(reduceOrder(currentOrder.id));
+      setSignHiddenStop(true);
+    }
+    if (isHiddenStop)
+    {
+      setSignHiddenStop(false);
+      dispatch(fetchUserOrder(training.id));
+    }
+  };
+
+  useEffect(()=>{
+    setSignDisabledTraining(currentOrder?.isDone || currentOrder?.isDone === undefined);
+  }, [currentOrder?.isDone, isHiddenStop]);
+
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -229,7 +250,7 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
                   </label>
                   <div className="training-info__error">Введите число</div>
                 </div>
-                <button className="btn training-info__buy" type="button">Купить</button>
+                <button className="btn training-info__buy" type="button" disabled={!isDisabledTraining}>Купить</button>
               </div>
             </div>
           </form>
@@ -240,6 +261,7 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
         <div className="training-video__video">
           <div className="training-video__thumbnail">
             <input
+              className='visually-hidden'
               type="file"
               name="import"
               tabIndex={-1}
@@ -249,23 +271,28 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
               onChange={handleVideoUpload}
               disabled={!isEditForm}
             />
-            {fileVideoTraning ? (
-              <video src={URL.createObjectURL(fileVideoTraning)} width="922" height="566" controls></video>
-            ) : (
-              <video src={training.videoTraningPath} width="922" height="566" controls></video>
-            )}
-
+            {fileVideoTraning
+              ? ( <video src={URL.createObjectURL(fileVideoTraning)} width="922" height="566" controls></video>
+              ) : (
+                <video src={training.videoTraningPath} width="922" height="566" controls></video>
+              )}
           </div>
-          <button className="training-video__play-button btn-reset">
+          {/* <button className="training-video__play-button btn-reset">
             <svg width="18" height="30" aria-hidden="true">
               <use xlinkHref="#icon-arrow"></use>
             </svg>
           </button>
+          */}
         </div>
         {!isCoach &&
       <div className="training-video__buttons-wrapper">
-        <button className="btn training-video__button training-video__button--start" type="button">Приступить</button>
-        <button className="btn training-video__button training-video__button--stop" type="button">Закончить</button>
+        <button
+          className="btn training-video__button training-video__button--start"
+          type="button"
+          disabled={isDisabledTraining}
+          onClick={handleStartButtonClick}
+        >{isHiddenStop ? 'Закончить' : 'Приступить'}
+        </button>
       </div>}
         {isCoach && isEditForm &&
     <div className="training-video__edit-buttons">

@@ -178,6 +178,12 @@ GET http://localhost:4000/api/user/orders?isDone=false HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 
+
+# Поиск заказа
+GET http://localhost:4000/api/user/order/64a406e9c4d605ea3e822df6 HTTP/1.1
+Authorization: Bearer {{authToken}}
+###
+
 # Удаление заказа
 DELETE http://localhost:4000/api/user/orders/delete/64a44aa08cc4fa6456f4121a HTTP/1.1
 Authorization: Bearer {{authToken}}

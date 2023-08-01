@@ -29,6 +29,13 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
       .exec();
   }
 
+
+  public async findByUserIdTrainingId(userId: string, trainingId: string): Promise<Order | null> {
+    return this.ordersModel
+      .findOne({userId: userId, trainingId: trainingId})
+      .exec();
+  }
+
   public async findByCoachId(coachId: string, query: TrainingOrdersQuery): Promise<Order[]> {
     const objQuery = getTrainingOrdersQuery(query);
     return this.ordersModel

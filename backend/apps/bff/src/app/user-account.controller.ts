@@ -116,6 +116,15 @@ export class UserAccountController {
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(RoleUserInterceptor)
   @UseInterceptors(UseridInterceptor)
+  @Get('order/:trainingId')
+  public async showOrder(@Body() userId: string, @Param('trainingId') trainingId: string) {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Orders}/show/user/${trainingId}`, {data: userId});
+   return data;
+  }
+
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(RoleUserInterceptor)
+  @UseInterceptors(UseridInterceptor)
   @UseInterceptors(UseridOrderInterceptor)
   @Delete('orders/delete/:id')
   public async deleteOrder(@Param('id', MongoidValidationPipe) id: string) {
