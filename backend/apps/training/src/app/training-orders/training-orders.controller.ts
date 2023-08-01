@@ -71,6 +71,17 @@ export class TrainingOrdersController {
     return fillObject(TrainingOrderRdo, existOrder);
   }
 
+  @ApiResponse({
+    type: TrainingOrderRdo,
+    status: HttpStatus.OK,
+    description: 'Show order for user by training'
+  })
+  @Get('show/user/:trainingId')
+  public async showUserTraining(@Body() body, @Param('trainingId') trainingId: string) {
+    const existOrder = await this.orderService.showByUserAndTraining(body.userId, trainingId);
+    return fillObject(TrainingOrderRdo, existOrder);
+  }
+
 
   @ApiResponse({
     type: TrainingOrderRdo,

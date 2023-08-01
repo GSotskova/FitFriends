@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
-import { fetchCoachTraining, fetchComments } from '../../store/api-actions';
+import { fetchCoachTraining, fetchComments, fetchUserOrder } from '../../store/api-actions';
 import { Order } from '../../types/order';
 import { UserRole } from '../../types/user';
 import { AppRoute } from '../../constants';
@@ -16,6 +16,7 @@ const OrderItem = ({order, currentUserRole}: Props): JSX.Element => {
   const navigate = useNavigate();
   const routeChange = () =>{
     dispatch(fetchCoachTraining(order.trainingId));
+    dispatch(fetchUserOrder(order.trainingId));
     dispatch(fetchComments(order.trainingId));
     const path = `${AppRoute.Training}/${order.trainingId}`;
     navigate(path);

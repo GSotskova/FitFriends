@@ -8,3 +8,5 @@ export const getOrdersDataLoadingStatus = (state: State): boolean => state[NameS
 export const getOrdersUserLoadingStatus = (state: State): boolean => state[NameSpace.DataOrders].isOrdersUserDataLoading;
 export const getErrorStatus = (state: State): boolean => state[NameSpace.DataOrders].hasError;
 export const getErrorPost = (state: State): boolean => state[NameSpace.DataOrders].hasErrorPost;
+export const getOrder = (state: State): Order | null => state[NameSpace.DataOrders].order;
+export const getOrderLoadingStatus = (state: State): boolean => state[NameSpace.DataOrders].isOrderDataLoading;

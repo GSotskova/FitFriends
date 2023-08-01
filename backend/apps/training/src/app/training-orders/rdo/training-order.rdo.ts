@@ -107,6 +107,18 @@ export class TrainingOrderRdo {
   public rating: string;
 
   @ApiProperty({
+    description: 'Training done count'
+  })
+  @Expose()
+  public trainingDoneCount: number;
+
+  @ApiProperty({
+    description: 'Training rest count'
+  })
+  @Expose()
+  public trainingRestCount: number;
+
+  @ApiProperty({
     description: 'Error'
   })
   @Expose()

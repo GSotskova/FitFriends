@@ -80,6 +80,14 @@ export class TrainingOrdersService {
     return existOrder;
   }
 
+  public async showByUserAndTraining(userId: string, trainingId: string) {
+    const existOrder = await this.ordersRepository.findByUserIdTrainingId(userId, trainingId);
+    if (!existOrder) {
+      return {error: ORDER_NOT_FOUND}
+    }
+    return existOrder;
+  }
+
   public async show(id:string) {
     const existOrder = await this.ordersRepository.findById(id);
     if (!existOrder) {

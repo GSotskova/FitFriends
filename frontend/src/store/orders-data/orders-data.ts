@@ -1,11 +1,13 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
 import {OrderData} from '../../types/state';
-import {fetchCoachOrders, postOrder, fetchUserOrders, reduceOrder} from '../api-actions';
+import {fetchCoachOrders, postOrder, fetchUserOrders, reduceOrder, fetchUserOrder} from '../api-actions';
 
 const initialState: OrderData = {
   orders: [],
+  order: null,
   isOrdersDataLoading: false,
+  isOrderDataLoading: false,
   isOrdersUserDataLoading: false,
   hasError: false,
   hasErrorPost: false
@@ -40,6 +42,18 @@ export const ordersData = createSlice({
       })
       .addCase(fetchUserOrders.rejected, (state) => {
         state.isOrdersUserDataLoading = false;
+        state.hasError = true;
+      })
+      .addCase(fetchUserOrder.pending, (state) => {
+        state.isOrderDataLoading = true;
+        state.hasError = false;
+      })
+      .addCase(fetchUserOrder.fulfilled, (state, action) => {
+        state.order = action.payload;
+        state.isOrderDataLoading = false;
+      })
+      .addCase(fetchUserOrder.rejected, (state) => {
+        state.isOrderDataLoading = false;
         state.hasError = true;
       })
       .addCase(postOrder.fulfilled, (state, action) => {

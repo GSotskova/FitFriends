@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../constants';
 import { useAppDispatch } from '../../hooks';
-import { fetchCoachTraining, fetchComments } from '../../store/api-actions';
+import { fetchCoachTraining, fetchComments, fetchUserOrder } from '../../store/api-actions';
 import { Training } from '../../types/training';
 
 type Props = {
@@ -14,6 +14,7 @@ const TrainingItem = ({training}: Props): JSX.Element => {
   const navigate = useNavigate();
   const routeChange = () =>{
     dispatch(fetchCoachTraining(training.id));
+    dispatch(fetchUserOrder(training.id));
     dispatch(fetchComments(training.id));
     const path = `${AppRoute.Training}/${training.id}`;
     navigate(path);
