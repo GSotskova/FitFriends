@@ -57,6 +57,7 @@ export type Query = {
   userRole?: UserRole;
   location?: StationMetro[];
   levelTraining?: LevelTraining;
+  isDone?: string;
 }
 
 export enum StatusRequest

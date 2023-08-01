@@ -19,6 +19,7 @@ export type Order = {
   descriptionTraining: string;
   sex: string;
   isSpecialOffer: boolean;
+  rating: number;
 }
 
 export enum PaymentOption {

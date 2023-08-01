@@ -72,6 +72,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
     },
       {
         $project:{_id: 0,
+              trainingId:  "$_id.trainingId",
               nameTraining:  "$_id.nameTraining",
               createdAt: {$dateToString:{format:"%Y-%m-%d %H:%M:%S",date:"$_id.createdAt"}},
               photoTraning: "$_id.photoTraning",
@@ -99,10 +100,11 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
 
   public async findByUserId(userId: string, query: TrainingOrdersQuery): Promise<Order[]> {
     const objQuery = getTrainingOrdersQuery(query);
+    console.log(objQuery);
     return this.ordersModel
     .aggregate([
         {$match: { $and: [
-          {isDone: false},
+          //{isDone: false},
           {userId: userId},
 
         ]}},
@@ -123,6 +125,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
         _id: {
           trainingId: '$trainingId',
           createdAt: '$createdAt',
+          isDone: '$isDone',
           nameTraining: "$result.nameTraining",
           photoTraning: "$result.photoTraning",
           levelTraining: "$result.levelTraining",
@@ -141,6 +144,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
     },
       {
         $project:{_id: 0,
+              trainingId:  "$_id.trainingId",
               nameTraining:  "$_id.nameTraining",
               createdAt: {$dateToString:{format:"%Y-%m-%d %H:%M:%S",date:"$_id.createdAt"}},
               photoTraning: "$_id.photoTraning",
@@ -154,11 +158,13 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
               videoTraning: "$_id.videoTraning",
               rating: "$_id.rating",
               isSpecialOffer: "$_id.isSpecialOffer",
+              isDone: "$_id.isDone",
               trainingCount: 1,
               totalPrice: 1
         }
     },
       { $unset: 'result' },
+      { $match: objQuery.objFiltr},
       { $sort:  objQuery.objSort },
       { $limit: objQuery.limitNumber},
       { $skip:  objQuery.skip }

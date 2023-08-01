@@ -76,11 +76,14 @@ export const getTrainingCatalogQuery = (query: TrainingCatalogQuery ) => {
 
 
 export const getTrainingOrdersQuery = (query: TrainingOrdersQuery ) => {
-  const {limit, sortCount, sortPrice, sortDate, page}= query;
+  const {limit, sortCount, sortPrice, sortDate, isDone, page}= query;
   const limitCount = limit? limit : DEFAULT_LIST_COUNT_LIMIT
   const pageNum = page? (page-1) : 0;
   const skip = pageNum*limitCount ;
   const limitNumber = limitCount + skip
+
+  const objFiltr: SomeObject = {};
+      if (isDone) {objFiltr['isDone'] =  isDone==='true' ? true : false;}
 
   const objSort: SomeObject = {};
   const keys = Object.keys(query);
@@ -91,7 +94,7 @@ export const getTrainingOrdersQuery = (query: TrainingOrdersQuery ) => {
     });
 
 
-  return {limitNumber, skip, objSort}
+  return {limitNumber, skip, objSort, objFiltr}
 };
 
 export const getTrainingQuery = (query: TrainingQuery ) => {

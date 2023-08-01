@@ -12,7 +12,7 @@ import MyTrainingsPage from '../../pages/my-trainings/my-trainings';
 import CreateTrainingPage from '../../pages/create-training/create-training';
 import FriendsListPage from '../../pages/friends-list-coach/friends-list-coach';
 import { getAuthCheckedStatus, getAuthInfo, getAuthInfoDataLoadingStatus, getAuthorizationStatus, getSignUserLoading, getUserFullInfo } from '../../store/user-process/selectors';
-import { fetchCatalogTrainings, fetchCoachFriends, fetchCoachOrders, fetchCoachTrainings, fetchUser, fetchUserCatalog, fetchUserTrainings } from '../../store/api-actions';
+import { fetchCatalogTrainings, fetchCoachFriends, fetchCoachOrders, fetchCoachTrainings, fetchUser, fetchUserCatalog, fetchUserFriends, fetchUserOrders, fetchUserTrainings } from '../../store/api-actions';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import MyOrdersPage from '../../pages/my-orders/my-orders';
 import MainPage from '../../pages/main-page/main-page';
@@ -23,6 +23,8 @@ import LoadingScreen from '../../pages/loading-screen/loading-screen';
 import NotAuthRoute from '../not-auth-route/not-auth-route';
 import TrainingCardPage from '../../pages/training-card/training-card';
 import FriendsListUserPage from '../../pages/friends-list-user/friends-list-user';
+import UserBuyPage from '../../pages/user-buy/user-buy';
+import AccountUserPage from '../../pages/personal-account-user/personal-account-user';
 
 
 function App(): JSX.Element {
@@ -45,6 +47,8 @@ function App(): JSX.Element {
       dispatch(fetchUserTrainings(userFullInfo));
       dispatch(fetchCatalogTrainings());
       dispatch(fetchUserCatalog());
+      dispatch(fetchUserOrders());
+      dispatch(fetchUserFriends());
     }
     if (userData?.role === UserRole.Coach && userData.id) {
       dispatch(fetchCoachTrainings());
@@ -114,6 +118,14 @@ function App(): JSX.Element {
         }
       />
       <Route
+        path={AppRoute.AccountUser}
+        element={
+          <PrivateRoute restrictedFor={authorizationStatus} redirectTo={AppRoute.Login} verifyRole={UserRole.User === userData?.role}>
+            <AccountUserPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path={`${AppRoute.AccountCoach}/trainings`}
         element={
           <PrivateRoute
@@ -130,6 +142,14 @@ function App(): JSX.Element {
         element={
           <PrivateRoute restrictedFor={authorizationStatus} redirectTo={AppRoute.Login} verifyRole={UserRole.Coach === userData?.role}>
             <MyOrdersPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={`${AppRoute.AccountUser}/orders`}
+        element={
+          <PrivateRoute restrictedFor={authorizationStatus} redirectTo={AppRoute.Login} verifyRole={UserRole.User === userData?.role}>
+            <UserBuyPage />
           </PrivateRoute>
         }
       />
