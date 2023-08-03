@@ -1,6 +1,6 @@
 import { DescriptionLn } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { editTraining, fetchUserOrder, reduceOrder } from '../../store/api-actions';
+import { editTraining, fetchCoachTraining, fetchUserOrder, reduceOrder } from '../../store/api-actions';
 import { Training } from '../../types/training';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { UserRole, UserSex } from '../../types/user';
@@ -29,6 +29,7 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const isCoach = role === UserRole.Coach;
   const currentOrder = useAppSelector(getOrder);
+
   const [isDisabledTraining, setSignDisabledTraining] = useState<boolean>(currentOrder?.isDone || currentOrder?.isDone === undefined);
   const [isHiddenStop, setSignHiddenStop] = useState<boolean>(false);
   const handleStartButtonClick = () => {
@@ -49,26 +50,13 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
 
   const [showModal, setShowModal] = useState(false);
   const togglePopup = () => {
+    if (showModal) {
+      dispatch(fetchUserOrder(training.id));
+      dispatch(fetchCoachTraining(training.id));
+    }
     setShowModal(!showModal);
   };
 
-  /*const keyPress = useCallback(
-    (evt: React.KeyboardEvent<HTMLDivElement>) => {
-      if (evt.key === 'Escape' && showModal) {
-        setShowModal(false);
-        console.log('I pressed');
-      }
-    },
-    [setShowModal, showModal]
-  );
-
-  useEffect(
-    () => {
-      document.addEventListener('keydown', keyPress);
-      return () => document.removeEventListener('keydown', keyPress);
-    },
-    [keyPress]
-  );*/
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -301,7 +289,7 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
                 >Купить
                 </button>}
                 {showModal &&
-                <PopupWindow>
+                <PopupWindow handleClose={togglePopup}>
                   <CreateOrder training={training} handleClose={togglePopup} />
                 </PopupWindow>}
                 {isCoach &&

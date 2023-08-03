@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { getUsers } from '../../store/user-process/selectors';
 import UserItem from '../../components/user-item/user-item';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { fetchCatalogTrainings, fetchCoachTraining, fetchComments, fetchUserCatalog } from '../../store/api-actions';
+import { fetchCatalogTrainings, fetchCoachTraining, fetchComments, fetchUserCatalog, fetchUserOrder } from '../../store/api-actions';
 
 const responsive = {
   desktop: {
@@ -122,6 +122,7 @@ const routeChangeTraining = () =>{
 
 const routeChangeCard = (id: string) =>{
   dispatch(fetchCoachTraining(id));
+  dispatch(fetchUserOrder(id));
   dispatch(fetchComments(id));
   const path = `${AppRoute.Training}/${id}`;
   navigate(path);

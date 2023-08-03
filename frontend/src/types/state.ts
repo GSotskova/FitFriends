@@ -55,6 +55,8 @@ export type OrderData = {
   isOrdersUserDataLoading: boolean;
   hasError: boolean;
   hasErrorPost: boolean;
+  isPostLoading: boolean;
+  hasErrorReduce: boolean;
   order: Order | null;
   isOrderDataLoading: boolean;
 };
