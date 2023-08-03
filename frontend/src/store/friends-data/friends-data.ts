@@ -1,13 +1,15 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
 import {FriendData} from '../../types/state';
-import {deleteFriend, fetchCoachFriends, postFriend, fetchUserFriends} from '../api-actions';
+import {deleteFriend, fetchCoachFriends, postFriend, fetchUserFriends, deleteCoachFriend} from '../api-actions';
 
 const initialState: FriendData = {
   friends: [],
   isFriendsDataLoading: false,
   hasError: false,
-  hasErrorPost: false
+  hasErrorPost: false,
+  isFriendLoadDelete: false,
+  isFriendLoadPost: false
 };
 
 
@@ -41,16 +43,43 @@ export const friendsData = createSlice({
         state.isFriendsDataLoading = false;
         state.hasError = true;
       })
+      .addCase(postFriend.pending, (state, action) => {
+        state.isFriendLoadPost = true;
+      })
       .addCase(postFriend.fulfilled, (state, action) => {
         state.friends.push(action.payload);
         state.hasErrorPost = false;
+        state.isFriendLoadPost = false;
       })
       .addCase(postFriend.rejected, (state) => {
         state.hasErrorPost = true;
+        state.isFriendLoadPost = false;
+      })
+      .addCase(deleteFriend.pending, (state) => {
+        state.hasErrorPost = false;
+        state.isFriendLoadDelete = true;
       })
       .addCase(deleteFriend.fulfilled, (state, action) => {
         const updatedFriend = action.payload;
         state.friends = state.friends.filter((friend) => friend.id !== updatedFriend.id);
+        state.isFriendLoadDelete = false;
+      })
+      .addCase(deleteFriend.rejected, (state) => {
+        state.hasErrorPost = true;
+        state.isFriendLoadDelete = false;
+      })
+      .addCase(deleteCoachFriend.pending, (state) => {
+        state.hasErrorPost = false;
+        state.isFriendLoadDelete = true;
+      })
+      .addCase(deleteCoachFriend.fulfilled, (state, action) => {
+        const updatedFriend = action.payload;
+        state.friends = state.friends.filter((friend) => friend.id !== updatedFriend.id);
+        state.isFriendLoadDelete = false;
+      })
+      .addCase(deleteCoachFriend.rejected, (state) => {
+        state.hasErrorPost = true;
+        state.isFriendLoadDelete = false;
       });
   }
 });

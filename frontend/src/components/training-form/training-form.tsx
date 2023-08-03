@@ -5,6 +5,8 @@ import { Training } from '../../types/training';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { UserRole, UserSex } from '../../types/user';
 import { getOrder } from '../../store/orders-data/selectors';
+import CreateOrder from '../create-order/create-order';
+import PopupWindow from '../popup-window/popup-window';
 
 type Props = {
   training: Training;
@@ -18,7 +20,8 @@ enum FormFieldName {
   price='price',
   caloriesReset='caloriesReset',
   descriptionTraining='descriptionTraining',
-  videoTraning='videoTraning'
+  videoTraning='videoTraning',
+  isSpecialOffer='isSpecialoffer'
 }
 
 
@@ -26,7 +29,6 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const isCoach = role === UserRole.Coach;
   const currentOrder = useAppSelector(getOrder);
-
   const [isDisabledTraining, setSignDisabledTraining] = useState<boolean>(currentOrder?.isDone || currentOrder?.isDone === undefined);
   const [isHiddenStop, setSignHiddenStop] = useState<boolean>(false);
   const handleStartButtonClick = () => {
@@ -45,6 +47,28 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
     setSignDisabledTraining(currentOrder?.isDone || currentOrder?.isDone === undefined);
   }, [currentOrder?.isDone, isHiddenStop]);
 
+  const [showModal, setShowModal] = useState(false);
+  const togglePopup = () => {
+    setShowModal(!showModal);
+  };
+
+  /*const keyPress = useCallback(
+    (evt: React.KeyboardEvent<HTMLDivElement>) => {
+      if (evt.key === 'Escape' && showModal) {
+        setShowModal(false);
+        console.log('I pressed');
+      }
+    },
+    [setShowModal, showModal]
+  );
+
+  useEffect(
+    () => {
+      document.addEventListener('keydown', keyPress);
+      return () => document.removeEventListener('keydown', keyPress);
+    },
+    [keyPress]
+  );*/
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,9 +79,10 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
       nameTraining: String(formData.get(FormFieldName.nameTraining)),
       price: Number(formData.get(FormFieldName.price)),
       descriptionTraining: String(formData.get(FormFieldName.descriptionTraining)),
-      isSpecialOffer: false
+      isSpecialOffer: isDiscount
     };
     dispatch(editTraining(data));
+    setSignEditForm(false);
   };
 
   const handleVideoSubmit = () => {
@@ -74,11 +99,22 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
     setSignEditForm((prevIsEditForm) => !prevIsEditForm);
   };
 
+  const [isDiscount, setDiscount] = useState<boolean>(training.isSpecialOffer ? training.isSpecialOffer : false);
+  const handleSetDiscount = () => {
+    if (currentInfo.price){
+      setInfo({...currentInfo, price: Math.round(isDiscount ? currentInfo.price / 0.9 : currentInfo.price * 0.9)});
+    }
+    setDiscount((prevIsDiscount) => !prevIsDiscount);
+
+
+  };
+
   const TRAINING_INFO = {
     nameTraining: training.nameTraining,
     price: training.price,
     descriptionTraining: training.descriptionTraining,
-    isSpecialOffer: training.isSpecialOffer
+    isSpecialOffer: training.isSpecialOffer,
+    videoTraningPath: training.videoTraningPath
   };
   const [currentInfo, setInfo] = useState(TRAINING_INFO);
   const handleInfoChange = (evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -91,6 +127,7 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
     }
   };
 
+
   const [fileVideoTraning, setfileVideoTraning] = useState<File | undefined>();
   const handleVideoUpload = (evt: ChangeEvent<HTMLInputElement>) => {
     if (!evt.target.files) {
@@ -102,10 +139,10 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
   const handleVideoDelete = () => {
     if (inputRef.current) {
       inputRef.current.value = '';
+      setInfo({...currentInfo, videoTraningPath: undefined});
       setfileVideoTraning(undefined);
     }
   };
-
   const [isNotCorrectLength, setSignCorrectLength] = useState<boolean>(false);
   useEffect(() => {
     if (
@@ -137,30 +174,36 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
               <span className="training-info__name">{training.coachName}</span>
             </div>
           </div>
+          {isCoach && isEditForm &&
+              (
+                <button
+                  className="btn-flat btn-flat--light btn-flat--underlined training-info__edit training-info__edit--edit"
+                  type="submit"
+                  form="training"
+                >
+                  <svg width="12" height="12" aria-hidden="true">
+                    <use xlinkHref="#icon-edit"></use>
+                  </svg><span>Сохранить</span>
+                </button>
+              )}
+          {isCoach && !isEditForm &&
+          (
+            <button
+              className="btn-flat btn-flat--light training-info__edit training-info__edit--edit"
+              type="button"
+              onClick={handleEditButtonClick}
+            >
+              <svg width="12" height="12" aria-hidden="true">
+                <use xlinkHref="#icon-edit"></use>
+              </svg><span>Редактировать</span>
+            </button>
+          )}
+
         </div>
-        {isCoach && !isEditForm &&
-      <button
-        className="btn-flat btn-flat--light training-info__edit training-info__edit--edit"
-        type="button"
-        onClick={handleEditButtonClick}
-      >
-        <svg width="12" height="12" aria-hidden="true">
-          <use xlinkHref="#icon-edit"></use>
-        </svg><span>Редактировать</span>
-      </button>}
-        {isCoach && isEditForm &&
-        <button
-          className="btn-flat btn-flat--light btn-flat--underlined training-info__edit training-info__edit--save"
-          type="button"
-        >
-          <svg width="12" height="12" aria-hidden="true">
-            <use xlinkHref="#icon-edit"></use>
-          </svg><span>Сохранить</span>
-        </button>}
         <div className="training-info__main-content">
           <form
-            action="#"
             method="get"
+            id="training"
             onSubmit={handleFormSubmit}
           >
             <div className="training-info__form-wrapper">
@@ -178,7 +221,6 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
                       onChange={handleInfoChange}
                     />
                   </label>
-                  <div className="training-info__error">Обязательное поле</div>
                 </div>
                 <div className="training-info__textarea">
                   <label><span className="training-info__label">Описание тренировки</span>
@@ -250,7 +292,29 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
                   </label>
                   <div className="training-info__error">Введите число</div>
                 </div>
-                <button className="btn training-info__buy" type="button" disabled={!isDisabledTraining}>Купить</button>
+                {!isCoach &&
+                <button
+                  className="btn training-info__buy"
+                  type="button"
+                  disabled={!isDisabledTraining}
+                  onClick={togglePopup}
+                >Купить
+                </button>}
+                {showModal &&
+                <PopupWindow>
+                  <CreateOrder training={training} handleClose={togglePopup} />
+                </PopupWindow>}
+                {isCoach &&
+                  <button
+                    className="btn-flat btn-flat--light btn-flat--underlined"
+                    type="button"
+                    onClick={handleSetDiscount}
+                    disabled={!isEditForm}
+                  >
+                    <svg width="14" height="14" aria-hidden="true">
+                      <use xlinkHref="#icon-discount"></use>
+                    </svg><span>{isDiscount ? 'Отменить скидку' : 'Сделать скидку 10%'}</span>
+                  </button>}
               </div>
             </div>
           </form>
@@ -261,7 +325,7 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
         <div className="training-video__video">
           <div className="training-video__thumbnail">
             <input
-              className='visually-hidden'
+              className={`${currentInfo.videoTraningPath || fileVideoTraning || !isEditForm ? 'visually-hidden' : ''}`}
               type="file"
               name="import"
               tabIndex={-1}
@@ -271,18 +335,11 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
               onChange={handleVideoUpload}
               disabled={!isEditForm}
             />
-            {fileVideoTraning
-              ? ( <video src={URL.createObjectURL(fileVideoTraning)} width="922" height="566" controls></video>
-              ) : (
-                <video src={training.videoTraningPath} width="922" height="566" controls></video>
-              )}
+            {fileVideoTraning &&
+              <video src={URL.createObjectURL(fileVideoTraning)} width="922" height="566" controls></video>}
+            {!fileVideoTraning && currentInfo.videoTraningPath &&
+                <video src={currentInfo.videoTraningPath} width="922" height="566" controls></video>}
           </div>
-          {/* <button className="training-video__play-button btn-reset">
-            <svg width="18" height="30" aria-hidden="true">
-              <use xlinkHref="#icon-arrow"></use>
-            </svg>
-          </button>
-          */}
         </div>
         {!isCoach &&
       <div className="training-video__buttons-wrapper">
@@ -295,7 +352,7 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
         </button>
       </div>}
         {isCoach && isEditForm &&
-    <div className="training-video__edit-buttons">
+    <div className="training-video__edit-buttons" style={{display: 'flex'}}>
       <button
         className="btn"
         type="button"

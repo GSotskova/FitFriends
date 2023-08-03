@@ -59,6 +59,11 @@ export class UsersSubscriptionsService {
       .findByUserId(userId);
   }
 
+  public async getById(userId: string, coachId: string) {
+    return this.usersSubscriptionsRepository
+      .findSubscriptionByUserId(userId, coachId);
+  }
+
   public async getByCoachId(coachId: string) {
     return this.usersSubscriptionsRepository
       .findBycoachId(coachId);

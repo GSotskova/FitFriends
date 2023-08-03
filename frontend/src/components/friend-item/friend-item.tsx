@@ -1,12 +1,15 @@
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
 import { acceptRequest, deleteRequest } from '../../store/api-actions';
 import { Friend, StatusRequest, UserRole } from '../../types/user';
+import { AppRoute } from '../../constants';
 
 type Props = {
   user: Friend;
+  currentUserRole: UserRole;
 }
 
-const FriendItem = ({user}: Props): JSX.Element => {
+const FriendItem = ({user, currentUserRole}: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const isCoach = user.role === UserRole.Coach;
   const handleAcceptQuery = ()=> {
@@ -21,9 +24,18 @@ const FriendItem = ({user}: Props): JSX.Element => {
     }
   };
 
+  const navigate = useNavigate();
+  const routeChange = () =>{
+    const path = `${AppRoute.Users}/${user.userId}`;
+    navigate(path);
+  };
+
   return (
     <div className="thumbnail-friend">
-      <div className={`thumbnail-friend__info thumbnail-friend__info--theme-${isCoach ? 'dark' : 'light'} `}>
+      <div
+        className={`thumbnail-friend__info thumbnail-friend__info--theme-${isCoach ? 'dark' : 'light'} `}
+        onClick={routeChange}
+      >
         <div className="thumbnail-friend__image-status">
           <div className="thumbnail-friend__image">
             <picture>
@@ -59,7 +71,7 @@ const FriendItem = ({user}: Props): JSX.Element => {
           <p className="thumbnail-friend__request-text">
             Запрос на&nbsp;персональную тренировку {user.requestStatus !== StatusRequest.Pending ? user.requestStatus : ''}
           </p>
-          {isCoach &&
+          {currentUserRole === UserRole.Coach &&
           <div className="thumbnail-friend__button-wrapper">
             <button
               className="btn btn--medium btn--dark-bg thumbnail-friend__button"

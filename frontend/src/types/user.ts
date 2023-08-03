@@ -73,6 +73,8 @@ export type UserFullInfo = {
   caloriesReset: number;
   caloriesSpend: number;
   isReady: boolean;
+  isFriend?: boolean;
+  isSubscribe?: boolean;
 }
 
 export type UserEdit = {
@@ -93,6 +95,7 @@ export type UserEdit = {
 
 export type Friend = {
   id: string;
+  userId: string;
   userName: string;
   avatar: string;
   avatarPath: string;

@@ -17,6 +17,8 @@ export type UserProcess = {
   isAuthInfoLoading: boolean;
   hasErrorPostCertificate: boolean;
   users: UserFullInfo[];
+  userOther: UserFullInfo | null;
+  isUserOtherLoading: boolean;
 };
 
 export type TrainingData = {
@@ -27,6 +29,8 @@ export type TrainingData = {
   isTrainingLoading: boolean;
   training: Training | null;
   hasErrorPost: boolean;
+  coachTrainings: Training[];
+  isCoachTrainingsLoading: boolean;
 };
 
 export type CommentData = {
@@ -41,6 +45,8 @@ export type FriendData = {
   isFriendsDataLoading: boolean;
   hasError: boolean;
   hasErrorPost: boolean;
+  isFriendLoadDelete: boolean;
+  isFriendLoadPost: boolean;
 };
 
 export type OrderData = {
@@ -55,6 +61,16 @@ export type OrderData = {
 
 export type RequestData = {
   hasErrorPost: boolean;
+  hasErrorDelete: boolean;
+  isLoadPost: boolean;
+  isLoadDelete: boolean;
+};
+
+export type SubscribeData = {
+  hasErrorPost: boolean;
+  hasErrorDelete: boolean;
+  isSubscrLoadPost: boolean;
+  isSubscrLoadDelete: boolean;
 };
 
 

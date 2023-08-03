@@ -41,7 +41,8 @@ export enum NameSpace {
   DataFriends = 'DATA_FRIENDS',
   DataOrders = 'DATA_ORDERS',
   DataRequest = 'DATA_REQUEST',
-  DataComments = 'DATA_COMMENT'
+  DataComments = 'DATA_COMMENT',
+  DataSubscribe = 'DATA_SUBSCRIBE'
 }
 
 export enum HttpCode {

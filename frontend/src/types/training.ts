@@ -67,6 +67,18 @@ export enum StatusRequest
   Accepted = 'принят',
 }
 
+export enum TypeRequest
+ {
+  Personal = 'персональная тренировка',
+  Together = 'совместная тренировка'
+}
+
+export type TrainingRequest = {
+  userId: string;
+  statusRequest: StatusRequest;
+  typeRequest: TypeRequest;
+}
+
 export type Comment = {
   id: string;
   userId: string;

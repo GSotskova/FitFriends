@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../hooks';
 import { getUserFullInfo } from '../../store/user-process/selectors';
 import { AppRoute } from '../../constants';
@@ -7,66 +7,39 @@ import { UserRole } from '../../types/user';
 
 const Header = (): JSX.Element => {
   const userInfo = useAppSelector(getUserFullInfo);
-
-  const navigate = useNavigate();
-  const routeMain = () =>{
-    if (userInfo.role === UserRole.Coach) {
-      const path = AppRoute.AccountCoach;
-      navigate(path);
-    }
-    const path = AppRoute.Main;
-    navigate(path);
-  };
-
-  const routeAccount = () =>{
-    if (userInfo.role === UserRole.Coach) {
-      const path = AppRoute.AccountCoach;
-      navigate(path);
-    }
-    const path = AppRoute.AccountUser;
-    navigate(path);
-  };
-
-  const routeFriends = () =>{
-    if (userInfo.role === UserRole.Coach) {
-      const path = `${AppRoute.AccountCoach}/friends`;
-      navigate(path);
-    }
-    const path = `${AppRoute.AccountUser}/friends`;
-    navigate(path);
-  };
-
+  const pathType = userInfo.role === UserRole.Coach ? AppRoute.AccountCoach : AppRoute.AccountUser;
+  const pathTypeMain = userInfo.role === UserRole.Coach ? AppRoute.AccountCoach : AppRoute.Main;
 
   return (
     <header className="header">
       <div className="container">
-        <button className="header__logo" aria-label="Переход на главную" onClick={routeMain}>
+        <Link className="header__logo" aria-label="Переход на главную" to={pathTypeMain}>
           <svg width="187" height="70" aria-hidden="true">
             <use xlinkHref="#logo"></use>
           </svg>
-        </button>
+        </Link>
         <nav className="main-nav">
           <ul className="main-nav__list">
             <li className="main-nav__item">
-              <button className="main-nav__link is-active" onClick={routeMain} aria-label="На главную">
+              <Link className="main-nav__link is-active" to={pathTypeMain} aria-label="На главную">
                 <svg width="18" height="18" aria-hidden="true">
                   <use xlinkHref="#icon-home"></use>
                 </svg>
-              </button>
+              </Link>
             </li>
             <li className="main-nav__item">
-              <button className="main-nav__link" onClick={routeAccount} aria-label="Личный кабинет">
+              <Link className="main-nav__link" to={pathType} aria-label="Личный кабинет">
                 <svg width="16" height="18" aria-hidden="true">
                   <use xlinkHref="#icon-user"></use>
                 </svg>
-              </button>
+              </Link>
             </li>
             <li className="main-nav__item">
-              <button className="main-nav__link" onClick={routeFriends} aria-label="Друзья">
+              <Link className="main-nav__link" to={`${pathType}/friends`} aria-label="Друзья">
                 <svg width="22" height="16" aria-hidden="true">
                   <use xlinkHref="#icon-friends"></use>
                 </svg>
-              </button>
+              </Link>
             </li>
             <li className="main-nav__item main-nav__item--notifications">
               <a className="main-nav__link" href="/" aria-label="Уведомления">

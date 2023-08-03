@@ -76,6 +76,17 @@ export class TrainingInfoController {
     return fillObject(TrainingRdo, existTrainig);
   }
 
+  @Get('show/coach/list/:coachId')
+  @ApiResponse({
+    type: TrainingRdo,
+    status: HttpStatus.OK,
+    description: 'Show list training'
+  })
+  public async showCoachIdList(@Param('coachId', MongoidValidationPipe) coachId: string, @Query() query: TrainingQuery) {
+    const existTrainig = await this.trainingService.showList(coachId, query);
+    return fillObject(TrainingRdo, existTrainig);
+  }
+
 
   @RabbitRPC({
     exchange: RabbitExchange.Training,

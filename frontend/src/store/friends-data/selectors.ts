@@ -7,3 +7,5 @@ export const getFriends = (state: State): Friend[] => state[NameSpace.DataFriend
 export const getFriendsDataLoadingStatus = (state: State): boolean => state[NameSpace.DataFriends].isFriendsDataLoading;
 export const getErrorStatus = (state: State): boolean => state[NameSpace.DataFriends].hasError;
 export const getErrorPost = (state: State): boolean => state[NameSpace.DataFriends].hasErrorPost;
+export const getSignFriendLoadDelete = (state: State): boolean => state[NameSpace.DataFriends].isFriendLoadDelete;
+export const getSignFriendLoadPost = (state: State): boolean => state[NameSpace.DataFriends].isFriendLoadPost;

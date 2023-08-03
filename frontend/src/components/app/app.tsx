@@ -25,6 +25,7 @@ import TrainingCardPage from '../../pages/training-card/training-card';
 import FriendsListUserPage from '../../pages/friends-list-user/friends-list-user';
 import UserBuyPage from '../../pages/user-buy/user-buy';
 import AccountUserPage from '../../pages/personal-account-user/personal-account-user';
+import UserCardPage from '../../pages/user-card/user-card';
 
 
 function App(): JSX.Element {
@@ -54,7 +55,6 @@ function App(): JSX.Element {
       dispatch(fetchCoachTrainings());
       dispatch(fetchCoachFriends());
       dispatch(fetchCoachOrders());
-      dispatch(fetchUserCatalog());
     }
   }, [dispatch, userData?.id, userData?.role, userFullInfo]);
 
@@ -198,6 +198,18 @@ function App(): JSX.Element {
             verifyRole
           >
             <TrainingCardPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path={`${AppRoute.Users}/:id`}
+        element={
+          <PrivateRoute
+            restrictedFor={authorizationStatus}
+            redirectTo={AppRoute.Login}
+            verifyRole
+          >
+            <UserCardPage />
           </PrivateRoute>
         }
       />

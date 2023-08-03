@@ -44,7 +44,7 @@ const responsiveFour = {
   }
 };
 
-function MainPage(): JSX.Element {
+function MainPage() {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
   const userTrainings = useAppSelector(getUserTrainings);
@@ -131,6 +131,9 @@ if (isTrainingsDataLoading) {
   return (<LoadingScreen />);
 }
 
+if(!users) {
+  return null;
+}
 
 return (
   <div className="wrapper">

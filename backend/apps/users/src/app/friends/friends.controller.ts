@@ -71,6 +71,19 @@ export class FriendController {
 
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
+    type: FriendInfoRdo,
+    status: HttpStatus.OK,
+    description: 'Show friend for user'
+  })
+  @Get('find/:friendId')
+  public async findFriend(@Req() { user: payload }: RequestWithTokenPayload, @Param('friendId') friendId: string) {
+    const friends = await this.friendService.findFriend(payload.sub, friendId);
+    console.log(friends)
+    return friends;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
     status: HttpStatus.OK,
     description: 'Delete from friends'
   })

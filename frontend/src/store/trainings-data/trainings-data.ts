@@ -1,12 +1,14 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
 import {TrainingData} from '../../types/state';
-import {editTraining, fetchCoachTrainings, postTraining, fetchCoachTraining, fetchUserTrainings, fetchCatalogTrainings} from '../api-actions';
+import {editTraining, fetchCoachTrainings, postTraining, fetchCoachTraining, fetchUserTrainings, fetchCatalogTrainings, fetchCoachOtherTrainings} from '../api-actions';
 
 const initialState: TrainingData = {
   trainings: [],
   userTrainings: [],
+  coachTrainings: [],
   isTrainingsDataLoading: false,
+  isCoachTrainingsLoading: false,
   hasError: false,
   isTrainingLoading: false,
   training: null,
@@ -76,7 +78,18 @@ export const trainingsData = createSlice({
       .addCase(editTraining.fulfilled, (state, action) => {
         const updatedTraining = action.payload;
         state.trainings = state.trainings.map((training) => training.id === updatedTraining.id ? updatedTraining : training);
-
+      })
+      .addCase(fetchCoachOtherTrainings.pending, (state) => {
+        state.isCoachTrainingsLoading = true;
+        state.hasError = false;
+      })
+      .addCase(fetchCoachOtherTrainings.fulfilled, (state, action) => {
+        state.coachTrainings = action.payload;
+        state.isCoachTrainingsLoading = false;
+      })
+      .addCase(fetchCoachOtherTrainings.rejected, (state) => {
+        state.isCoachTrainingsLoading = false;
+        state.hasError = true;
       });
   }
 });

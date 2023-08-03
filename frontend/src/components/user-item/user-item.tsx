@@ -1,4 +1,8 @@
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks';
 import { UserFullInfo, UserRole } from '../../types/user';
+import { AppRoute } from '../../constants';
+import { fetchCoachOtherTrainings, fetchUserOther } from '../../store/api-actions';
 
 type Props = {
   user: UserFullInfo;
@@ -6,10 +10,25 @@ type Props = {
 }
 
 const UserItem = ({user, isMainPage}: Props): JSX.Element => {
+  const dispatch = useAppDispatch();
   const isCoach = user.role === UserRole.Coach && !isMainPage;
 
+  const routeUser = () => {
+    dispatch(fetchUserOther(user.id));
+    dispatch(fetchCoachOtherTrainings(user.id));
+  };
+
+  const navigate = useNavigate();
+  const routeChange = () =>{
+    const path = `${AppRoute.Users}/${user.id}`;
+    navigate(path);
+  };
+
   return (
-    <div className={`thumbnail-user thumbnail-user--role-${isCoach ? 'coach' : 'user'} ${isMainPage ? 'thumbnail-user--dark' : ' '}`}>
+    <div
+      className={`thumbnail-user thumbnail-user--role-${isCoach ? 'coach' : 'user'} ${isMainPage ? 'thumbnail-user--dark' : ' '}`}
+      onClick={routeChange}
+    >
       <div className="thumbnail-user__image">
         <picture>
           <img src={user.avatarPath} width="82" height="82" alt=""/>
@@ -33,11 +52,12 @@ const UserItem = ({user, isMainPage}: Props): JSX.Element => {
         )}
 
       </ul>
-      <a
+      <Link
         className={`btn ${isMainPage ? 'btn--outlined' : ''} ${isCoach ? 'btn--dark-bg' : ''} btn--dark-bg btn--medium thumbnail-user__button`}
-        href="/"
+        onClick={routeUser}
+        to={`${AppRoute.Users}/${user.id}`}
       >Подробнее
-      </a>
+      </Link>
     </div>
   );
 };

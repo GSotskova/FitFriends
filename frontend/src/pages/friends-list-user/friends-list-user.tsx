@@ -4,6 +4,7 @@ import Header from '../../components/header/header';
 import { getFriends } from '../../store/friends-data/selectors';
 import { AppRoute } from '../../constants';
 import FriendItem from '../../components/friend-item/friend-item';
+import { UserRole } from '../../types/user';
 
 
 function FriendsListUserPage(): JSX.Element {
@@ -37,7 +38,7 @@ function FriendsListUserPage(): JSX.Element {
                 {friends.map((el) =>
                   (
                     <li className="friends-list__item" key={el.id}>
-                      <FriendItem user={el} />
+                      <FriendItem user={el} currentUserRole={UserRole.User}/>
                     </li>)
                 )}
               </ul>
