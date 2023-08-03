@@ -32,7 +32,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
 
   public async findByUserIdTrainingId(userId: string, trainingId: string): Promise<Order | null> {
     return this.ordersModel
-      .findOne({userId: userId, trainingId: trainingId})
+      .findOne({userId: userId, trainingId: trainingId, isDone: false})
       .exec();
   }
 

@@ -10,7 +10,9 @@ const initialState: OrderData = {
   isOrderDataLoading: false,
   isOrdersUserDataLoading: false,
   hasError: false,
-  hasErrorPost: false
+  hasErrorPost: false,
+  isPostLoading: false,
+  hasErrorReduce: false
 };
 
 
@@ -56,19 +58,25 @@ export const ordersData = createSlice({
         state.isOrderDataLoading = false;
         state.hasError = true;
       })
+      .addCase(postOrder.pending, (state, action) => {
+        state.hasErrorPost = false;
+        state.isPostLoading = true;
+      })
       .addCase(postOrder.fulfilled, (state, action) => {
         state.orders.push(action.payload);
         state.hasErrorPost = false;
+        state.isPostLoading = false;
       })
       .addCase(postOrder.rejected, (state) => {
         state.hasErrorPost = true;
+        state.isPostLoading = false;
       })
       .addCase(reduceOrder.fulfilled, (state, action) => {
         state.orders.push(action.payload);
-        state.hasErrorPost = false;
+        state.hasErrorReduce = false;
       })
       .addCase(reduceOrder.rejected, (state) => {
-        state.hasErrorPost = true;
+        state.hasErrorReduce = true;
       });
   }
 });
