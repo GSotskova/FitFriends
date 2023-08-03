@@ -4,11 +4,12 @@ import Header from '../../components/header/header';
 import { getFriends } from '../../store/friends-data/selectors';
 import { AppRoute } from '../../constants';
 import FriendItem from '../../components/friend-item/friend-item';
+import { UserRole } from '../../types/user';
 
 
 function FriendsListPage(): JSX.Element {
   const friends = useAppSelector(getFriends);
-
+console.log(friends)
   const navigate = useNavigate();
   const routeChange = () =>{
     const path = AppRoute.AccountCoach;
@@ -37,7 +38,7 @@ function FriendsListPage(): JSX.Element {
                 {friends.map((el) =>
                   (
                     <li className="friends-list__item" key={el.id}>
-                      <FriendItem user={el} />
+                      <FriendItem user={el} currentUserRole={UserRole.Coach} />
                     </li>)
                 )}
               </ul>

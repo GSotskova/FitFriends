@@ -47,7 +47,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "email": "user1@notfound.local",
+  "email": "coach1@notfound.local",
   "password": "1234567"
 }
 ###
@@ -196,7 +196,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "coachId": "649866f6dac052e861589f59"
+  "coachId": "6497fd0eaaa5a02715264c9b"
 }
 
 ###
@@ -207,7 +207,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "coachId": "649866f6dac052e861589f59"
+  "coachId": "6497fd0eaaa5a02715264c9b"
 }
 ###
 # Рассылка почтовых уведомлений на email о новых тренировках
@@ -238,7 +238,7 @@ Content-Type: application/json
 }
 ###
 # Редактирование  тренировки
-POST http://localhost:4000/api/coach/training/edit/64a447e28cc4fa6456f411fa HTTP/1.1
+POST http://localhost:4000/api/coach/training/edit/64a406e9c4d605ea3e822df6 HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
@@ -330,4 +330,8 @@ Content-Type: application/json
 {
   "statusRequest": "принят"
 }
+###
+# Список тренировок конкртного тренера
+GET http://localhost:4000/api/training/coach/649866f6dac052e861589f59 HTTP/1.1
+Authorization: Bearer {{authToken}}
 ###

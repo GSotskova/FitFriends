@@ -145,7 +145,7 @@ public async createSubscription( @Body() dto: UserSubscriptionDto) {
 @UseInterceptors(UseridInterceptor)
 @Delete('subscription/delete')
 public async deleteSubscription( @Body() dto: UserSubscriptionDto) {
-
+  console.log(dto)
   const { data } = await this.httpService.axiosRef.delete(`${ApplicationServiceURL.Subscription}/delete`, {data : dto});
   return data;
 }

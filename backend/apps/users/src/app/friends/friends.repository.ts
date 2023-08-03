@@ -76,7 +76,7 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
     {
       $project:{
           _id : 1,
-          userId: "$result._id",
+          userId: '$friendId',
           createdAt: {$dateToString:{format:"%Y-%m-%d %H:%M:%S",date:"$createdAt"}},
           userName : "$result.userName",
           email : "$result.email",

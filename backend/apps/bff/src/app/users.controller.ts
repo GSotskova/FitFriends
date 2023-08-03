@@ -82,12 +82,31 @@ export class UsersController {
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(UseridInterceptor)
   @Get('/:id')
-  public async show(@Req() req: Request, @Param('id', MongoidValidationPipe) id: string) {
+  public async show(@Req() req: Request, @Param('id', MongoidValidationPipe) id: string, @Body() body) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${id}`,  {
       headers: {
         'Authorization': req.headers['authorization']
       }
     });
+    if (data.avatar) {
+      const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${data.avatar}`);
+      data.avatarPath = path
+      }
+
+    const { data: {friendId} } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Friends}/find/${id}`, {
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    });
+    data.isFriend = friendId ? true :false;
+
+    const { data: {coachId} } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Subscription}/find/${id}`, {
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    });
+    console.log(body.userId, coachId)
+    data.isSubscribe = coachId ? true: false
     return data;
 }
 
@@ -106,21 +125,23 @@ export class UsersController {
 
 @UseGuards(CheckAuthGuard)
 @UseInterceptors(RoleUserInterceptor)
+@UseInterceptors(UseridInterceptor)
 @Get('')
-public async showList(@Req() req: Request, @Query() query: UsersQuery) {
+public async showList(@Req() req: Request, @Query() query: UsersQuery, @Body() body) {
   const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}`,  {
     params : query,
     headers: {
       'Authorization': req.headers['authorization']
     }
   });
-  await Promise.all(data.map(async (el) => {
+  const users = data.filter((el)=>el.id!==body.userId)
+  await Promise.all(users.map(async (el) => {
     if (el.avatar) {
       const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${el.avatar}`);
       el.avatarPath = path;
       }
      }));
-  return data;
+  return users;
 }
 
 

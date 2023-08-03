@@ -25,8 +25,9 @@ export type Order = {
 export enum PaymentOption {
   Visa = 'visa',
   Mir = 'mir',
-  Umoney = 'umoney',
+  Iomoney = 'iomoney',
 }
+export const PAY_OPTION = Object.values(PaymentOption);
 
 export type NewOrder = {
   trainingId: string;

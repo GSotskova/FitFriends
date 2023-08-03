@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NameSpace, AuthorizationStatus, FormRegistration} from '../../constants';
 import {UserProcess} from '../../types/state';
-import {checkAuthAction, loginUser, checkEmail, fetchUser, updateCertificate, postCertificate, deleteCertificate, fetchUserCatalog} from '../api-actions';
+import {checkAuthAction, loginUser, checkEmail, fetchUser, updateCertificate, postCertificate, deleteCertificate, fetchUserCatalog, fetchUserOther} from '../api-actions';
 import { User, UserFullInfo, UserGeneral, UserRole, UserSex } from '../../types/user';
 import { StationMetro } from '../../types/station-metro.enum';
 import { LevelTraining, TrainingTime } from '../../types/questionnaire';
@@ -37,7 +37,9 @@ const initialState: UserProcess = {
   formRegistrType: FormRegistration.General,
   existsEmail: false,
   hasErrorPostCertificate: false,
-  users: []
+  users: [],
+  userOther: null,
+  isUserOtherLoading: false
 };
 
 export const userProcess = createSlice({
@@ -122,6 +124,16 @@ export const userProcess = createSlice({
       })
       .addCase(deleteCertificate.rejected, (state) => {
         state.hasErrorPostCertificate = true;
+      })
+      .addCase(fetchUserOther.pending, (state) => {
+        state.isUserOtherLoading = true;
+      })
+      .addCase(fetchUserOther.fulfilled, (state, action) => {
+        state.userOther = action.payload;
+        state.isUserOtherLoading = false;
+      })
+      .addCase(fetchUserOther.rejected, (state) => {
+        state.isUserOtherLoading = false;
       });
   }
 });

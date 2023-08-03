@@ -12,4 +12,5 @@ export const getUserGeneralInfo = (state: State): UserGeneral | null => state[Na
 export const getUserFullInfo = (state: State): UserFullInfo => state[NameSpace.User].userFullInfo;
 export const getSignUserLoading = (state: State): boolean => state[NameSpace.User].isUserLoading;
 export const getUsers = (state: State): UserFullInfo[] => state[NameSpace.User].users;
-export const getSignUserCatalogLoading = (state: State): boolean => state[NameSpace.User].isUserCatalogLoading;
+export const getUserOther = (state: State): UserFullInfo | null => state[NameSpace.User].userOther;
+export const getSignUserOtherLoading = (state: State): boolean => state[NameSpace.User].isUserOtherLoading;

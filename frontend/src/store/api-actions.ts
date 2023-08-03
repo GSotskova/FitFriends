@@ -11,7 +11,7 @@ import { QuestionnaireCoach, QuestionnaireUser } from '../types/questionnaire';
 import { adaptAvatarToServer, adaptCertificateToServer, adaptCoachToServer, adaptUserEditToServer, adaptUserToServer, adaptVideoToServer } from '../utils/adapters/adaptersToServer';
 import { adaptUserToClient } from '../utils/adapters/adaptersToClient';
 import { setAuthInfo, setUserFullInfo } from './user-process/user-process';
-import { Comment, NewComment, NewTraining, Query, StatusRequest, Training } from '../types/training';
+import { Comment, NewComment, NewTraining, Query, StatusRequest, Training, TrainingRequest } from '../types/training';
 import { NewOrder, Order } from '../types/order';
 
 export const Action = {
@@ -24,27 +24,33 @@ export const Action = {
   POST_CERTIFICATE: 'coach/postCertificate',
   DELETE_CERTIFICATE: 'coach/deleteCertificate',
   EDIT_USER: 'user/edit',
+  FETCH_USER_OTHER: 'user/fetchUserOther',
   FETCH_USER: 'user/fetchUser',
   FETCH_USER_CATALOG: 'user/fetchUserCatalog',
   FETCH_COACH_TRAININGS: 'training/fetchCoachTrainings',
+  FETCH_COACH_OTHER_TRAININGS: 'training/fetchCoachOtherTrainings',
   FETCH_COACH_TRAINING:  'training/fetchCoachTraining',
   POST_TRAINING:  'training/postTraining',
   EDIT_TRAINING:  'training/editTraining',
   FETCH_COACH_FRIENDS:  'coach/fetchCoachFriends',
   FETCH_USER_FRIENDS:  'user/fetchUserFriends',
-  DELETE_FRIEND:  'coach/deleteFriend',
+  DELETE_USER_FRIEND:  'user/deleteFriend',
+  DELETE_COACH_FRIEND:  'coach/deleteCoachFriend',
   POST_FRIEND:  'user/postFriend',
   FETCH_COACH_ORDERS:  'coach/fetchCoachOrders',
   FETCH_USER_ORDERS:  'user/fetchUserOrders',
   FETCH_USER_ORDER:  'user/fetchUserOrder',
   POST_ORDER:  'user/postOrder',
   REDUCE_ORDER:  'user/reduceOrder',
+  CREATE_REQUEST:  'coach/createRequest',
   ACCEPT_REQUEST:  'coach/acceptRequest',
   REJECT_REQUEST:  'coach/deleteRequest',
   FETCH_USER_TRAININGS: 'training/fetchUserTrainings',
   FETCH_CATALOG_TRAININGS: 'training/fetchCatalogTrainings',
   FETCH_COMMENTS: 'comment/fetchComments',
   POST_COMMENT:  'comment/postComment',
+  CREATE_SUBSCRIBE:  'user/createSubscribe',
+  DELETE_SUBSCRIBE:  'user/deleteSubscribe',
 };
 
 export const checkAuthAction = createAsyncThunk<User, undefined, {
@@ -216,6 +222,17 @@ export const editUser = createAsyncThunk<UserFullInfo, UserEdit & FileType, {
        return adaptUserToClient(data);
      });
 
+export const fetchUserOther = createAsyncThunk<UserFullInfo, string, {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+   }>(
+     Action.FETCH_USER_OTHER,
+     async (id, { dispatch, extra: api }) => {
+       const { data } = await api.get<UserFullInfo>(`${APIRoute.Users}/${id}`);
+       return adaptUserToClient(data);
+     });
+
 
 export const fetchUser = createAsyncThunk<UserFullInfo, undefined, {
     dispatch: AppDispatch;
@@ -274,6 +291,20 @@ export const fetchCoachTrainings = createAsyncThunk<Training[], Query | undefine
               return Promise.reject(error);
             }
           });
+
+export const fetchCoachOtherTrainings = createAsyncThunk<Training[], string, {
+            dispatch: AppDispatch;
+            state: State;
+            extra: AxiosInstance; }>(
+              Action.FETCH_COACH_OTHER_TRAININGS,
+              async (id, {dispatch, extra: api}) => {
+                try {
+                  const {data} = await api.get<Training[]>(`${APIRoute.Training}/coach/${id}?sortDate=desc`);
+                  return data;
+                } catch (error) {
+                  return Promise.reject(error);
+                }
+              });
 
 export const fetchCoachTraining = createAsyncThunk<Training, string, {
         dispatch: AppDispatch;
@@ -347,7 +378,7 @@ export const editTraining = createAsyncThunk<Training, Training, {
                const postVideoApiRoute = `${APIRoute.Files}/video/training/${training.id}`;
                await api.post(postVideoApiRoute, adaptVideoToServer(training.fileVideoTraning));
              }
-             const { data } = await api.patch<Training>(`${APIRoute.CoachTraining}/edit/${training.id}`, training);
+             const { data } = await api.post<Training>(`${APIRoute.CoachTraining}/edit/${training.id}`, training);
              return data;
            });
 
@@ -380,20 +411,33 @@ export const fetchUserFriends = createAsyncThunk<Friend[], undefined, {
                     }
                   });
 
-export const deleteFriend = createAsyncThunk<Friend, Friend['id'], {
+export const deleteFriend = createAsyncThunk<Friend, string, {
               dispatch: AppDispatch;
               state: State;
               extra: AxiosInstance; }>(
-                Action.DELETE_FRIEND,
+                Action.DELETE_USER_FRIEND,
                 async (id, {dispatch, extra: api}) => {
                   try {
-                    const {data} = await api.post<Friend>(`${APIRoute.Coach}/friends/delete/${id}`);
+                    const {data} = await api.post<Friend>(`${APIRoute.User}/friends/delete/${id}`);
                     return data;
                   } catch (error) {
                     return Promise.reject(error);
                   }
                 });
 
+export const deleteCoachFriend = createAsyncThunk<Friend, string, {
+                  dispatch: AppDispatch;
+                  state: State;
+                  extra: AxiosInstance; }>(
+                    Action.DELETE_COACH_FRIEND,
+                    async (id, {dispatch, extra: api}) => {
+                      try {
+                        const {data} = await api.post<Friend>(`${APIRoute.Coach}/friends/delete/${id}`);
+                        return data;
+                      } catch (error) {
+                        return Promise.reject(error);
+                      }
+                    });
 export const postFriend = createAsyncThunk<Friend, UserFullInfo['id'], {
               dispatch: AppDispatch;
               state: State;
@@ -431,6 +475,7 @@ export const fetchUserOrders = createAsyncThunk<Order[], Query | undefined, {
                     Action.FETCH_USER_ORDERS,
                     async (query, {dispatch, extra: api}) => {
                       try {
+                        console.log('fetchUserOrders');
                         const isDone = query && query.isDone ? `isDone=${query.isDone}` : '';
                         const {data} = await api.get<Order[]>(`${APIRoute.User}/orders?${isDone}`);
                         return data;
@@ -476,6 +521,20 @@ export const reduceOrder = createAsyncThunk<Order, string, {
                     try {
                       const {data} = await api.post<Order>(`${APIRoute.User}/orders/reduce/${id}`);
                       return data;
+                    } catch (error) {
+                      return Promise.reject(error);
+                    }
+                  });
+
+export const createRequest = createAsyncThunk<void, TrainingRequest, {
+                dispatch: AppDispatch;
+                state: State;
+                extra: AxiosInstance; }>(
+                  Action.CREATE_REQUEST,
+                  async (trainingRequest, {dispatch, extra: api}) => {
+                    try {
+                      await api.post(`${APIRoute.User}/request/training/create`,trainingRequest);
+                      dispatch(fetchCoachFriends());
                     } catch (error) {
                       return Promise.reject(error);
                     }
@@ -557,3 +616,29 @@ export const fetchCatalogTrainings = createAsyncThunk<Training[], Query | undefi
                     return Promise.reject(error);
                   }
                 });
+
+export const createSubscribe = createAsyncThunk<void, string, {
+                  dispatch: AppDispatch;
+                  state: State;
+                  extra: AxiosInstance; }>(
+                    Action.CREATE_SUBSCRIBE,
+                    async (coachId, {dispatch, extra: api}) => {
+                      try {
+                        await api.post(`${APIRoute.User}/subscription/create`,{'coachId': coachId} );
+                      } catch (error) {
+                        return Promise.reject(error);
+                      }
+                    });
+
+export const deleteSubscribe = createAsyncThunk<void, string, {
+                  dispatch: AppDispatch;
+                  state: State;
+                  extra: AxiosInstance; }>(
+                    Action.DELETE_SUBSCRIBE,
+                    async (coachId, {dispatch, extra: api}) => {
+                      try {
+                        await api.delete(`${APIRoute.User}/subscription/delete`,{data: {'coachId': coachId}});
+                      } catch (error) {
+                        return Promise.reject(error);
+                      }
+                    });

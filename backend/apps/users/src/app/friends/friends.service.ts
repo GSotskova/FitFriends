@@ -42,4 +42,13 @@ export class FriendService {
     return this.friendRepository.destroy(idFriends._id);
   }
 
+  public async findFriend(userId: string, friendId: string) {
+    const friendUser = await this.friendRepository.findId(friendId, userId)
+    const friendCoach = await this.friendRepository.findId(userId, friendId)
+    console.log(friendUser , friendCoach)
+    if (!friendUser && !friendCoach) {
+      return {error: FRIENDS_NOT_FOUND}
+    }
+    return friendUser ? friendUser : friendCoach;
+  }
 }

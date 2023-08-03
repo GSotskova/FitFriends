@@ -33,6 +33,8 @@ export const adaptUserToClient =
     trainingTime: user.trainingTime,
     caloriesReset: user.caloriesReset,
     caloriesSpend: user.caloriesSpend,
-    isReady: user.isReady
+    isReady: user.isReady,
+    isFriend: user.isFriend,
+    isSubscribe: user.isSubscribe
   });
 

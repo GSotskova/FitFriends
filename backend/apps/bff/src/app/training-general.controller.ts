@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Query, Req, UseFilters, UseGuards, 
 import { HttpService } from '@nestjs/axios';
 import { ApplicationServiceURL } from './app.config';
 import { AxiosExceptionFilter } from './filters/axios-exception.filter';
-import { DefaultQuery, TrainingCatalogQuery} from '@project/shared/shared-query';
+import { DefaultQuery, TrainingCatalogQuery, TrainingQuery} from '@project/shared/shared-query';
 import { CheckAuthGuard } from './guards/check-auth.guard';
 import { RoleUserInterceptor } from './interceptors/role-user.interceptor';
 import { CommentDto } from '@project/shared/shared-dto';
@@ -55,5 +55,19 @@ export class TrainingGeneralController {
    return data;
   }
 
+
+  @UseGuards(CheckAuthGuard)
+  @Get('coach/:coachId')
+  public async showList(@Query() query: TrainingQuery, @Param('coachId') coachId: string) {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Training}/show/coach/list/${coachId}`, {params : query});
+    await Promise.all(data.map(async (el) => {
+      if (el.photoTraning) {
+        const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${el.photoTraning}`);
+        el.photoTraningPath = path;
+        }
+       }));
+
+   return data;
+  }
 
 }
