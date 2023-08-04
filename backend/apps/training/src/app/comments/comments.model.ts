@@ -27,7 +27,7 @@ export class CommentModel extends Document implements Comment  {
     required: true})
   public message: string;
 
-  @Prop({default: now()})
+  @Prop({default: now})
   public createdAt: Date;
 
 }

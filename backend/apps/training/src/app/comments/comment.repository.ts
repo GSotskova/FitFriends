@@ -20,15 +20,17 @@ export class CommentRepository {
 
 
   public async findByTrainingId(trainingId: string, query?: DefaultQuery): Promise<Comment[] > {
+    if(query) {
+        const objQuery= getDefaultQuery(query)
 
-    const objQuery= getDefaultQuery(query)
-
-    return this.commentModel
-      .find({trainingId: trainingId})
-      .sort(objQuery.objSort)
-      .skip(objQuery.skip)
-      .limit(objQuery.limitNumber + objQuery.limitNumber)
-      .exec();
-  }
+        return this.commentModel
+          .find({trainingId: trainingId})
+          .sort(objQuery.objSort)
+          .skip(objQuery.skip)
+          .limit(objQuery.limitNumber + objQuery.limitNumber)
+          .exec();
+    }
+    return this.commentModel.find({trainingId: trainingId}).exec();
+    }
 
 }

@@ -3,8 +3,9 @@ import { Training } from '../../types/training';
 import { PAY_OPTION, PaymentOption } from '../../types/order';
 import { postOrder } from '../../store/api-actions';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getErrorPost } from '../../store/trainings-data/selectors';
+import { getErrorPost } from '../../store/orders-data/selectors';
 import { getLoadingPost } from '../../store/orders-data/selectors';
+import { COUNT_ORDER_DEFAULT } from '../../constants';
 
 type Prop ={
   handleClose?: () => void;
@@ -14,7 +15,7 @@ type Prop ={
 
 const CreateOrder = ({training, handleClose}: Prop): JSX.Element => {
   const dispatch = useAppDispatch();
-  const [countTraining, setCountTraining] = useState(5);
+  const [countTraining, setCountTraining] = useState(COUNT_ORDER_DEFAULT);
   const isErrorPost = useAppSelector(getErrorPost);
   const isLoadingPost = useAppSelector(getLoadingPost);
 

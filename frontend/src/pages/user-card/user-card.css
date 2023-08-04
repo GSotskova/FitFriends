@@ -4,26 +4,10 @@
 }
 
 
-.user-card-coach__training-bts {
+.user-card-coach__training-head {
   order: 0;
-  margin-bottom: 30px;
-  margin-top: 0;
-  padding: 0;
-  margin-left: auto;
-  width: 10%;
 }
 
 .conteiner-user_order {
   order: 1;
-  margin-bottom: 50px;
 }
-
-.user-card-coach__training-head {
-  margin-bottom: 0;
-  width: 60%;
-}
-
-.user-card-coach__training-form
- {
-  order: 2;
- }

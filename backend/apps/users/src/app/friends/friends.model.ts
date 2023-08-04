@@ -18,7 +18,7 @@ export class FriendModel extends Document implements Friend {
   })
   public friendId: string;
 
-  @Prop({default: now()})
+  @Prop({default: now})
   public createdAt: Date;
 
 

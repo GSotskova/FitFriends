@@ -37,7 +37,7 @@ export type CommentData = {
   comments: Comment[];
   isCommentsDataLoading: boolean;
   hasError: boolean;
-  hasErrorPost: boolean;
+  hasErrorPostComment: boolean;
 };
 
 export type FriendData = {

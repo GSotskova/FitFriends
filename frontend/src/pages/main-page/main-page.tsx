@@ -44,6 +44,115 @@ const responsiveFour = {
   }
 };
 
+type Prop ={
+  next?: () => void;
+  previous?: () => void;
+  routeChangeTraining?: () => void;
+  routeChangeUsers?: () => void;
+}
+
+const ButtonGroup = ({next, previous}: Prop ) => (
+  <div className="special-for-you__title-wrapper">
+    <h2 className="special-for-you__title">Специально подобрано для вас</h2>
+    <div className="special-for-you__controls">
+      <button
+        className="btn-icon personal-account-coach__control"
+        type="button"
+        aria-label="previous"
+        onClick={() => previous?.()}
+      >
+        <svg width="16" height="14" aria-hidden="true">
+          <use xlinkHref="#arrow-left"></use>
+        </svg>
+      </button>
+      <button
+        className="btn-icon personal-account-coach__control"
+        type="button"
+        aria-label="next"
+        onClick={() => next?.()}
+      >
+        <svg width="16" height="14" aria-hidden="true">
+          <use xlinkHref="#arrow-right"></use>
+        </svg>
+      </button>
+    </div>
+  </div>
+);
+
+const ButtonGroupPopular = ({next, previous, routeChangeTraining}: Prop ) => (
+  <div className="popular-trainings__title-wrapper">
+    <h2 className="popular-trainings__title">Популярные тренировки</h2>
+    <button
+      className="btn-flat popular-trainings__button"
+      type="button"
+      onClick={routeChangeTraining}
+    ><span>Смотреть все</span>
+      <svg width="14" height="10" aria-hidden="true">
+        <use xlinkHref="#arrow-right"></use>
+      </svg>
+    </button>
+    <div className="popular-trainings__controls">
+      <button
+        className="btn-icon popular-trainings__control"
+        type="button"
+        aria-label="previous"
+        onClick={() => previous?.()}
+      >
+        <svg width="16" height="14" aria-hidden="true">
+          <use xlinkHref="#arrow-left"></use>
+        </svg>
+      </button>
+      <button
+        className="btn-icon popular-trainings__control"
+        type="button"
+        aria-label="next"
+        onClick={() => next?.()}
+      >
+        <svg width="16" height="14" aria-hidden="true">
+          <use xlinkHref="#arrow-right"></use>
+        </svg>
+      </button>
+    </div>
+  </div>
+);
+
+const ButtonGroupDark = ({next, previous, routeChangeUsers}: Prop ) => (
+  <div className="look-for-company__title-wrapper">
+    <h2 className="look-for-company__title">Ищут компанию для тренировки</h2>
+    <button
+      className="btn-flat btn-flat--light look-for-company__button"
+      type="button"
+      onClick={routeChangeUsers}
+    >
+      <span>Смотреть все</span>
+      <svg width="14" height="10" aria-hidden="true">
+        <use xlinkHref="#arrow-right"></use>
+      </svg>
+    </button>
+    <div className="look-for-company__controls">
+      <button
+        className="btn-icon btn-icon--outlined look-for-company__control"
+        type="button" aria-label="previous"
+        onClick={() => previous?.()}
+      >
+        <svg width="16" height="14" aria-hidden="true">
+          <use xlinkHref="#arrow-left"></use>
+        </svg>
+      </button>
+      <button
+        className="btn-icon btn-icon--outlined look-for-company__control"
+        type="button" aria-label="next"
+        onClick={() => next?.()}
+      >
+        <svg width="16" height="14" aria-hidden="true">
+          <use xlinkHref="#arrow-right"></use>
+        </svg>
+      </button>
+    </div>
+  </div>
+);
+
+
 function MainPage() {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
@@ -53,102 +162,46 @@ function MainPage() {
   const trainings = _.sortBy(trainingsNotSort, 'rating').reverse();
   const specialTrainings = trainings.filter((el)=>el.isSpecialOffer === true);
 
-type Prop ={
-  next?: () => void;
-  previous?: () => void;
-}
-const ButtonGroup = ({next, previous}: Prop ) => (
-  <div className="special-for-you__controls">
-    <button
-      className="btn-icon personal-account-coach__control"
-      type="button"
-      aria-label="previous"
-      onClick={() => previous?.()}
-    >
-      <svg width="16" height="14" aria-hidden="true">
-        <use xlinkHref="#arrow-left"></use>
-      </svg>
-    </button>
-    <button
-      className="btn-icon personal-account-coach__control"
-      type="button"
-      aria-label="next"
-      onClick={() => next?.()}
-    >
-      <svg width="16" height="14" aria-hidden="true">
-        <use xlinkHref="#arrow-right"></use>
-      </svg>
-    </button>
-  </div>
-);
+  const navigate = useNavigate();
+  const routeChangeUsers = () =>{
+    dispatch(fetchUserCatalog());
+    const path = AppRoute.Users;
+    navigate(path);
+  };
 
 
-const ButtonGroupDark = ({next, previous}: Prop ) => (
-  <div className="look-for-company__controls">
-    <button
-      className="btn-icon btn-icon--outlined look-for-company__control"
-      type="button" aria-label="previous"
-      onClick={() => previous?.()}
-    >
-      <svg width="16" height="14" aria-hidden="true">
-        <use xlinkHref="#arrow-left"></use>
-      </svg>
-    </button>
-    <button
-      className="btn-icon btn-icon--outlined look-for-company__control"
-      type="button" aria-label="next"
-      onClick={() => next?.()}
-    >
-      <svg width="16" height="14" aria-hidden="true">
-        <use xlinkHref="#arrow-right"></use>
-      </svg>
-    </button>
-  </div>
-);
+  const routeChangeTraining = () =>{
+    dispatch(fetchCatalogTrainings());
+    const path = `${AppRoute.Training}/catalog`;
+    navigate(path);
+  };
 
-const navigate = useNavigate();
-const routeChangeUsers = () =>{
-  dispatch(fetchUserCatalog());
-  const path = AppRoute.Users;
-  navigate(path);
-};
+  const routeChangeCard = (id: string) =>{
+    dispatch(fetchCoachTraining(id));
+    dispatch(fetchUserOrder(id));
+    dispatch(fetchComments(id));
+    const path = `${AppRoute.Training}/${id}`;
+    navigate(path);
+  };
 
+  if (isTrainingsDataLoading) {
+    return (<LoadingScreen />);
+  }
 
-const routeChangeTraining = () =>{
-  dispatch(fetchCatalogTrainings());
-  const path = `${AppRoute.Training}/catalog`;
-  navigate(path);
-};
+  if(!users) {
+    return null;
+  }
 
-const routeChangeCard = (id: string) =>{
-  dispatch(fetchCoachTraining(id));
-  dispatch(fetchUserOrder(id));
-  dispatch(fetchComments(id));
-  const path = `${AppRoute.Training}/${id}`;
-  navigate(path);
-};
-
-if (isTrainingsDataLoading) {
-  return (<LoadingScreen />);
-}
-
-if(!users) {
-  return null;
-}
-
-return (
-  <div className="wrapper">
-    <Header />
-    <main>
-      <h1 className="visually-hidden">FitFriends — Время находить тренировки, спортзалы и друзей спортсменов</h1>
-      <section className="special-for-you">
-        {userTrainings.length !== 0 &&
+  return (
+    <div className="wrapper">
+      <Header />
+      <main>
+        <h1 className="visually-hidden">FitFriends — Время находить тренировки, спортзалы и друзей спортсменов</h1>
+        <section className="special-for-you">
+          {userTrainings.length !== 0 &&
       (
         <div className="container">
           <div className="special-for-you__wrapper conteiner-main-revers">
-            <div className="special-for-you__title-wrapper">
-              <h2 className="special-for-you__title">Специально подобрано для вас</h2>
-            </div>
             <Carousel
               responsive={responsive}
               arrows={false}
@@ -189,15 +242,15 @@ return (
             </Carousel>
           </div>
         </div>)}
-        {userTrainings.length === 0 && (
-          <FakeImg />
-        )}
-      </section>
-      <section className="special-offers">
-        <div className="container">
-          <div className="special-offers__wrapper">
-            <h2 className="visually-hidden">Специальные предложения</h2>
-            {specialTrainings.length !== 0 &&
+          {userTrainings.length === 0 && (
+            <FakeImg />
+          )}
+        </section>
+        <section className="special-offers">
+          <div className="container">
+            <div className="special-offers__wrapper">
+              <h2 className="visually-hidden">Специальные предложения</h2>
+              {specialTrainings.length !== 0 &&
               (
                 <Carousel
                   responsive={responsiveSpecial}
@@ -240,29 +293,17 @@ return (
                   }
                 </Carousel>
               )}
-            {specialTrainings.length === 0 && (
+              {specialTrainings.length === 0 && (
+                <FakeImg />
+              )}
               <FakeImg />
-            )}
-            <FakeImg />
-          </div>
-        </div>
-      </section>
-      <section className="popular-trainings">
-        <div className="container">
-          <div className="popular-trainings__wrapper conteiner-main-revers">
-            <div className="popular-trainings__title-wrapper">
-              <h2 className="popular-trainings__title">Популярные тренировки</h2>
-              <button
-                className="btn-flat popular-trainings__button"
-                type="button"
-                onClick={routeChangeTraining}
-              ><span>Смотреть все</span>
-                <svg width="14" height="10" aria-hidden="true">
-                  <use xlinkHref="#arrow-right"></use>
-                </svg>
-              </button>
             </div>
-            {trainings.length !== 0 &&
+          </div>
+        </section>
+        <section className="popular-trainings">
+          <div className="container">
+            <div className="popular-trainings__wrapper conteiner-main-revers">
+              {trainings.length !== 0 &&
         (
           <Carousel
             responsive={responsiveFour}
@@ -274,7 +315,7 @@ return (
             slidesToSlide={1}
             renderButtonGroupOutside
             customButtonGroup={
-              <ButtonGroup />
+              <ButtonGroupPopular routeChangeTraining={routeChangeTraining}/>
             }
           >
             {
@@ -288,29 +329,16 @@ return (
             }
           </Carousel>
         )}
-            {trainings.length === 0 && (
-              <FakeImg />
-            )}
-          </div>
-        </div>
-      </section>
-      <section className="look-for-company">
-        <div className="container">
-          <div className="look-for-company__wrapper conteiner-main-revers">
-            <div className="look-for-company__title-wrapper">
-              <h2 className="look-for-company__title">Ищут компанию для тренировки</h2>
-              <button
-                className="btn-flat btn-flat--light look-for-company__button"
-                type="button"
-                onClick={routeChangeUsers}
-              >
-                <span>Смотреть все</span>
-                <svg width="14" height="10" aria-hidden="true">
-                  <use xlinkHref="#arrow-right"></use>
-                </svg>
-              </button>
+              {trainings.length === 0 && (
+                <FakeImg />
+              )}
             </div>
-            {users.length !== 0 &&
+          </div>
+        </section>
+        <section className="look-for-company">
+          <div className="container">
+            <div className="look-for-company__wrapper conteiner-main-revers">
+              {users.length !== 0 &&
                 <Carousel
                   responsive={responsiveFour}
                   arrows={false}
@@ -319,7 +347,7 @@ return (
                   pauseOnHover
                   slidesToSlide={1}
                   renderButtonGroupOutside
-                  customButtonGroup={<ButtonGroupDark />}
+                  customButtonGroup={<ButtonGroupDark routeChangeUsers={routeChangeUsers}/>}
                 >
                   {users.slice(0, COUNT_USERS_READY).map((el)=>
                     (
@@ -328,14 +356,14 @@ return (
                       </div>)
                   )}
                 </Carousel>}
-            {users.length === 0 && ( <FakeImg />)}
+              {users.length === 0 && ( <FakeImg />)}
+            </div>
           </div>
-        </div>
-      </section>
-    </main>
-  </div>
+        </section>
+      </main>
+    </div>
 
-);
+  );
 }
 
 export default MainPage;

@@ -3,41 +3,19 @@
   flex-direction: column;
 }
 
-
-.special-for-you__controls {
-  order: 1;
-  margin-bottom: 0px;
-  margin-top: 0;
-  padding: 0;
-  width: 10%;
-  float: left!important;
-  margin-left: auto
-}
-
-.look-for-company__controls {
-  order: 1;
-  margin-bottom: 30px;
-  margin-top: 0;
-  padding: 0;
-}
-
 .conteiner_order {
   order: 2;
 }
 
 .special-for-you__title-wrapper {
-  margin-bottom: 0;
-  width: 60%;
-  float: left!important;
+  order: 0;
 }
 
 .popular-trainings__title-wrapper {
-  margin-bottom: 0;
-  width: 60%;
-  float: left!important;
+  order: 0
 }
 
 .look-for-company__title-wrapper
  {
-  margin-bottom: 0px;
+  order:0;
  }

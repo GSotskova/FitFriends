@@ -105,8 +105,15 @@ export class UsersController {
         'Authorization': req.headers['authorization']
       }
     });
-    console.log(body.userId, coachId)
     data.isSubscribe = coachId ? true: false
+
+    if (data.certificate) {
+      data.certificatesPath=[];
+      await Promise.all(data.certificate.map(async (el) => {
+         const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${el}`);
+         data.certificatesPath.push({certificateId: el, certificatePath: path});
+         }));
+      }
     return data;
 }
 

@@ -1,5 +1,5 @@
 import Header from '../../components/header/header';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { UserRole } from '../../types/user';
 import { AppRoute } from '../../constants';
 import CommentItem from '../../components/comment-item/comment-item';
@@ -9,8 +9,13 @@ import { getComments, getSignCommentsLoading } from '../../store/comment-data/se
 import { getTraining, getIsTrainingLoading } from '../../store/trainings-data/selectors';
 import TrainingForm from '../../components/training-form/training-form';
 import LoadingScreen from '../loading-screen/loading-screen';
+import PopupWindow from '../../components/popup-window/popup-window';
+import CreateComment from '../../components/create-comment/create-comment';
+import { useEffect, useState } from 'react';
+import { fetchCoachTraining, fetchComments } from '../../store/api-actions';
 
 function TrainingCardPage() {
+  const dispatch = useAppDispatch();
   const user = useAppSelector(getUserFullInfo);
   const isUserLoading = useAppSelector(getSignUserLoading);
   const comments = useAppSelector(getComments);
@@ -20,12 +25,26 @@ function TrainingCardPage() {
 
   const training = useAppSelector(getTraining);
   const isTrainLoading = useAppSelector(getIsTrainingLoading);
-
   const navigate = useNavigate();
   const routeChange = () =>{
     const path = `${AppRoute.AccountCoach}/trainings`;
     navigate(path);
   };
+
+  const [showModal, setShowModal] = useState(false);
+  const togglePopup = () => {
+    if (showModal && training) {
+      dispatch(fetchComments(training.id));
+      // dispatch(fetchCoachTraining(training.id));
+    }
+    setShowModal(!showModal);
+  };
+
+  useEffect(()=>{
+    if (training) {
+      dispatch(fetchCoachTraining(training.id));
+    }
+  }, [comments, dispatch]);
 
   if (!training) {
     return null;
@@ -65,9 +84,14 @@ function TrainingCardPage() {
                   className="btn btn--medium reviews-side-bar__button"
                   type="button"
                   disabled={isCoach}
+                  onClick={togglePopup}
                 >
                     Оставить отзыв
                 </button>
+                {showModal &&
+                <PopupWindow handleClose={togglePopup}>
+                  <CreateComment trainingId={training.id} userId={user.id} handleClose={togglePopup} />
+                </PopupWindow>}
               </aside>
               <TrainingForm training={training} role={user.role} />
             </div>

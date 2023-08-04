@@ -60,7 +60,7 @@ export class UserModel extends Document implements User {
   @Prop()
   public backgroundImg: string;
 
-  @Prop({default: now()})
+  @Prop({default: now})
   public createdAt: Date;
 }
 
