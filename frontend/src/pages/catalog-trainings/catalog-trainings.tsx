@@ -2,20 +2,26 @@ import {useState, useEffect} from 'react';
 import MultiRangeSlider, { ChangeResult } from 'multi-range-slider-react';
 import Header from '../../components/header/header';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getTrainings } from '../../store/trainings-data/selectors';
+import { getCountAllTrainings, getTrainings, getTrainingsDataLoadingStatus } from '../../store/trainings-data/selectors';
 import { fetchCatalogTrainings } from '../../store/api-actions';
 import TrainingItem from '../../components/training-item/training-item';
 import { Query } from '../../types/training';
 import { TRAINING_ARR, TrainingType } from '../../types/questionnaire';
 import { useNavigate } from 'react-router-dom';
-import { AppRoute } from '../../constants';
+import { AppRoute, DEFAULT_LIMIT } from '../../constants';
+import LoadingScreen from '../loading-screen/loading-screen';
+import useScrollToUp from '../../hooks/use-scroll-to-up/use-scroll-to-up';
 
 
 function CatalogTrainingsPage() {
+  useScrollToUp();
   const dispatch = useAppDispatch();
   const trainings = useAppSelector(getTrainings);
-
-  const [query, setQuery] = useState<Query | undefined>();
+  const isTrainingsDataLoading = useAppSelector(getTrainingsDataLoadingStatus);
+  const totalTrainings = useAppSelector(getCountAllTrainings);
+  const totalPage = Math.ceil(totalTrainings / DEFAULT_LIMIT);
+console.log(totalTrainings, totalPage)
+  const [query, setQuery] = useState<Query>({limit: DEFAULT_LIMIT, page: 1});
   const [formValue, setValue] = useState({
     minPrice: 0, maxPrice: 10000,
     minCalories: 1000, maxCalories: 5000,
@@ -83,7 +89,6 @@ function CatalogTrainingsPage() {
     }
   };
 
-
   useEffect(()=>{
     dispatch(fetchCatalogTrainings(query));
   }, [dispatch, query]);
@@ -94,7 +99,16 @@ function CatalogTrainingsPage() {
     navigate(path);
   };
 
+  const scrollToTop = () =>{
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
+  if (isTrainingsDataLoading) {
+    <LoadingScreen/>;
+  }
   if (!trainings) {
     return null;
   }
@@ -291,8 +305,15 @@ function CatalogTrainingsPage() {
                   )}
                 </ul>
                 <div className="show-more training-catalog__show-more">
-                  <button className="btn show-more__button show-more__button--more" type="button">Показать еще</button>
-                  <button className="btn show-more__button show-more__button--to-top" type="button">Вернуться в начало</button>
+                  {totalPage !== query.page &&
+                  <button
+                    className="btn show-more__button show-more__button--more"
+                    type="button"
+                    onClick={() => setQuery({...query, page: query.page ? query.page + 1 : 1})}
+                  >Показать еще
+                  </button> }
+                  {totalPage === query.page && totalPage !== 1 &&
+                  <button className="btn show-more__button" type="button" onClick={scrollToTop}>Вернуться в начало</button>}
                 </div>
               </div>
             </div>

@@ -19,10 +19,13 @@ export type UserProcess = {
   users: UserFullInfo[];
   userOther: UserFullInfo | null;
   isUserOtherLoading: boolean;
+  countUsers: number;
 };
 
 export type TrainingData = {
   trainings: Training[];
+  countAllTrainings: number;
+  isLoadingCountAllTrainings: boolean;
   userTrainings: Training[];
   isTrainingsDataLoading: boolean;
   hasError: boolean;
@@ -31,6 +34,7 @@ export type TrainingData = {
   hasErrorPost: boolean;
   coachTrainings: Training[];
   isCoachTrainingsLoading: boolean;
+  isLoadingPostTraining: boolean;
 };
 
 export type CommentData = {
@@ -42,6 +46,8 @@ export type CommentData = {
 
 export type FriendData = {
   friends: Friend[];
+  countFiends: number;
+  isCountDataLoading: boolean;
   isFriendsDataLoading: boolean;
   hasError: boolean;
   hasErrorPost: boolean;
@@ -59,6 +65,7 @@ export type OrderData = {
   hasErrorReduce: boolean;
   order: Order | null;
   isOrderDataLoading: boolean;
+  countOrders: number;
 };
 
 export type RequestData = {

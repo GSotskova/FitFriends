@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NameSpace, AuthorizationStatus, FormRegistration} from '../../constants';
 import {UserProcess} from '../../types/state';
-import {checkAuthAction, loginUser, checkEmail, fetchUser, updateCertificate, postCertificate, deleteCertificate, fetchUserCatalog, fetchUserOther} from '../api-actions';
+import {checkAuthAction, loginUser, checkEmail, fetchUser, updateCertificate, postCertificate, deleteCertificate, fetchUserCatalog, fetchUserOther, fetchCountUsers} from '../api-actions';
 import { User, UserFullInfo, UserGeneral, UserRole, UserSex } from '../../types/user';
 import { StationMetro } from '../../types/station-metro.enum';
 import { LevelTraining, TrainingTime } from '../../types/questionnaire';
@@ -39,7 +39,8 @@ const initialState: UserProcess = {
   hasErrorPostCertificate: false,
   users: [],
   userOther: null,
-  isUserOtherLoading: false
+  isUserOtherLoading: false,
+  countUsers: 0
 };
 
 export const userProcess = createSlice({
@@ -106,6 +107,9 @@ export const userProcess = createSlice({
       })
       .addCase(fetchUserCatalog.rejected, (state) => {
         state.isUserCatalogLoading = false;
+      })
+      .addCase(fetchCountUsers.fulfilled, (state, action) => {
+        state.countUsers = action.payload;
       })
       .addCase(updateCertificate.fulfilled, (state, action) => {
         state.hasErrorPostCertificate = false;

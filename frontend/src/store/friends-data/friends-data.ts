@@ -1,10 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
 import {FriendData} from '../../types/state';
-import {deleteFriend, fetchCoachFriends, postFriend, fetchUserFriends, deleteCoachFriend} from '../api-actions';
+import {deleteFriend, fetchCoachFriends, postFriend, fetchUserFriends, fetchCountFriends, deleteCoachFriend} from '../api-actions';
 
 const initialState: FriendData = {
   friends: [],
+  countFiends: 0,
+  isCountDataLoading: false,
   isFriendsDataLoading: false,
   hasError: false,
   hasErrorPost: false,
@@ -41,6 +43,18 @@ export const friendsData = createSlice({
       })
       .addCase(fetchUserFriends.rejected, (state) => {
         state.isFriendsDataLoading = false;
+        state.hasError = true;
+      })
+      .addCase(fetchCountFriends.pending, (state) => {
+        state.isCountDataLoading = true;
+        state.hasError = false;
+      })
+      .addCase(fetchCountFriends.fulfilled, (state, action) => {
+        state.countFiends = action.payload;
+        state.isCountDataLoading = false;
+      })
+      .addCase(fetchCountFriends.rejected, (state) => {
+        state.isCountDataLoading = false;
         state.hasError = true;
       })
       .addCase(postFriend.pending, (state, action) => {

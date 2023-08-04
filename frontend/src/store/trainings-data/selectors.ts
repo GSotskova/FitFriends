@@ -12,3 +12,6 @@ export const getErrorStatus = (state: State): boolean => state[NameSpace.DataTra
 export const getErrorPost = (state: State): boolean => state[NameSpace.DataTrainings].hasErrorPost;
 export const getIsTrainingLoading = (state: State): boolean => state[NameSpace.DataTrainings].isTrainingLoading;
 export const getIsCoachTrainingsLoading = (state: State): boolean => state[NameSpace.DataTrainings].isCoachTrainingsLoading;
+export const getCountAllTrainings = (state: State): number => state[NameSpace.DataTrainings].countAllTrainings;
+export const getIsLoadingCountAllTrainings = (state: State): boolean => state[NameSpace.DataTrainings].isLoadingCountAllTrainings;
+export const getIsLoadingPostTraining = (state: State): boolean => state[NameSpace.DataTrainings].isLoadingPostTraining;

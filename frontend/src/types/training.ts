@@ -44,7 +44,7 @@ export type NewTraining = {
 
 
 export type Query = {
-  limit?: string;
+  limit?: number;
   price?: number[];
   caloriesReset?: number[];
   rating?: number[];

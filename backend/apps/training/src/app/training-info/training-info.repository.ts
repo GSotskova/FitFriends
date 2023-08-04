@@ -36,7 +36,6 @@ export class TrainingRepository implements CRUDRepository<TrainingEntity, string
     .find({...objQuery.objFiltr, coachId: coachId})
     .sort(objQuery.objSort)
     .limit(objQuery.limitNumber)
-    .skip(objQuery.skip)
     .exec();
   }
 
@@ -46,7 +45,6 @@ export class TrainingRepository implements CRUDRepository<TrainingEntity, string
     .find({...objQuery.objFiltr})
     .sort(objQuery.objSort)
     .limit(objQuery.limitNumber )
-    .skip(objQuery.skip)
     .exec();
   }
 

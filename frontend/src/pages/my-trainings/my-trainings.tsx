@@ -2,20 +2,22 @@ import {useState, useEffect} from 'react';
 import MultiRangeSlider, { ChangeResult } from 'multi-range-slider-react';
 import Header from '../../components/header/header';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getTrainings } from '../../store/trainings-data/selectors';
+import { getCountAllTrainings, getTrainings } from '../../store/trainings-data/selectors';
 import { fetchCoachTrainings } from '../../store/api-actions';
 import TrainingItem from '../../components/training-item/training-item';
 import { Query } from '../../types/training';
 import { TRAINING_TIME, TrainingTime } from '../../types/questionnaire';
 import { useNavigate } from 'react-router-dom';
-import { AppRoute } from '../../constants';
+import { AppRoute, DEFAULT_LIMIT } from '../../constants';
 
 
 function MyTrainingsPage() {
   const dispatch = useAppDispatch();
   const trainings = useAppSelector(getTrainings);
+  const totalTrainings = useAppSelector(getCountAllTrainings);
+  const totalPage = Math.ceil(totalTrainings / DEFAULT_LIMIT);
 
-  const [query, setQuery] = useState<Query | undefined>();
+  const [query, setQuery] = useState<Query>({limit: DEFAULT_LIMIT, page: 1});
   const [formValue, setValue] = useState({
     minPrice: 0, maxPrice: 10000,
     minCalories: 1000, maxCalories: 5000,
@@ -72,6 +74,12 @@ function MyTrainingsPage() {
     }
   };
 
+  const scrollToTop = () =>{
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   useEffect(()=>{
     dispatch(fetchCoachTrainings(query));
@@ -263,8 +271,15 @@ function MyTrainingsPage() {
                     )}
                   </ul>
                   <div className="show-more my-trainings__show-more">
-                    <button className="btn show-more__button show-more__button--more" type="button">Показать еще</button>
-                    <button className="btn show-more__button show-more__button--to-top" type="button">Вернуться в начало</button>
+                    {totalPage !== query.page &&
+                  <button
+                    className="btn show-more__button show-more__button--more"
+                    type="button"
+                    onClick={() => setQuery({...query, page: query.page ? query.page + 1 : 1})}
+                  >Показать еще
+                  </button> }
+                    {totalPage === query.page && totalPage !== 1 &&
+                  <button className="btn show-more__button" type="button" onClick={scrollToTop}>Вернуться в начало</button>}
                   </div>
                 </div>
               </div>

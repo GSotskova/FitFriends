@@ -84,6 +84,18 @@ export class UserAccountController {
    return data;
   }
 
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  @Get('friends/count')
+  public async countFriends(@Req() req: Request) {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Friends}/user`, {
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    });
+   return data.length;
+  }
+
 
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(RoleUserInterceptor)
@@ -111,6 +123,15 @@ export class UserAccountController {
   public async showOrders(@Body() userId: string, @Query() query: TrainingOrdersQuery) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Orders}/show/list/user`, {params : query, data: userId});
    return data;
+  }
+
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(RoleUserInterceptor)
+  @UseInterceptors(UseridInterceptor)
+  @Get('orders/count')
+  public async countOrders(@Body() userId: string) {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Orders}/show/list/user`, {data: userId});
+   return data.length;
   }
 
   @UseGuards(CheckAuthGuard)

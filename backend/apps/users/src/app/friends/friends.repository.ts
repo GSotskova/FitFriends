@@ -118,8 +118,7 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
     { $unset: 'resultUser' },
     { $unset: 'resultCoach' },
     { $sort:  objQuery.objSort },
-    { $limit: objQuery.skip + objQuery.limitNumber},
-    { $skip:  objQuery.skip }
+    { $limit: objQuery.skip + objQuery.limitNumber}
     ])
       .exec();
   }
@@ -173,8 +172,7 @@ export class FriendRepository implements CRUDRepository<FriendEntity, string, Fr
     },
     { $unset: 'result' },
     { $sort:  objQuery.objSort },
-    { $limit: objQuery.skip + objQuery.limitNumber},
-    { $skip:  objQuery.skip }
+    { $limit: objQuery.skip + objQuery.limitNumber}
     ])
       .exec();
   }

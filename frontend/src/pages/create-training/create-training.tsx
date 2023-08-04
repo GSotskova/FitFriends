@@ -1,10 +1,11 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import Header from '../../components/header/header';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { postTraining } from '../../store/api-actions';
 import { LEVEL_TRAIN_ARR, LevelTraining, TRAINING_ARR, TRAINING_TIME, TrainingTime, TrainingType } from '../../types/questionnaire';
 import { USER_SEX_ARR, UserSex } from '../../types/user';
 import { DescriptionLn } from '../../constants';
+import { getIsLoadingPostTraining, getErrorPost } from '../../store/trainings-data/selectors';
 
 enum FormFieldName {
   nameTraining ='nameTraining',
@@ -19,8 +20,10 @@ enum FormFieldName {
 }
 
 function CreateTrainingPage(): JSX.Element {
-
   const dispatch = useAppDispatch();
+  const isLoadingPost = useAppSelector(getIsLoadingPostTraining);
+  const hasErrorPost = useAppSelector(getErrorPost);
+
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -329,7 +332,9 @@ function CreateTrainingPage(): JSX.Element {
                         </div>
                       </div>
                     </div>
-                    <button className="btn create-training__button" type="submit">Опубликовать</button>
+                    <button className="btn create-training__button" type="submit" disabled={isLoadingPost || hasErrorPost}>
+                      {isLoadingPost ? 'Отправка...' : 'Опубликовать'}
+                    </button>
                   </div>
                 </form>
               </div>

@@ -151,6 +151,19 @@ public async showList(@Req() req: Request, @Query() query: UsersQuery, @Body() b
   return users;
 }
 
+@UseGuards(CheckAuthGuard)
+@UseInterceptors(RoleUserInterceptor)
+@UseInterceptors(UseridInterceptor)
+@Get('/get/count')
+public async countUsers(@Req() req: Request, @Body() body) {
+  const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}`,  {
+    headers: {
+      'Authorization': req.headers['authorization']
+    }
+  });
+  const users = data.filter((el)=>el.id!==body.userId)
+  return users.length;
+}
 
 @UseGuards(CheckAuthGuard)
 @UseInterceptors(UseridInterceptor)

@@ -99,8 +99,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
     },
       { $unset: 'result' },
       { $sort:  objQuery.objSort },
-      { $limit: objQuery.limitNumber},
-      { $skip:  objQuery.skip }
+      { $limit: objQuery.limitNumber}
      ])
     .exec();
   }
@@ -173,8 +172,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
       { $unset: 'result' },
       { $match: objQuery.objFiltr},
       { $sort:  objQuery.objSort },
-      { $limit: objQuery.limitNumber},
-      { $skip:  objQuery.skip }
+      { $limit: objQuery.limitNumber}
      ])
     .exec();
   }

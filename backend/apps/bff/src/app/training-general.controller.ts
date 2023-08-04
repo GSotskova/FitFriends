@@ -25,6 +25,14 @@ export class TrainingGeneralController {
    return data;
   }
 
+
+  @UseGuards(CheckAuthGuard)
+  @Get('count')
+  public async countTraining() {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Training}/show/catalog`);
+   return data.length;
+  }
+
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(RoleUserInterceptor)
   @UseInterceptors(UseridInterceptor)

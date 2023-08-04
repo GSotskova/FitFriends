@@ -85,3 +85,5 @@ export const SHOW_TRAINING_TYPE = 5;
 export const RATING_TRAINING_ARR = [1,2,3,4,5];
 export const COUNT_ORDER_DEFAULT = 5;
 export const DEFAULT_RATING = 5;
+export const DEFAULT_LIMIT = 6;
+export const ORDERS_LIMIT = 4;

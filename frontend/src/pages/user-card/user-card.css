@@ -11,3 +11,8 @@
 .conteiner-user_order {
   order: 1;
 }
+
+.user-card-coach__training-form
+ {
+  order:2;
+ }

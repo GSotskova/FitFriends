@@ -49,6 +49,16 @@ export class CoachAccountController {
 
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(RoleCoachInterceptor)
+  @UseInterceptors(CoachIdInterceptor)
+  @Get('training/show/count')
+  public async countTraining(@Body() coachId: string) {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Training}/show/list`, {data: coachId});
+     return data.length;
+  }
+
+
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(RoleCoachInterceptor)
   @UseInterceptors(UseridTrainingInterceptor)
   @Post('training/edit/:id')
   public async update(@Body() dto: EditTrainingDTO, @Param('id', MongoidValidationPipe) id: string) {
@@ -86,9 +96,31 @@ export class CoachAccountController {
   @UseInterceptors(CoachIdInterceptor)
   @Get('orders')
   public async showOrders(@Body() coachId: string, @Query() query: TrainingOrdersQuery) {
-    console.log(query);
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Orders}/show/list`, {params : query, data: coachId});
    return data;
+  }
+
+
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(RoleCoachInterceptor)
+  @UseInterceptors(CoachIdInterceptor)
+  @Get('orders/count')
+  public async countOrders(@Body() coachId: string) {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Orders}/show/list`, { data: coachId});
+   return data.length;
+  }
+
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(CoachIdInterceptor)
+  @Get('friends/count')
+  public async countFriends(@Req() req: Request) {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Friends}/coach`, {
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    });
+
+   return data.length;
   }
 
   @UseGuards(CheckAuthGuard)

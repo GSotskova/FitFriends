@@ -12,7 +12,8 @@ import { useNavigate } from 'react-router-dom';
 import { getUsers } from '../../store/user-process/selectors';
 import UserItem from '../../components/user-item/user-item';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { fetchCatalogTrainings, fetchCoachTraining, fetchComments, fetchUserCatalog, fetchUserOrder } from '../../store/api-actions';
+import { fetchCatalogTrainings, fetchCoachTraining, fetchComments, fetchCountTrainings, fetchCountUsers, fetchUserCatalog, fetchUserOrder } from '../../store/api-actions';
+import { UserRole } from '../../types/user';
 
 const responsive = {
   desktop: {
@@ -85,7 +86,7 @@ const ButtonGroupPopular = ({next, previous, routeChangeTraining}: Prop ) => (
     <button
       className="btn-flat popular-trainings__button"
       type="button"
-      onClick={routeChangeTraining}
+      onClick={()=>routeChangeTraining?.()}
     ><span>Смотреть все</span>
       <svg width="14" height="10" aria-hidden="true">
         <use xlinkHref="#arrow-right"></use>
@@ -164,6 +165,7 @@ function MainPage() {
 
   const navigate = useNavigate();
   const routeChangeUsers = () =>{
+    dispatch(fetchCountUsers());
     dispatch(fetchUserCatalog());
     const path = AppRoute.Users;
     navigate(path);
@@ -171,6 +173,7 @@ function MainPage() {
 
 
   const routeChangeTraining = () =>{
+    dispatch(fetchCountTrainings(UserRole.User));
     dispatch(fetchCatalogTrainings());
     const path = `${AppRoute.Training}/catalog`;
     navigate(path);

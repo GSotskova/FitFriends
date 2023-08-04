@@ -27,16 +27,19 @@ export const Action = {
   FETCH_USER_OTHER: 'user/fetchUserOther',
   FETCH_USER: 'user/fetchUser',
   FETCH_USER_CATALOG: 'user/fetchUserCatalog',
+  FETCH_COUNT_USERS: 'user/fetchCountUsers',
   FETCH_COACH_TRAININGS: 'training/fetchCoachTrainings',
   FETCH_COACH_OTHER_TRAININGS: 'training/fetchCoachOtherTrainings',
   FETCH_COACH_TRAINING:  'training/fetchCoachTraining',
   POST_TRAINING:  'training/postTraining',
   EDIT_TRAINING:  'training/editTraining',
   FETCH_COACH_FRIENDS:  'coach/fetchCoachFriends',
+  FETCH_COUNT_USER_FRIENDS:  'friends/fetchCountFriends',
   FETCH_USER_FRIENDS:  'user/fetchUserFriends',
   DELETE_USER_FRIEND:  'user/deleteFriend',
   DELETE_COACH_FRIEND:  'coach/deleteCoachFriend',
   POST_FRIEND:  'user/postFriend',
+  FETCH_COUNT_ORDERS:  'order/fetchCountOrders',
   FETCH_COACH_ORDERS:  'coach/fetchCoachOrders',
   FETCH_USER_ORDERS:  'user/fetchUserOrders',
   FETCH_USER_ORDER:  'user/fetchUserOrder',
@@ -47,6 +50,7 @@ export const Action = {
   REJECT_REQUEST:  'coach/deleteRequest',
   FETCH_USER_TRAININGS: 'training/fetchUserTrainings',
   FETCH_CATALOG_TRAININGS: 'training/fetchCatalogTrainings',
+  FETCH_COUNT_TRAININGS: 'training/fetchCountTrainings',
   FETCH_COMMENTS: 'comment/fetchComments',
   POST_COMMENT:  'comment/postComment',
   CREATE_SUBSCRIBE:  'user/createSubscribe',
@@ -252,6 +256,22 @@ export const fetchUser = createAsyncThunk<UserFullInfo, undefined, {
         }
       });
 
+export const fetchCountUsers = createAsyncThunk<number, undefined, {
+        dispatch: AppDispatch;
+        state: State;
+        extra: AxiosInstance; }>(
+          Action.FETCH_COUNT_USERS,
+          async (_arg, {dispatch, extra: api}) => {
+            try {
+              const {data} = await api.get<number>(`${APIRoute.Users}/get/count`);
+              return data;
+
+            } catch (error) {
+
+              return Promise.reject(error);
+            }
+          });
+
 export const fetchUserCatalog = createAsyncThunk<UserFullInfo[], Query | undefined, {
     dispatch: AppDispatch;
     state: State;
@@ -259,11 +279,13 @@ export const fetchUserCatalog = createAsyncThunk<UserFullInfo[], Query | undefin
       Action.FETCH_USER_CATALOG,
       async (query, {dispatch, extra: api}) => {
         try {
+          const limit = query && query.limit ? `limit=${query.limit}&` : '';
+          const page = query && query.page ? `page=${query.page}&` : '';
           const userRoleQuery = query && query.userRole ? `userRole=${query.userRole}&` : '';
           const locationQuery = query && query.location ? `location=${query.location.join(',')}&` : '';
           const levelTrainingQuery = query && query.levelTraining ? `levelTraining=${query.levelTraining}&` : '';
           const trainingTypeQuery = query && query.trainingType ? `trainingType=${query.trainingType.join(',').trim()}` : '';
-          const {data} = await api.get<UserFullInfo[]>(`${APIRoute.Users}?${userRoleQuery}${levelTrainingQuery}${locationQuery}${trainingTypeQuery}`);
+          const {data} = await api.get<UserFullInfo[]>(`${APIRoute.Users}?${limit}${page}${userRoleQuery}${levelTrainingQuery}${locationQuery}${trainingTypeQuery}`);
           return data;
 
         } catch (error) {
@@ -280,12 +302,15 @@ export const fetchCoachTrainings = createAsyncThunk<Training[], Query | undefine
           async (query, {dispatch, extra: api}) => {
             try {
               console.log('fetchCoachTrainings');
+              const limit = query && query.limit ? `limit=${query.limit}&` : '';
+              const page = query && query.page ? `page=${query.page}&` : '';
               const priceQuery = query && query.price ? `price=${query.price[0]},${query.price[1]}` : '';
               const caloriesQuery = query && query.caloriesReset ? `&caloriesReset=${query.caloriesReset[0]},${query.caloriesReset[1]}` : '';
               const trainingTimeQuery = query && query.trainingTime ? `&trainingTime=${query.trainingTime.join(',').trim()}` : '';
               const rating = query && query.rating ? `&rating=${query.rating[0]},${query.rating[1]}` : '';
 
-              const {data} = await api.get<Training[]>(`${APIRoute.CoachTraining}/show/list?${priceQuery}${caloriesQuery}${trainingTimeQuery}${rating}`);
+              const {data} = await api.get<Training[]>(
+                `${APIRoute.CoachTraining}/show/list?${limit}${page}${priceQuery}${caloriesQuery}${trainingTimeQuery}${rating}`);
               return data;
             } catch (error) {
               return Promise.reject(error);
@@ -382,29 +407,51 @@ export const editTraining = createAsyncThunk<Training, Training, {
              return data;
            });
 
-export const fetchCoachFriends = createAsyncThunk<Friend[], undefined, {
+export const fetchCoachFriends = createAsyncThunk<Friend[], Query | undefined, {
             dispatch: AppDispatch;
             state: State;
             extra: AxiosInstance; }>(
               Action.FETCH_COACH_FRIENDS,
-              async (_arg, {dispatch, extra: api}) => {
+              async (query, {dispatch, extra: api}) => {
                 try {
-                  const {data} = await api.get<Friend[]>(`${APIRoute.Coach}/friends/show`);
+                  const limit = query && query.limit ? `limit=${query.limit}&` : '';
+                  const page = query && query.page ? `page=${query.page}&` : '';
+                  const {data} = await api.get<Friend[]>(`${APIRoute.Coach}/friends/show?${limit}${page}`);
                   return data;
                 } catch (error) {
                   return Promise.reject(error);
                 }
               });
 
+export const fetchCountFriends = createAsyncThunk<number, UserRole, {
+                dispatch: AppDispatch;
+                state: State;
+                extra: AxiosInstance; }>(
+                  Action.FETCH_COUNT_USER_FRIENDS,
+                  async (role, {dispatch, extra: api}) => {
+                    try {
+                      if (role === UserRole.User) {
+                        const {data} = await api.get<number>(`${APIRoute.User}/friends/count`);
+                        return data;
+                      }
+                      const {data} = await api.get<number>(`${APIRoute.Coach}/friends/count`);
+                      return data;
 
-export const fetchUserFriends = createAsyncThunk<Friend[], undefined, {
+                    } catch (error) {
+                      return Promise.reject(error);
+                    }
+                  });
+
+export const fetchUserFriends = createAsyncThunk<Friend[], Query | undefined, {
                 dispatch: AppDispatch;
                 state: State;
                 extra: AxiosInstance; }>(
                   Action.FETCH_USER_FRIENDS,
-                  async (_arg, {dispatch, extra: api}) => {
+                  async (query, {dispatch, extra: api}) => {
                     try {
-                      const {data} = await api.get<Friend[]>(`${APIRoute.User}/friends/show`);
+                      const limit = query && query.limit ? `limit=${query.limit}&` : '';
+                      const page = query && query.page ? `page=${query.page}&` : '';
+                      const {data} = await api.get<Friend[]>(`${APIRoute.User}/friends/show${limit}${page}`);
                       return data;
                     } catch (error) {
                       return Promise.reject(error);
@@ -452,6 +499,25 @@ export const postFriend = createAsyncThunk<Friend, UserFullInfo['id'], {
                   }
                 });
 
+export const fetchCountOrders = createAsyncThunk<number, UserRole, {
+                  dispatch: AppDispatch;
+                  state: State;
+                  extra: AxiosInstance; }>(
+                    Action.FETCH_COUNT_ORDERS,
+                    async (role, {dispatch, extra: api}) => {
+                      try {
+                        if (role === UserRole.Coach) {
+                          const {data} = await api.get<number>(`${APIRoute.Coach}/orders/count`);
+                          return data;
+                        }
+                        const {data} = await api.get<number>(`${APIRoute.User}/orders/count`);
+                        return data;
+                      } catch (error) {
+                        return Promise.reject(error);
+                      }
+                    });
+
+
 export const fetchCoachOrders = createAsyncThunk<Order[], string | undefined, {
               dispatch: AppDispatch;
               state: State;
@@ -476,8 +542,10 @@ export const fetchUserOrders = createAsyncThunk<Order[], Query | undefined, {
                     async (query, {dispatch, extra: api}) => {
                       try {
                         console.log('fetchUserOrders');
+                        const limit = query && query.limit ? `limit=${query.limit}&` : '';
+                        const page = query && query.page ? `page=${query.page}&` : '';
                         const isDone = query && query.isDone ? `isDone=${query.isDone}` : '';
-                        const {data} = await api.get<Order[]>(`${APIRoute.User}/orders?${isDone}`);
+                        const {data} = await api.get<Order[]>(`${APIRoute.User}/orders?${limit}${page}${isDone}`);
                         return data;
                       } catch (error) {
                         return Promise.reject(error);
@@ -593,6 +661,23 @@ export const fetchUserTrainings = createAsyncThunk<Training[], UserFullInfo, {
                     return Promise.reject(error);
                   }
                 });
+export const fetchCountTrainings = createAsyncThunk<number, UserRole, {
+                  dispatch: AppDispatch;
+                  state: State;
+                  extra: AxiosInstance; }>(
+                    Action.FETCH_COUNT_TRAININGS,
+                    async (role, {dispatch, extra: api}) => {
+                      try {
+                        if (role === UserRole.User) {
+                          const {data} = await api.get<number>(`${APIRoute.Training}/count`);
+                          return data;
+                        }
+                        const {data} = await api.get<number>(`${APIRoute.CoachTraining}/show/count`);
+                        return data;
+                      } catch (error) {
+                        return Promise.reject(error);
+                      }
+                    });
 
 export const fetchCatalogTrainings = createAsyncThunk<Training[], Query | undefined, {
               dispatch: AppDispatch;
@@ -601,15 +686,17 @@ export const fetchCatalogTrainings = createAsyncThunk<Training[], Query | undefi
                 Action.FETCH_CATALOG_TRAININGS,
                 async (query, {dispatch, extra: api}) => {
                   try {
-                    console.log('fetchCatalogTrainings');
-                    const priceQuery = query && query.price ? `price=${query.price[0]},${query.price[1]}` : '';
-                    const caloriesQuery = query && query.caloriesReset ? `&caloriesReset=${query.caloriesReset[0]},${query.caloriesReset[1]}` : '';
-                    const trainingTimeQuery = query && query.trainingTime ? `&trainingTime=${query.trainingTime.join(',').trim()}` : '';
-                    const trainingTypeQuery = query && query.trainingType ? `&trainingType=${query.trainingType.join(',').trim()}` : '';
-                    const rating = query && query.rating ? `&rating=${query.rating[0]},${query.rating[1]}` : '';
-                    const sortPrice = query && query.sortPrice ? `&sortPrice=${query.sortPrice}` : '';
+                    console.log('fetchCatalogTrainings', query?.limit, query?.page);
+                    const limit = query && query.limit ? `limit=${query.limit}&` : '';
+                    const page = query && query.page ? `page=${query.page}&` : '';
+                    const priceQuery = query && query.price ? `price=${query.price[0]},${query.price[1]}&` : '';
+                    const caloriesQuery = query && query.caloriesReset ? `caloriesReset=${query.caloriesReset[0]},${query.caloriesReset[1]}&` : '';
+                    const trainingTimeQuery = query && query.trainingTime ? `trainingTime=${query.trainingTime.join(',').trim()}&` : '';
+                    const trainingTypeQuery = query && query.trainingType ? `trainingType=${query.trainingType.join(',').trim()}&` : '';
+                    const rating = query && query.rating ? `rating=${query.rating[0]},${query.rating[1]}&` : '';
+                    const sortPrice = query && query.sortPrice ? `sortPrice=${query.sortPrice}&` : '';
                     const {data} = await api.get<Training[]>(
-                      `${APIRoute.Training}/catalog?${priceQuery}${caloriesQuery}${trainingTimeQuery}${trainingTypeQuery}${rating}${sortPrice}`
+                      `${APIRoute.Training}/catalog?${limit}${page}${priceQuery}${caloriesQuery}${trainingTimeQuery}${trainingTypeQuery}${rating}${sortPrice}`
                     );
                     return data;
                   } catch (error) {
