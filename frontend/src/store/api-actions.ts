@@ -327,7 +327,7 @@ export const fetchComments = createAsyncThunk<Comment[], string, {
               Action.FETCH_COMMENTS,
               async (id, {dispatch, extra: api}) => {
                 try {
-                  const {data} = await api.get<Comment[]>(`${APIRoute.Training}/comments/${id}`);
+                  const {data} = await api.get<Comment[]>(`${APIRoute.Training}/comments/${id}?sortDate=desc`);
                   return data;
                 } catch (error) {
                   return Promise.reject(error);
@@ -342,7 +342,7 @@ export const postComment = createAsyncThunk<Comment, NewComment, {
                 async (newComment, {dispatch, extra: api}) => {
                   try {
                     const {message, ratingTraining, userId, trainingId } = newComment;
-                    const {data} = await api.post<Comment>(`${APIRoute.Training}/comments/${trainingId}`, {message, ratingTraining, userId});
+                    const {data} = await api.post<Comment>(`${APIRoute.Training}/comments/create/${trainingId}`, {message, ratingTraining, userId});
                     return data;
                   } catch (error) {
                     return Promise.reject(error);

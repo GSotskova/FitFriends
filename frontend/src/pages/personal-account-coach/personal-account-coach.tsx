@@ -1,86 +1,14 @@
 import { Link } from 'react-router-dom';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
 import UserInfo from '../../components/user-info/user-info';
 import Header from '../../components/header/header';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppSelector } from '../../hooks';
 import { getUserFullInfo } from '../../store/user-process/selectors';
 import { AppRoute } from '../../constants';
-import './personal-account-coach.css';
-import CertificateItem from '../../components/certificate-item/certificate-item';
-import { ChangeEvent, useRef } from 'react';
-import { postCertificate } from '../../store/api-actions';
-import { FileType } from '../../types/user';
+import CertificateSlider from '../../components/certificates-slider/certificates-slider';
 
 
-const responsive = {
-  desktop: {
-    breakpoint: {
-      max: 3000,
-      min: 1024
-    },
-    items: 3,
-  },
-  mobile: {
-    breakpoint: {
-      max: 464,
-      min: 0
-    },
-    items: 1,
-    partialVisibilityGutter: 30
-  },
-  tablet: {
-    breakpoint: {
-      max: 1024,
-      min: 464
-    },
-    items: 2,
-    partialVisibilityGutter: 30
-  }
-};
-
-type Prop ={
-  next?: () => void;
-  previous?: () => void;
-}
-const ButtonGroup = ({next, previous}: Prop ) => (
-
-  <div className="personal-account-coach__controls">
-    <button
-      className="btn-icon personal-account-coach__control"
-      type="button"
-      aria-label="previous"
-      onClick={() => previous?.()}
-    >
-      <svg width="16" height="14" aria-hidden="true">
-        <use xlinkHref="#arrow-left"></use>
-      </svg>
-    </button>
-    <button
-      className="btn-icon personal-account-coach__control"
-      type="button"
-      aria-label="next"
-      onClick={() => next?.()}
-    >
-      <svg width="16" height="14" aria-hidden="true">
-        <use xlinkHref="#arrow-right"></use>
-      </svg>
-    </button>
-  </div>
-
-
-);
 function AccountCoachPage(): JSX.Element {
-  const dispatch = useAppDispatch();
   const coachInfo = useAppSelector(getUserFullInfo);
-
-  const handlePDFUpload = (evt: ChangeEvent<HTMLInputElement>) => {
-    if (!evt.target.files) {
-      return;
-    }
-    dispatch(postCertificate({fileCertificate: evt.target.files[0]} as FileType));
-  };
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   return (
     <div className="wrapper">
@@ -150,44 +78,7 @@ function AccountCoachPage(): JSX.Element {
                       </div>
                     </div>
                   </div>
-                  <div className="personal-account-coach__additional-info conteiner-revers">
-                    <div className="personal-account-coach__label-wrapper">
-                      <h2 className="personal-account-coach__label">Дипломы и сертификаты</h2>
-                      <label className="btn-flat btn-flat--underlined personal-account-coach__button">
-                        <svg width="14" height="14" aria-hidden="true">
-                          <use xlinkHref="#icon-import"></use>
-                        </svg><span>Загрузить</span>
-                        <input
-                          className="visually-hidden"
-                          type="file"
-                          name="import"
-                          accept=".pdf"
-                          ref={inputRef}
-                          required
-                          onChange={handlePDFUpload}
-                        />
-                      </label>
-                    </div>
-                    <Carousel
-                      responsive={responsive}
-                      arrows={false}
-                      containerClass="container conteiner_order"
-                      focusOnSelect
-                      pauseOnHover
-                      showDots
-                      slidesToSlide={1}
-                      renderButtonGroupOutside
-                      customButtonGroup={
-                        <ButtonGroup />
-                      }
-                    >
-                      {
-                        coachInfo.certificatesPath.map((el)=>
-                          <CertificateItem certificatePath={el.certificatePath} certificateId={el.certificateId} key={el.certificateId}/>
-                        )
-                      }
-                    </Carousel>
-                  </div>
+                  <CertificateSlider coachInfo={coachInfo}/>
                 </div>
               </div>
             </div>

@@ -71,9 +71,17 @@ export const enum DescriptionLn {
   MaxLength = 140
 }
 
+export const enum CommentLn {
+  MinLength = 100,
+  MaxLength = 1024
+}
+
 export const MAX_CALORIES_VALUE = 5000;
 export const COUNT_TRAINING_FOR_YOU = 9;
 export const COUNT_TRAINING_SPECIAL = 3;
 export const COUNT_USERS_READY = 8;
 export const SHOW_TRAINING_TYPE = 5;
 
+export const RATING_TRAINING_ARR = [1,2,3,4,5];
+export const COUNT_ORDER_DEFAULT = 5;
+export const DEFAULT_RATING = 5;

@@ -66,7 +66,7 @@ export class TrainingOrdersModel extends Document implements Order  {
   })
   public isDone: boolean;
 
-  @Prop({default: now()})
+  @Prop({default: now})
   public createdAt: Date;
 }
 

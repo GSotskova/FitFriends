@@ -7,7 +7,7 @@ const initialState: CommentData = {
   comments: [],
   isCommentsDataLoading: false,
   hasError: false,
-  hasErrorPost: false
+  hasErrorPostComment: false
 };
 
 
@@ -29,12 +29,15 @@ export const commentsData = createSlice({
         state.isCommentsDataLoading = false;
         state.hasError = true;
       })
+      .addCase(postComment.pending, (state, action) => {
+        state.hasErrorPostComment = false;
+      })
       .addCase(postComment.fulfilled, (state, action) => {
         state.comments.push(action.payload);
-        state.hasErrorPost = false;
+        state.hasErrorPostComment = false;
       })
       .addCase(postComment.rejected, (state) => {
-        state.hasErrorPost = true;
+        state.hasErrorPostComment = true;
       });
   }
 });

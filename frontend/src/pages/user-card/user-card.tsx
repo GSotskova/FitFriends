@@ -16,6 +16,8 @@ import { TypeRequest } from '../../types/training';
 import { getSignSubscrLoadDelete, getSignSubscrLoadPost } from '../../store/subscribe-data/selectors';
 import { getSignLoadPost } from '../../store/request-data/selectors';
 import { getSignFriendLoadDelete, getSignFriendLoadPost } from '../../store/friends-data/selectors';
+import PopupWindow from '../../components/popup-window/popup-window';
+import PopupCertificates from '../../components/popup-certificates/popup-certificates';
 
 
 const responsive = {
@@ -37,6 +39,7 @@ function UserCardPage() {
   const currentIsCoach = user.role === UserRole.Coach;
 
   const userOther = useAppSelector(getUserOther);
+  console.log(userOther)
   const isUserOtherLoading = useAppSelector(getSignUserOtherLoading);
   const isCoach = userOther && userOther.role === UserRole.Coach;
   const coachTrainings = useAppSelector(getCoachTrainings);
@@ -109,20 +112,28 @@ function UserCardPage() {
     previous?: () => void;
   }
   const ButtonGroup = ({next, previous}: Prop ) => (
-    <div className="user-card-coach__training-bts">
-      <button className="btn-icon user-card-coach__training-btn" type="button" aria-label="back" onClick={() => previous?.()}>
-        <svg width="14" height="10" aria-hidden="true">
-          <use xlinkHref="#arrow-left"></use>
-        </svg>
-      </button>
-      <button className="btn-icon user-card-coach__training-btn" type="button" aria-label="next" onClick={() => next?.()}>
-        <svg width="14" height="10" aria-hidden="true">
-          <use xlinkHref="#arrow-right"></use>
-        </svg>
-      </button>
+    <div className="user-card-coach__training-head">
+      <h2 className="user-card-coach__training-title">Тренировки</h2>
+
+      <div className="user-card-coach__training-bts">
+        <button className="btn-icon user-card-coach__training-btn" type="button" aria-label="back" onClick={() => previous?.()}>
+          <svg width="14" height="10" aria-hidden="true">
+            <use xlinkHref="#arrow-left"></use>
+          </svg>
+        </button>
+        <button className="btn-icon user-card-coach__training-btn" type="button" aria-label="next" onClick={() => next?.()}>
+          <svg width="14" height="10" aria-hidden="true">
+            <use xlinkHref="#arrow-right"></use>
+          </svg>
+        </button>
+      </div>
     </div>
   );
 
+  const [showModal, setShowModal] = useState(false);
+  const togglePopup = () => {
+    setShowModal(!showModal);
+  };
   if (!userOther) {
     return null;
   }
@@ -179,11 +190,15 @@ function UserCardPage() {
                           {userOther.description}
                         </div>
                         {isCoach &&
-                        <button className="btn-flat user-card-coach__sertificate" type="button">
+                        <button className="btn-flat user-card-coach__sertificate" type="button" onClick={togglePopup}>
                           <svg width="12" height="13" aria-hidden="true">
                             <use xlinkHref="#icon-teacher"></use>
                           </svg><span>Посмотреть сертификаты</span>
                         </button>}
+                        {isCoach && showModal &&
+                          <PopupWindow handleClose={togglePopup}>
+                            <PopupCertificates coachInfo={userOther} handleClose={togglePopup} />
+                          </PopupWindow>}
                         <ul className="user-card-coach__hashtag-list">
                           {userOther.trainingType.map((el)=> (
                             <li className="user-card-coach__hashtag-item" key={el}>
@@ -214,10 +229,6 @@ function UserCardPage() {
                     </div>
                     {isCoach &&
                     <div className="user-card-coach__training conteiner-user-revers">
-                      <div className="user-card-coach__training-head">
-                        <h2 className="user-card-coach__training-title">Тренировки</h2>
-                      </div>
-
                       {coachTrainings.length !== 0 &&
                         (
                           <Carousel

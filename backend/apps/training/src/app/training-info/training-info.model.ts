@@ -76,7 +76,7 @@ export class TrainingModel extends Document implements Training {
   })
   public isSpecialOffer: boolean;
 
-  @Prop({default: now()})
+  @Prop({default: now})
   public createdAt: Date;
 }
 
