@@ -34,8 +34,8 @@ export class UserInfoController {
     description: 'Show list users'
   })
   @Get('')
-  public async showList(@Query() query: UsersQuery) {
-    const existPost = await this.userService.getUsers(query);
+  public async showList(@Query() query: UsersQuery, @Body() body) {
+    const existPost = await this.userService.getUsers(query, body.userId);
     return fillObject(UserInfoRdo, existPost);
   }
 
@@ -142,10 +142,8 @@ export class UserInfoController {
     queue: RabbitQueue.Request,
   })
   public async trainingRequestNotify(@Body() request: TrainingRequest) {
-
-  const requestType =
-      request.typeRequest === TypeRequest.Personal
-      ? NotifyMessage.Personal
+  const requestType = request.typeRequest === TypeRequest.Personal
+      ? `Запрос на персональную тренировку от пользователя ${request.statusRequest}` as NotifyMessage
       : NotifyMessage.Training
 
       const newNotify =  this.notifyUserService.create(request.initiatorId, request.userId, requestType)

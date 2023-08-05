@@ -5,7 +5,9 @@ import {editTraining, fetchCoachTrainings, postTraining, fetchCoachTraining, fet
 
 const initialState: TrainingData = {
   trainings: [],
-  countAllTrainings: 0,
+  countAllTrainings: {
+    totalTrainings: 0,
+    maxPrice: 0},
   isLoadingCountAllTrainings: false,
   userTrainings: [],
   coachTrainings: [],

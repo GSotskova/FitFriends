@@ -1,21 +1,23 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import Header from '../../components/header/header';
-import { getFriends, getCountFiends } from '../../store/friends-data/selectors';
-import { AppRoute, DEFAULT_LIMIT } from '../../constants';
+import { getFriends, getCountFiends, getFriendsDataLoadingStatus } from '../../store/friends-data/selectors';
+import { DEFAULT_LIMIT } from '../../constants';
 import FriendItem from '../../components/friend-item/friend-item';
 import { UserRole } from '../../types/user';
 import useScrollToUp from '../../hooks/use-scroll-to-up/use-scroll-to-up';
 import { useEffect, useState } from 'react';
 import { Query } from '../../types/training';
 import { fetchCoachFriends } from '../../store/api-actions';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 
 function FriendsListPage(): JSX.Element {
   useScrollToUp();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const friends = useAppSelector(getFriends);
-
+  const isFriendsDataLoading = useAppSelector(getFriendsDataLoadingStatus);
   const totalFriends = useAppSelector(getCountFiends);
   const totalPage = Math.ceil(totalFriends / DEFAULT_LIMIT);
 
@@ -30,13 +32,10 @@ function FriendsListPage(): JSX.Element {
       behavior: 'smooth'
     });
   };
+  if (isFriendsDataLoading) {
+    <LoadingScreen/>;
+  }
 
-
-  const navigate = useNavigate();
-  const routeChange = () =>{
-    const path = AppRoute.AccountCoach;
-    navigate(path);
-  };
   return (
     <div className="wrapper">
       <Header />
@@ -47,7 +46,7 @@ function FriendsListPage(): JSX.Element {
               <button
                 className="btn-flat friends-list__back"
                 type="button"
-                onClick={routeChange}
+                onClick={() => navigate(-1)}
               >
                 <svg width="14" height="10" aria-hidden="true">
                   <use xlinkHref="#arrow-left"></use>

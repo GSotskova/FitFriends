@@ -218,8 +218,8 @@ const UserInfo = ({user}: Props): JSX.Element => {
                   name="description"
                   disabled={!isEditForm}
                   onChange={handleInfoChange}
+                  value={currentInfo.description}
                 >
-                  {currentInfo.description}
                 </textarea>
                 {isNotCorrectLength &&
                           <span className="custom-textarea__error">Минимальная длина 10 символ. Максимальная длина 140 символов</span>}

@@ -1,7 +1,6 @@
 import Header from '../../components/header/header';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { StatusRequest, UserRole } from '../../types/user';
-import { AppRoute } from '../../constants';
 import { getSignUserLoading, getSignUserOtherLoading, getUserFullInfo, getUserOther } from '../../store/user-process/selectors';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import LoadingScreen from '../loading-screen/loading-screen';
@@ -34,6 +33,7 @@ const responsive = {
 
 function UserCardPage() {
   const params = useParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(getUserFullInfo);
   const isUserLoading = useAppSelector(getSignUserLoading);
@@ -60,13 +60,6 @@ function UserCardPage() {
       setSubscribe(userOther?.isSubscribe);
     }
   }, [dispatch, params.id, userOther?.isSubscribe]);
-
-
-  const navigate = useNavigate();
-  const routeChange = () =>{
-    const path = `${AppRoute.Main}`;
-    navigate(path);
-  };
 
   const handleDeleteFriend = () => {
     if(params.id) {
@@ -153,7 +146,7 @@ function UserCardPage() {
         <div className="inner-page inner-page--no-sidebar">
           <div className="container">
             <div className="inner-page__wrapper">
-              <button className="btn-flat inner-page__back" type="button" onClick={routeChange}>
+              <button className="btn-flat inner-page__back" type="button" onClick={() => navigate(-1)}>
                 <svg width="14" height="10" aria-hidden="true">
                   <use xlinkHref="#arrow-left"></use>
                 </svg><span>Назад</span>

@@ -3,7 +3,7 @@ import {AxiosError, AxiosInstance} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state';
 import {AuthData} from '../types/auth-data';
-import {APIRoute, AppRoute, HttpCode, MAX_CALORIES_VALUE} from '../constants';
+import {APIRoute, AppRoute, DEFAULT_LIMIT, HttpCode, MAX_CALORIES_VALUE, ORDERS_LIMIT} from '../constants';
 import {saveToken, dropToken} from '../services/token';
 import {redirectToRoute} from './action';
 import { User, UserGeneral, FileType, UserFullInfo, UserRole, UserEdit, Friend } from '../types/user';
@@ -11,7 +11,7 @@ import { QuestionnaireCoach, QuestionnaireUser } from '../types/questionnaire';
 import { adaptAvatarToServer, adaptCertificateToServer, adaptCoachToServer, adaptUserEditToServer, adaptUserToServer, adaptVideoToServer } from '../utils/adapters/adaptersToServer';
 import { adaptUserToClient } from '../utils/adapters/adaptersToClient';
 import { setAuthInfo, setUserFullInfo } from './user-process/user-process';
-import { Comment, NewComment, NewTraining, Query, StatusRequest, Training, TrainingRequest } from '../types/training';
+import { Comment, NewComment, NewTraining, Query, StatusRequest, TotalTrainInfo, Training, TrainingRequest } from '../types/training';
 import { NewOrder, Order } from '../types/order';
 import { Notify } from '../types/notify';
 
@@ -69,8 +69,6 @@ export const checkAuthAction = createAsyncThunk<User, undefined, {
   async (_arg, {dispatch, extra: api}) => {
     try {
       const {data} = await api.get<User>(APIRoute.CheckUser);
-      // eslint-disable-next-line no-console
-      console.log('checkAuthAction', data);
       dispatch(setAuthInfo({authInfo: data}));
 
       return data;
@@ -107,8 +105,6 @@ export const loginUser = createAsyncThunk<UserFullInfo | null, AuthData, {
     }
     else
     {
-      // eslint-disable-next-line no-console
-      console.log('loginUser', data.role);
       dispatch(redirectToRoute(AppRoute.Main));
     }
     return adaptUserToClient(data);
@@ -219,7 +215,6 @@ export const editUser = createAsyncThunk<UserFullInfo, UserEdit & FileType, {
    }>(
      Action.EDIT_USER,
      async (updUser: UserEdit & FileType, { dispatch, extra: api }) => {
-       console.log('updUser', updUser);
        const { data } = await api.post<UserFullInfo>(`${APIRoute.Users}/edit`, adaptUserEditToServer(updUser));
        if (data && updUser.avatarImg?.name) {
          const postAvatarApiRoute = `${APIRoute.Files}/avatar`;
@@ -247,8 +242,6 @@ export const fetchUser = createAsyncThunk<UserFullInfo, undefined, {
     extra: AxiosInstance; }>(
       Action.FETCH_USER,
       async (id, {dispatch, extra: api}) => {
-        // eslint-disable-next-line no-console
-        console.log('fetchUser');
         try {
           const {data} = await api.get<UserFullInfo>(APIRoute.CheckUser);
           return adaptUserToClient(data);
@@ -282,8 +275,8 @@ export const fetchUserCatalog = createAsyncThunk<UserFullInfo[], Query | undefin
       Action.FETCH_USER_CATALOG,
       async (query, {dispatch, extra: api}) => {
         try {
-          const limit = query && query.limit ? `limit=${query.limit}&` : '';
-          const page = query && query.page ? `page=${query.page}&` : '';
+          const limit = query && query.limit ? `limit=${query.limit}&` : `limit=${DEFAULT_LIMIT}&`;
+          const page = query && query.page ? `page=${query.page}&` : 'page=1&';
           const userRoleQuery = query && query.userRole ? `userRole=${query.userRole}&` : '';
           const locationQuery = query && query.location ? `location=${query.location.join(',')}&` : '';
           const levelTrainingQuery = query && query.levelTraining ? `levelTraining=${query.levelTraining}&` : '';
@@ -304,13 +297,12 @@ export const fetchCoachTrainings = createAsyncThunk<Training[], Query | undefine
           Action.FETCH_COACH_TRAININGS,
           async (query, {dispatch, extra: api}) => {
             try {
-              console.log('fetchCoachTrainings');
-              const limit = query && query.limit ? `limit=${query.limit}&` : '';
-              const page = query && query.page ? `page=${query.page}&` : '';
-              const priceQuery = query && query.price ? `price=${query.price[0]},${query.price[1]}` : '';
-              const caloriesQuery = query && query.caloriesReset ? `&caloriesReset=${query.caloriesReset[0]},${query.caloriesReset[1]}` : '';
-              const trainingTimeQuery = query && query.trainingTime ? `&trainingTime=${query.trainingTime.join(',').trim()}` : '';
-              const rating = query && query.rating ? `&rating=${query.rating[0]},${query.rating[1]}` : '';
+              const limit = query && query.limit ? `limit=${query.limit}&` : `limit=${DEFAULT_LIMIT}&`;
+              const page = query && query.page ? `page=${query.page}&` : 'page=1&';
+              const priceQuery = query && query.price ? `price=${query.price[0]},${query.price[1]}&` : '';
+              const caloriesQuery = query && query.caloriesReset ? `caloriesReset=${query.caloriesReset[0]},${query.caloriesReset[1]}&` : '';
+              const trainingTimeQuery = query && query.trainingTime ? `trainingTime=${query.trainingTime.join(',').trim()}&` : '';
+              const rating = query && query.rating ? `rating=${query.rating[0]},${query.rating[1]}&` : '';
 
               const {data} = await api.get<Training[]>(
                 `${APIRoute.CoachTraining}/show/list?${limit}${page}${priceQuery}${caloriesQuery}${trainingTimeQuery}${rating}`);
@@ -327,7 +319,7 @@ export const fetchCoachOtherTrainings = createAsyncThunk<Training[], string, {
               Action.FETCH_COACH_OTHER_TRAININGS,
               async (id, {dispatch, extra: api}) => {
                 try {
-                  const {data} = await api.get<Training[]>(`${APIRoute.Training}/coach/${id}?sortDate=desc`);
+                  const {data} = await api.get<Training[]>(`${APIRoute.Training}/coach/${id}`);
                   return data;
                 } catch (error) {
                   return Promise.reject(error);
@@ -355,7 +347,7 @@ export const fetchComments = createAsyncThunk<Comment[], string, {
               Action.FETCH_COMMENTS,
               async (id, {dispatch, extra: api}) => {
                 try {
-                  const {data} = await api.get<Comment[]>(`${APIRoute.Training}/comments/${id}?sortDate=desc`);
+                  const {data} = await api.get<Comment[]>(`${APIRoute.Training}/comments/${id}`);
                   return data;
                 } catch (error) {
                   return Promise.reject(error);
@@ -417,8 +409,8 @@ export const fetchCoachFriends = createAsyncThunk<Friend[], Query | undefined, {
               Action.FETCH_COACH_FRIENDS,
               async (query, {dispatch, extra: api}) => {
                 try {
-                  const limit = query && query.limit ? `limit=${query.limit}&` : '';
-                  const page = query && query.page ? `page=${query.page}&` : '';
+                  const limit = query && query.limit ? `limit=${query.limit}&` : `limit=${DEFAULT_LIMIT}&`;
+                  const page = query && query.page ? `page=${query.page}&` : 'page=1';
                   const {data} = await api.get<Friend[]>(`${APIRoute.Coach}/friends/show?${limit}${page}`);
                   return data;
                 } catch (error) {
@@ -452,9 +444,9 @@ export const fetchUserFriends = createAsyncThunk<Friend[], Query | undefined, {
                   Action.FETCH_USER_FRIENDS,
                   async (query, {dispatch, extra: api}) => {
                     try {
-                      const limit = query && query.limit ? `limit=${query.limit}&` : '';
-                      const page = query && query.page ? `page=${query.page}&` : '';
-                      const {data} = await api.get<Friend[]>(`${APIRoute.User}/friends/show${limit}${page}`);
+                      const limit = query && query.limit ? `limit=${query.limit}&` : `limit=${DEFAULT_LIMIT}&`;
+                      const page = query && query.page ? `page=${query.page}&` : 'page=1';
+                      const {data} = await api.get<Friend[]>(`${APIRoute.User}/friends/show?${limit}${page}`);
                       return data;
                     } catch (error) {
                       return Promise.reject(error);
@@ -528,7 +520,7 @@ export const fetchCoachOrders = createAsyncThunk<Order[], string | undefined, {
                 Action.FETCH_COACH_ORDERS,
                 async (sortData, {dispatch, extra: api}) => {
                   try {
-                    const sort = sortData ? sortData : ' ';
+                    const sort = sortData ? sortData : `limit=${ORDERS_LIMIT}&page=1`;
                     const {data} = await api.get<Order[]>(`${APIRoute.Coach}/orders?${sort}`);
                     return data;
                   } catch (error) {
@@ -544,9 +536,8 @@ export const fetchUserOrders = createAsyncThunk<Order[], Query | undefined, {
                     Action.FETCH_USER_ORDERS,
                     async (query, {dispatch, extra: api}) => {
                       try {
-                        console.log('fetchUserOrders');
-                        const limit = query && query.limit ? `limit=${query.limit}&` : '';
-                        const page = query && query.page ? `page=${query.page}&` : '';
+                        const limit = query && query.limit ? `limit=${query.limit}&` : `limit=${ORDERS_LIMIT}`;
+                        const page = query && query.page ? `page=${query.page}&` : 'page=1';
                         const isDone = query && query.isDone ? `isDone=${query.isDone}` : '';
                         const {data} = await api.get<Order[]>(`${APIRoute.User}/orders?${limit}${page}${isDone}`);
                         return data;
@@ -652,8 +643,6 @@ export const fetchUserTrainings = createAsyncThunk<Training[], UserFullInfo, {
                 Action.FETCH_USER_TRAININGS,
                 async (userFullInfo, {dispatch, extra: api}) => {
                   try {
-                    // const userFullInfo = useAppSelector(getUserFullInfo);
-                    console.log('fetchUserTrainings', userFullInfo);
                     const {trainingType, trainingTime, caloriesReset } = userFullInfo;
                     const caloriesQuery = `&caloriesReset=${caloriesReset},${MAX_CALORIES_VALUE}`;
                     const trainingTimeQuery = `&trainingTime=${trainingTime.trim()}`;
@@ -664,7 +653,7 @@ export const fetchUserTrainings = createAsyncThunk<Training[], UserFullInfo, {
                     return Promise.reject(error);
                   }
                 });
-export const fetchCountTrainings = createAsyncThunk<number, UserRole, {
+export const fetchCountTrainings = createAsyncThunk<TotalTrainInfo, UserRole, {
                   dispatch: AppDispatch;
                   state: State;
                   extra: AxiosInstance; }>(
@@ -672,10 +661,10 @@ export const fetchCountTrainings = createAsyncThunk<number, UserRole, {
                     async (role, {dispatch, extra: api}) => {
                       try {
                         if (role === UserRole.User) {
-                          const {data} = await api.get<number>(`${APIRoute.Training}/count`);
+                          const {data} = await api.get<TotalTrainInfo>(`${APIRoute.Training}/count`);
                           return data;
                         }
-                        const {data} = await api.get<number>(`${APIRoute.CoachTraining}/show/count`);
+                        const {data} = await api.get<TotalTrainInfo>(`${APIRoute.CoachTraining}/show/count`);
                         return data;
                       } catch (error) {
                         return Promise.reject(error);
@@ -689,9 +678,8 @@ export const fetchCatalogTrainings = createAsyncThunk<Training[], Query | undefi
                 Action.FETCH_CATALOG_TRAININGS,
                 async (query, {dispatch, extra: api}) => {
                   try {
-                    console.log('fetchCatalogTrainings', query?.limit, query?.page);
-                    const limit = query && query.limit ? `limit=${query.limit}&` : '';
-                    const page = query && query.page ? `page=${query.page}&` : '';
+                    const limit = query && query.limit ? `limit=${query.limit}&` : `limit=${DEFAULT_LIMIT}&`;
+                    const page = query && query.page ? `page=${query.page}&` : 'page=1&';
                     const priceQuery = query && query.price ? `price=${query.price[0]},${query.price[1]}&` : '';
                     const caloriesQuery = query && query.caloriesReset ? `caloriesReset=${query.caloriesReset[0]},${query.caloriesReset[1]}&` : '';
                     const trainingTimeQuery = query && query.trainingTime ? `trainingTime=${query.trainingTime.join(',').trim()}&` : '';

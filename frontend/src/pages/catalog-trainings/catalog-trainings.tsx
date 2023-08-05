@@ -18,8 +18,8 @@ function CatalogTrainingsPage() {
   const dispatch = useAppDispatch();
   const trainings = useAppSelector(getTrainings);
   const isTrainingsDataLoading = useAppSelector(getTrainingsDataLoadingStatus);
-  const totalTrainings = useAppSelector(getCountAllTrainings);
-  const totalPage = Math.ceil(totalTrainings / DEFAULT_LIMIT);
+  const total = useAppSelector(getCountAllTrainings);
+  const totalPage = Math.ceil(total.totalTrainings / DEFAULT_LIMIT);
   const [query, setQuery] = useState<Query>({limit: DEFAULT_LIMIT, page: 1});
   const [formValue, setValue] = useState({
     minPrice: 0, maxPrice: 10000,
@@ -28,7 +28,7 @@ function CatalogTrainingsPage() {
   });
 
   const [sliderValue, setSliderValue] = useState({
-    minPrice: 0, maxPrice: 10000,
+    minPrice: 0, maxPrice: total.maxPrice,
     minCalories: 1000, maxCalories: 5000,
     minRating: 0, maxRating: 5
   });
@@ -36,27 +36,28 @@ function CatalogTrainingsPage() {
   const handleFilterChange = (evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 
     const {value, name} = evt.target;
-    setValue({...formValue, [name]: value});
+    const valueNum = Math.max(0, Number(value));
+    setValue({...formValue, [name]: Number(valueNum)});
 
-    if (name === 'minPrice' && Number(value) <= formValue.maxPrice) {
-      setQuery({...query, price:[Number(value), formValue.maxPrice]});
+    if (name === 'minPrice' && Number(valueNum) <= formValue.maxPrice) {
+      setQuery({...query, price:[Number(valueNum), formValue.maxPrice]});
     }
-    if (name === 'maxPrice' && Number(value) >= formValue.minPrice) {
-      setQuery({...query, price:[formValue.minPrice, Number(value)]});
+    if (name === 'maxPrice' && Number(valueNum) >= formValue.minPrice) {
+      setQuery({...query, price:[formValue.minPrice, Number(valueNum)]});
     }
-    if ((name === 'maxPrice' && Number(value) === 0 && formValue.minPrice === 0)
-      || (name === 'minPrice' && Number(value) === 0 && formValue.maxPrice === 0)) {
+    if ((name === 'maxPrice' && Number(valueNum) === 0 && formValue.minPrice === 0)
+      || (name === 'minPrice' && Number(valueNum) === 0 && formValue.maxPrice === 0)) {
       setQuery({...query, price: undefined});
     }
 
-    if (name === 'minCalories' && Number(value) <= formValue.maxCalories) {
-      setQuery({...query, caloriesReset:[Number(value), formValue.minCalories]});
+    if (name === 'minCalories' && Number(valueNum) <= formValue.maxCalories) {
+      setQuery({...query, caloriesReset:[Number(valueNum), formValue.maxCalories]});
     }
-    if (name === 'maxCalories' && Number(value) >= formValue.minCalories) {
-      setQuery({...query, caloriesReset:[formValue.minCalories, Number(value)]});
+    if (name === 'maxCalories' && Number(valueNum) >= formValue.minCalories) {
+      setQuery({...query, caloriesReset:[formValue.minCalories, Number(valueNum)]});
     }
-    if ((name === 'maxCalories' && Number(value) === 0 && formValue.minCalories === 0)
-      || (name === 'minCalories' && Number(value) === 0 && formValue.maxCalories === 0)) {
+    if ((name === 'maxCalories' && Number(valueNum) === 0 && formValue.minCalories === 0)
+      || (name === 'minCalories' && Number(valueNum) === 0 && formValue.maxCalories === 0)) {
       setQuery({...query, caloriesReset: undefined});
     }
 
@@ -160,7 +161,7 @@ function CatalogTrainingsPage() {
                       <div className="filter-range">
                         <MultiRangeSlider
                           min={0}
-                          max={10000}
+                          max={total.maxPrice}
                           step={100}
                           style={{border: 'none', boxShadow: 'none', padding: '15px 10px'}}
                           ruler='false'

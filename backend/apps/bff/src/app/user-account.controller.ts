@@ -74,11 +74,15 @@ export class UserAccountController {
         }
           initiatorId = body.userId;
           const coachId = el.userId;
+
           const requestTrainingCoach  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Request}/show`,{data: {initiatorId, coachId}} );
-          if (requestTrainingCoach.data.typeRequest === TypeRequest.Personal) {
+
+          const reqTrain = requestTrainingCoach.data.length !== 0 ?
+          requestTrainingCoach.data.reduce((prev, current) => (prev.dateUpd > current.dateUpd) ? prev : current) : null;
+          if (reqTrain.typeRequest === TypeRequest.Personal) {
             el.requestPersonal = true
-            el.requestStatus = requestTraining.data.statusRequest
-            el.requestId = requestTraining.data.id
+            el.requestStatus = reqTrain.statusRequest
+            el.requestId = reqTrain.id
           }
        }));
    return data;
@@ -166,7 +170,6 @@ public async createSubscription( @Body() dto: UserSubscriptionDto) {
 @UseInterceptors(UseridInterceptor)
 @Delete('subscription/delete')
 public async deleteSubscription( @Body() dto: UserSubscriptionDto) {
-  console.log(dto)
   const { data } = await this.httpService.axiosRef.delete(`${ApplicationServiceURL.Subscription}/delete`, {data : dto});
   return data;
 }

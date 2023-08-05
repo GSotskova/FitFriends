@@ -6,6 +6,7 @@ import { LEVEL_TRAIN_ARR, LevelTraining, TRAINING_ARR, TRAINING_TIME, TrainingTi
 import { USER_SEX_ARR, UserSex } from '../../types/user';
 import { DescriptionLn } from '../../constants';
 import { getIsLoadingPostTraining, getErrorPost } from '../../store/trainings-data/selectors';
+import { genrateRandomNumber } from '../../utils/utils';
 
 enum FormFieldName {
   nameTraining ='nameTraining',
@@ -29,6 +30,7 @@ function CreateTrainingPage(): JSX.Element {
     e.preventDefault();
     const form = e.currentTarget;
     const formData = new FormData(form);
+    const randImg = genrateRandomNumber();
     const data = {
       nameTraining: String(formData.get(FormFieldName.nameTraining)),
       levelTraining: currentAria.levelTr,
@@ -40,7 +42,8 @@ function CreateTrainingPage(): JSX.Element {
       descriptionTraining: String(formData.get(FormFieldName.descriptionTraining)),
       videoTraning: String(fileVideoTraning),
       fileVideoTraning: fileVideoTraning,
-      isSpecialOffer: false
+      isSpecialOffer: false,
+      photoTraning: `img/content/thumbnails/training-${randImg}.jpg`
     };
     dispatch(postTraining(data));
   };

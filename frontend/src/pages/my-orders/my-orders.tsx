@@ -2,15 +2,17 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../components/header/header';
 import OrderItem from '../../components/order-item/order-item';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getCountOrders, getOrders } from '../../store/orders-data/selectors';
+import { getCountOrders, getOrders, getOrdersDataLoadingStatus } from '../../store/orders-data/selectors';
 import { AppRoute, ORDERS_LIMIT } from '../../constants';
 import { useEffect, useState } from 'react';
 import { fetchCoachOrders } from '../../store/api-actions';
 import { UserRole } from '../../types/user';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 function MyOrdersPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const orders = useAppSelector(getOrders);
+  const isOrdersDataLoading = useAppSelector(getOrdersDataLoadingStatus);
   const totalOrders = useAppSelector(getCountOrders);
   const totalPage = Math.ceil(totalOrders / ORDERS_LIMIT);
 
@@ -27,7 +29,7 @@ function MyOrdersPage(): JSX.Element {
     currentSortCount:'',
     iconPrice:'up',
     iconCount:'up',
-    sortStr: `limit=${ORDERS_LIMIT}&page=1`,
+    sortStr: `limit=${ORDERS_LIMIT}&page=1&sortCount=desc`,
     limit: ORDERS_LIMIT,
     page: 1
   });
@@ -37,7 +39,7 @@ function MyOrdersPage(): JSX.Element {
       ...sortData,
       nextSortPrice: sortData.nextSortPrice === 'desc' ? 'asc' : 'desc',
       currentSortPrice: sortData.nextSortPrice,
-      sortStr: `sortPrice=${sortData.nextSortPrice}${sortCount}`,
+      sortStr: `limit=${sortData.limit}&page=${sortData.page}&sortPrice=${sortData.nextSortPrice}${sortCount}`,
       iconPrice: sortData.nextSortPrice === 'desc' ? 'down' : 'up'
     });
   };
@@ -47,7 +49,7 @@ function MyOrdersPage(): JSX.Element {
       ...sortData,
       nextSortCount: sortData.nextSortCount === 'desc' ? 'asc' : 'desc',
       currentSortCount: sortData.nextSortCount,
-      sortStr: `sortCount=${sortData.nextSortCount}${sortPrice}`,
+      sortStr: `limit=${sortData.limit}&page=${sortData.page}&sortCount=${sortData.nextSortCount}${sortPrice}`,
       iconCount: sortData.nextSortCount === 'desc' ? 'down' : 'up'
     });
   };
@@ -57,8 +59,8 @@ function MyOrdersPage(): JSX.Element {
     const sortPrice = sortData.currentSortPrice ? `&sortPrice=${sortData.currentSortPrice}` : '';
     setSort({
       ...sortData,
-      sortStr: `limit=${sortData.limit}&page=${sortData.page ? sortData.page + 1 : 1}${sortPrice}${sortCount}`,
-      page: sortData.page ? sortData.page + 1 : 1
+      sortStr: `limit=${sortData.limit}&page=${sortData.page + 1}${sortPrice}${sortCount}`,
+      page: sortData.page + 1
     });
   };
 
@@ -74,6 +76,9 @@ function MyOrdersPage(): JSX.Element {
     });
   };
 
+  if (isOrdersDataLoading) {
+    <LoadingScreen/>;
+  }
   return (
 
     <div className="wrapper">

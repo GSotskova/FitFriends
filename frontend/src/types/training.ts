@@ -6,7 +6,6 @@ export type Training = {
   id: string;
   nameTraining?: string;
   photoTraning?: string;
-  photoTraningPath?: string;
   levelTraining?: LevelTraining;
   trainingType?: TrainingType;
   trainingTime?: TrainingTime;
@@ -28,7 +27,6 @@ export type Training = {
 export type NewTraining = {
   nameTraining: string;
   photoTraning?: string;
-  photoTraningPath?: string;
   levelTraining: LevelTraining;
   trainingType: TrainingType;
   trainingTime: TrainingTime;
@@ -42,6 +40,10 @@ export type NewTraining = {
   isSpecialOffer?: boolean;
 }
 
+export type TotalTrainInfo = {
+  totalTrainings: number;
+  maxPrice: number;
+}
 
 export type Query = {
   limit?: number;

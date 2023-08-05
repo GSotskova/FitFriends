@@ -78,7 +78,6 @@ export class UploaderController {
   @Post('/coach/certificate/update')
   @UseInterceptors(FileInterceptor('certificate'))
   public async updateCertificate(@Req() req: Request, @UploadedFile() file: Express.Multer.File, @Body() body) {
-    console.log(file, 'certificateId', body.certificateId)
     const formData = new FormData();
     formData.append('certificate', Buffer.from(file.buffer), {filename: file.originalname, contentType: file.mimetype});
     formData.append('certificateId', body.certificateId);

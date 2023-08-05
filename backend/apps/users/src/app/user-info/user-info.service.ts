@@ -29,12 +29,12 @@ export class UserService {
     }
 
 
-  public async getUsers(query: UsersQuery) {
-   const existUsers = await this.userRepository.findAll(query);
+  public async getUsers(query: UsersQuery, userId: string) {
+   const existUsers = await this.userRepository.findAll(query, userId);
    if (!existUsers) {
      throw new NotFoundException(USERS_NOT_FOUND);
    }
-   return this.userRepository.findAll(query);
+   return this.userRepository.findAll(query, userId);
   }
 
   public async updateById(userId: string, dto: EditUserDto) {

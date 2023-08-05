@@ -2,16 +2,18 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../components/header/header';
 import OrderItem from '../../components/order-item/order-item';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getCountOrders, getOrders } from '../../store/orders-data/selectors';
+import { getCountOrders, getOrders, getOrdersUserLoadingStatus } from '../../store/orders-data/selectors';
 import { AppRoute, ORDERS_LIMIT } from '../../constants';
 import { useEffect, useState } from 'react';
 import { fetchUserOrders } from '../../store/api-actions';
 import { UserRole } from '../../types/user';
 import { Query } from '../../types/training';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 function UserBuyPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const orders = useAppSelector(getOrders);
+  const isOrdersUserDataLoading = useAppSelector(getOrdersUserLoadingStatus);
   const totalOrders = useAppSelector(getCountOrders);
   const totalPage = Math.ceil(totalOrders / ORDERS_LIMIT);
 
@@ -41,6 +43,11 @@ function UserBuyPage(): JSX.Element {
       behavior: 'smooth'
     });
   };
+
+
+  if (isOrdersUserDataLoading) {
+    <LoadingScreen/>;
+  }
   return (
     <div className="wrapper">
       <Header />

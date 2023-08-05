@@ -15,3 +15,4 @@ export const getUsers = (state: State): UserFullInfo[] => state[NameSpace.User].
 export const getUserOther = (state: State): UserFullInfo | null => state[NameSpace.User].userOther;
 export const getSignUserOtherLoading = (state: State): boolean => state[NameSpace.User].isUserOtherLoading;
 export const getCountUsers = (state: State): number => state[NameSpace.User].countUsers;
+export const getSignUserCatalogLoading = (state: State): boolean => state[NameSpace.User].isUserCatalogLoading;

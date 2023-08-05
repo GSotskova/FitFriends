@@ -60,9 +60,7 @@ export class QuestionnaireCoachRepository implements CRUDRepository<Questionnair
     const coachInfo = await this.questionnaireCoachModel.findOne({userId: coachId}).exec();
     const existsFile = coachInfo.certificate.includes(certificateId);
     if(existsFile) {
-      console.log(coachInfo.certificate)
     const certificates = coachInfo.certificate.filter((el)=> el !== certificateId);
-    console.log(certificates)
     return this.questionnaireCoachModel
       .findOneAndUpdate({userId: coachId}, {certificate: certificates}, {new: true})
       .exec();

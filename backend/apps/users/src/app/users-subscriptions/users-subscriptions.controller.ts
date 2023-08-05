@@ -34,7 +34,6 @@ export class UsersSubscriptionsController {
   })
   @Delete('delete')
   public async delete(@Body() dto: UserSubscriptionDto) {
-    console.log('Delete subscription',dto)
     const delSubscription = await this.usersSubscriptionsService.delete(dto);
     return delSubscription
   }
@@ -46,7 +45,6 @@ export class UsersSubscriptionsController {
   })
   @Get('user/:userId')
   public async getByUserId(@Param('userId') userId: string) {
-    console.log(userId)
     const subscriptions = await this.usersSubscriptionsService.getByUserId(userId);
     return fillObject(SubscriptionRdo, subscriptions);
   }

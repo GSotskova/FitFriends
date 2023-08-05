@@ -106,7 +106,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
 
   public async findByUserId(userId: string, query: TrainingOrdersQuery): Promise<Order[]> {
     const objQuery = getTrainingOrdersQuery(query);
-    console.log(objQuery);
+
     return this.ordersModel
     .aggregate([
         {$match: { $and: [

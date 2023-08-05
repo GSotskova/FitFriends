@@ -9,7 +9,7 @@ import FakeImg from '../../components/fake-img/fake-img';
 import { AppRoute, COUNT_TRAINING_FOR_YOU, COUNT_TRAINING_SPECIAL, COUNT_USERS_READY } from '../../constants';
 import TrainingItem from '../../components/training-item/training-item';
 import { useNavigate } from 'react-router-dom';
-import { getUsers } from '../../store/user-process/selectors';
+import { getUsers, getSignUserCatalogLoading } from '../../store/user-process/selectors';
 import UserItem from '../../components/user-item/user-item';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { fetchCatalogTrainings, fetchCoachTraining, fetchComments, fetchCountTrainings, fetchCountUsers, fetchUserCatalog, fetchUserOrder } from '../../store/api-actions';
@@ -176,6 +176,7 @@ const ButtonGroupDark = ({next, previous}: Prop ) => {
 function MainPage() {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
+  const isUserCatalogLoading = useAppSelector(getSignUserCatalogLoading);
   const userTrainings = useAppSelector(getUserTrainings);
   const isTrainingsDataLoading = useAppSelector(getTrainingsDataLoadingStatus);
   const trainingsNotSort = useAppSelector(getTrainings);
@@ -191,7 +192,7 @@ function MainPage() {
     navigate(path);
   };
 
-  if (isTrainingsDataLoading) {
+  if (isTrainingsDataLoading || isUserCatalogLoading) {
     return (<LoadingScreen />);
   }
 

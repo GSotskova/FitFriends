@@ -30,7 +30,9 @@ export class TrainingGeneralController {
   @Get('count')
   public async countTraining() {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Training}/show/catalog`);
-   return data.length;
+    const prices = data.map((el) => el.price ? el.price : 0);
+    const maxPrice = prices.length !== 0 ? prices.reduce((prev, current) => (prev > current) ? prev : current) : 0;
+   return {totalTrainings: data.length, maxPrice: maxPrice};
   }
 
   @UseGuards(CheckAuthGuard)
@@ -46,7 +48,6 @@ export class TrainingGeneralController {
   @Get('/comments/:id')
   public async showCommentsByTraining(@Req() req: Request, @Param('id') id: string, @Query() query: DefaultQuery) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Comments}/${id}`, {params : query});
-    console.log(data)
 
     await Promise.all(data.map(async (el) => {
       const user = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${el.userId}`, {
@@ -68,14 +69,7 @@ export class TrainingGeneralController {
   @Get('coach/:coachId')
   public async showList(@Query() query: TrainingQuery, @Param('coachId') coachId: string) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Training}/show/coach/list/${coachId}`, {params : query});
-    await Promise.all(data.map(async (el) => {
-      if (el.photoTraning) {
-        const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${el.photoTraning}`);
-        el.photoTraningPath = path;
-        }
-       }));
-
-   return data;
+     return data;
   }
 
 }

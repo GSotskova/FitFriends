@@ -3,6 +3,7 @@ import { postComment } from '../../store/api-actions';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getErrorPost } from '../../store/comment-data/selectors';
 import { CommentLn, DEFAULT_RATING, RATING_TRAINING_ARR } from '../../constants';
+import { toast } from 'react-toastify';
 
 
 type Prop ={
@@ -62,7 +63,9 @@ const CreateComment = ({trainingId, userId, handleClose}: Prop): JSX.Element => 
     }
   },[dispatch, handleClose, isDone, isErrorPost, trainingId]
   );
-
+  if (isErrorPost) {
+    toast.warn('Сервер не доступен. Попробуйте зайти позднее');
+  }
   return (
     <section className="popup">
       <div className="popup__wrapper">

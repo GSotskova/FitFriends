@@ -24,14 +24,14 @@ const TrainingItem = ({training}: Props): JSX.Element => {
   return (
     <div className="thumbnail-training__inner">
       <div className="thumbnail-training__image">
-        {training.photoTraningPath &&
+        {training.photoTraning &&
         (
           <picture>
             <source type="image/webp"/>
-            <img src={training.photoTraningPath} width="330" height="190" alt=""/>
+            <img src={training.photoTraning} width="330" height="190" alt=""/>
           </picture>
         )}
-        {!training.photoTraningPath &&
+        {!training.photoTraning &&
         (
           <picture>
             <source type="image/webp" srcSet="img/content/thumbnails/training-06.webp, img/content/thumbnails/training-06@2x.webp 2x"/>

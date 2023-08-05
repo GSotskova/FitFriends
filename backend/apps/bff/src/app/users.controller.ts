@@ -82,7 +82,7 @@ export class UsersController {
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(UseridInterceptor)
   @Get('/:id')
-  public async show(@Req() req: Request, @Param('id', MongoidValidationPipe) id: string, @Body() body) {
+  public async show(@Req() req: Request, @Param('id', MongoidValidationPipe) id: string) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${id}`,  {
       headers: {
         'Authorization': req.headers['authorization']
@@ -134,35 +134,34 @@ export class UsersController {
 @UseInterceptors(RoleUserInterceptor)
 @UseInterceptors(UseridInterceptor)
 @Get('')
-public async showList(@Req() req: Request, @Query() query: UsersQuery, @Body() body) {
+public async showList(@Req() req: Request, @Query() query: UsersQuery, @Body() userId: string) {
   const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}`,  {
     params : query,
+    data: userId,
     headers: {
       'Authorization': req.headers['authorization']
     }
   });
-  const users = data.filter((el)=>el.id!==body.userId)
-  await Promise.all(users.map(async (el) => {
+  await Promise.all(data.map(async (el) => {
     if (el.avatar) {
       const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${el.avatar}`);
       el.avatarPath = path;
       }
      }));
-  return users;
+  return data;
 }
 
 @UseGuards(CheckAuthGuard)
 @UseInterceptors(RoleUserInterceptor)
 @UseInterceptors(UseridInterceptor)
 @Get('/get/count')
-public async countUsers(@Req() req: Request, @Body() body) {
+public async countUsers(@Req() req: Request) {
   const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}`,  {
     headers: {
       'Authorization': req.headers['authorization']
     }
   });
-  const users = data.filter((el)=>el.id!==body.userId)
-  return users.length;
+  return data.length;
 }
 
 @UseGuards(CheckAuthGuard)

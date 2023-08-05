@@ -1,7 +1,7 @@
 import {store} from '../store/index';
 import {AuthorizationStatus, FormRegistration} from '../constants';
 import {User, UserFullInfo, UserGeneral, Friend} from './user';
-import { Comment, Training } from './training';
+import { Comment, TotalTrainInfo, Training } from './training';
 import { Order } from './order';
 import { Notify } from './notify';
 
@@ -25,7 +25,7 @@ export type UserProcess = {
 
 export type TrainingData = {
   trainings: Training[];
-  countAllTrainings: number;
+  countAllTrainings: TotalTrainInfo;
   isLoadingCountAllTrainings: boolean;
   userTrainings: Training[];
   isTrainingsDataLoading: boolean;

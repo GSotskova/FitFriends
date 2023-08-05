@@ -37,13 +37,6 @@ export class CoachAccountController {
   @Get('training/show/list')
   public async showList(@Body() coachId: string, @Query() query: TrainingQuery) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Training}/show/list`, {params : query, data: coachId});
-    await Promise.all(data.map(async (el) => {
-      if (el.photoTraning) {
-        const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${el.photoTraning}`);
-        el.photoTraningPath = path;
-        }
-       }));
-
    return data;
   }
 
@@ -53,7 +46,9 @@ export class CoachAccountController {
   @Get('training/show/count')
   public async countTraining(@Body() coachId: string) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Training}/show/list`, {data: coachId});
-     return data.length;
+    const prices = data.map((el) => el.price ? el.price : 0);
+    const maxPrice = prices.length !== 0 ? prices.reduce((prev, current) => (prev > current) ? prev : current) : 0;
+   return {totalTrainings: data.length, maxPrice: maxPrice};
   }
 
 
@@ -79,10 +74,6 @@ export class CoachAccountController {
     if (coach.data.avatar) {
     const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${coach.data.avatar}`);
     data.coachAvataPath = path
-    }
-    if (data.photoTraning) {
-    const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${data.photoTraning}`);
-    data.photoTraningPath = path
     }
     if (data.videoTraning) {
       const {data: {path}}  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Files}/${data.videoTraning}`);
@@ -142,9 +133,11 @@ export class CoachAccountController {
         const initiatorId = el.userId;
         const coachId = body.coachId;
         const requestTraining  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Request}/show`,{data: {initiatorId, coachId}} );
-        if (requestTraining.data.statusRequest === StatusRequest.Pending && requestTraining.data.typeRequest === TypeRequest.Personal) {
+
+        const existsPending = requestTraining.data.find((el) => (el.statusRequest === StatusRequest.Pending && el.typeRequest === TypeRequest.Personal))
+        if (existsPending) {
           el.requestPersonal = true
-          el.requestId = requestTraining.data.id
+          el.requestId = existsPending.id
         }
        }));
    return data;
@@ -168,7 +161,6 @@ export class CoachAccountController {
   @UseInterceptors(CoachIdInterceptor)
   @Delete('certificate/delete/:certificateId')
   public async deleteCertificate(@Req() req: Request, @Param('certificateId', MongoidValidationPipe) certificateId: string,  @Body() body) {
-    console.log(body.coachId, certificateId)
     const { data } = await this.httpService.axiosRef.delete(`${ApplicationServiceURL.Users}/certificate/delete/${certificateId}`, {
       data: {coachId: body.coachId},
       headers: {
