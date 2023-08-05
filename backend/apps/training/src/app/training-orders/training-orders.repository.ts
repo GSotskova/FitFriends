@@ -99,15 +99,14 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
     },
       { $unset: 'result' },
       { $sort:  objQuery.objSort },
-      { $limit: objQuery.limitNumber},
-      { $skip:  objQuery.skip }
+      { $limit: objQuery.limitNumber}
      ])
     .exec();
   }
 
   public async findByUserId(userId: string, query: TrainingOrdersQuery): Promise<Order[]> {
     const objQuery = getTrainingOrdersQuery(query);
-    console.log(objQuery);
+
     return this.ordersModel
     .aggregate([
         {$match: { $and: [
@@ -173,8 +172,7 @@ export class TrainingOrdersRepository implements CRUDRepository<TrainingOrdersEn
       { $unset: 'result' },
       { $match: objQuery.objFiltr},
       { $sort:  objQuery.objSort },
-      { $limit: objQuery.limitNumber},
-      { $skip:  objQuery.skip }
+      { $limit: objQuery.limitNumber}
      ])
     .exec();
   }

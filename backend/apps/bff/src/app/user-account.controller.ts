@@ -74,14 +74,30 @@ export class UserAccountController {
         }
           initiatorId = body.userId;
           const coachId = el.userId;
+
           const requestTrainingCoach  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Request}/show`,{data: {initiatorId, coachId}} );
-          if (requestTrainingCoach.data.typeRequest === TypeRequest.Personal) {
+
+          const reqTrain = requestTrainingCoach.data.length !== 0 ?
+          requestTrainingCoach.data.reduce((prev, current) => (prev.dateUpd > current.dateUpd) ? prev : current) : null;
+          if (reqTrain.typeRequest === TypeRequest.Personal) {
             el.requestPersonal = true
-            el.requestStatus = requestTraining.data.statusRequest
-            el.requestId = requestTraining.data.id
+            el.requestStatus = reqTrain.statusRequest
+            el.requestId = reqTrain.id
           }
        }));
    return data;
+  }
+
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(UseridInterceptor)
+  @Get('friends/count')
+  public async countFriends(@Req() req: Request) {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Friends}/user`, {
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    });
+   return data.length;
   }
 
 
@@ -116,6 +132,15 @@ export class UserAccountController {
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(RoleUserInterceptor)
   @UseInterceptors(UseridInterceptor)
+  @Get('orders/count')
+  public async countOrders(@Body() userId: string) {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Orders}/show/list/user`, {data: userId});
+   return data.length;
+  }
+
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(RoleUserInterceptor)
+  @UseInterceptors(UseridInterceptor)
   @Get('order/:trainingId')
   public async showOrder(@Body() userId: string, @Param('trainingId') trainingId: string) {
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Orders}/show/user/${trainingId}`, {data: userId});
@@ -145,7 +170,6 @@ public async createSubscription( @Body() dto: UserSubscriptionDto) {
 @UseInterceptors(UseridInterceptor)
 @Delete('subscription/delete')
 public async deleteSubscription( @Body() dto: UserSubscriptionDto) {
-  console.log(dto)
   const { data } = await this.httpService.axiosRef.delete(`${ApplicationServiceURL.Subscription}/delete`, {data : dto});
   return data;
 }

@@ -26,9 +26,9 @@ export class TrainingRequestRepository  {
       .exec();
   }
 
-  public async findId(initiatorId: string, userId: string): Promise<TrainingRequest | null> {
+  public async findId(initiatorId: string, userId: string): Promise<TrainingRequest[]> {
     return this.requestModel
-      .findOne({initiatorId: initiatorId, userId: userId})
+      .find({initiatorId: initiatorId, userId: userId})
       .exec();
   }
 

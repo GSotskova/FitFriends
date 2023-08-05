@@ -39,7 +39,7 @@ Content-Type: application/json
   "caloriesSpend": 1500,
   "isReady": true
   }
-
+statusRequestдру
 ###
 # @name login
 POST http://localhost:4000/api/users/login HTTP/1.1
@@ -101,12 +101,17 @@ Content-Type: application/json
   }
 ###
 
+# Количество пользователей
+GET http://localhost:4000/api/users/get/count HTTP/1.1
+Authorization: Bearer {{authToken}}
+###
+
 # Список (каталог) пользователей
 GET http://localhost:4000/api/users?trainingType=йога,бокс&levelTraining=любитель&limit=15&page=1 HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 # Список (каталог) пользователей
-GET http://localhost:4000/api/users?userRole=user HTTP/1.1
+GET http://localhost:4000/api/users HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 # Список оповещений
@@ -125,7 +130,7 @@ Content-Type: application/json
 
 
 #  Добавить друга
-POST http://localhost:4000/api/user/friends/add/6497fd0eaaa5a02715264c9b HTTP/1.1
+POST http://localhost:4000/api/user/friends/add/649866f6dac052e861589f59 HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 ###
@@ -148,7 +153,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "trainingId": "64be11e2e2e8164413415f83",
+  "trainingId": "64ccd524b0f11059b9dace76",
   "trainingCount": 1,
   "paymentOption": "visa"
 }
@@ -166,9 +171,9 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "userId": "649da3544f4fc537d512a656",
+  "userId": "649866f6dac052e861589f59",
   "statusRequest": "на рассмотрении",
-  "typeRequest": "совместная тренировка"
+  "typeRequest": "персональная тренировка"
 }
 ###
 
@@ -266,12 +271,12 @@ Content-Type: application/json
 ###
 
 # Список тренировок
-GET http://localhost:4000/api/coach/training/show/list?price=10,3000&sortDate=1 HTTP/1.1
+GET http://localhost:4000/api/coach/training/show/list?sortDate=desc&limit=6&page=1&rating=0,5& HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 
 # Список заказов для тренера
-GET http://localhost:4000/api/coach/orders?sortPrice=desc&sortDate=desc HTTP/1.1
+GET http://localhost:4000/api/coach/orders?sortPrice=desc&sortCount=asc HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 
@@ -297,7 +302,7 @@ Content-Type: application/json
 
 
 # Каталог тренировок
-GET http://localhost:4000/api/training/catalog?sortPrice=asc HTTP/1.1
+GET http://localhost:4000/api/training/catalog?sortPrice=desc HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 
@@ -324,7 +329,7 @@ GET http://localhost:4000/api/files/64b7fc617417f6f160831f15 HTTP/1.1
 ###
 
 # Изменений статуса заявки
-POST http://localhost:4000/api/users/request/update/64bd4332725e40ff5a96c3a1 HTTP/1.1
+POST http://localhost:4000/api/users/request/update/64cecb1c83937420e653e3d0 HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 

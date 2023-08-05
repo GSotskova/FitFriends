@@ -4,17 +4,24 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Query } from '../../types/training';
 import { LEVEL_TRAIN_ARR, LevelTraining, TRAINING_ARR, TrainingType } from '../../types/questionnaire';
 import { useNavigate } from 'react-router-dom';
-import { AppRoute, SHOW_TRAINING_TYPE } from '../../constants';
-import { getUsers } from '../../store/user-process/selectors';
-import { STATION_METRO, StationMetro } from '../../types/station-metro.enum';
+import { SHOW_TRAINING_TYPE, DEFAULT_LIMIT } from '../../constants';
+import { getUsers, getCountUsers, getSignUserCatalogLoading } from '../../store/user-process/selectors';
+import { STATION_METRO, StationMetro } from '../../types/station-metro';
 import { USER_ROLE_ARR_TYPE, UserRole } from '../../types/user';
 import UserItem from '../../components/user-item/user-item';
 import { fetchUserCatalog } from '../../store/api-actions';
+import useScrollToUp from '../../hooks/use-scroll-to-up/use-scroll-to-up';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 
 function CatalogUsersPage() {
+  useScrollToUp();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
+  const totalUsers = useAppSelector(getCountUsers);
+  const totalPage = Math.ceil(totalUsers / DEFAULT_LIMIT);
+  const isUserCatalogLoading = useAppSelector(getSignUserCatalogLoading);
 
 
   const [trainingShow, setTrainingShow] = useState<TrainingType[]>(TRAINING_ARR.slice(0,SHOW_TRAINING_TYPE));
@@ -22,7 +29,7 @@ function CatalogUsersPage() {
     setTrainingShow(TRAINING_ARR);
   };
 
-  const [query, setQuery] = useState<Query | undefined>();
+  const [query, setQuery] = useState<Query>({limit: DEFAULT_LIMIT, page: 1});
   const handleFilterChange = (evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const {value, name} = evt.target;
     if (name === 'specialisation') {
@@ -66,12 +73,19 @@ function CatalogUsersPage() {
     dispatch(fetchUserCatalog(query));
   }, [dispatch, query]);
 
-  const navigate = useNavigate();
-  const routeChange = () =>{
-    const path = AppRoute.Main;
-    navigate(path);
+  const scrollToTop = () =>{
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
+  if (isUserCatalogLoading) {
+    <LoadingScreen/>;
+  }
 
+  if(!users) {
+    return null;
+  }
   return (
     <div className="wrapper">
       <Header />
@@ -86,7 +100,7 @@ function CatalogUsersPage() {
                   <button
                     className="btn-flat btn-flat--underlined user-catalog-form__btnback"
                     type="button"
-                    onClick={routeChange}
+                    onClick={() => {dispatch(fetchUserCatalog()); navigate(-1);}}
                   >
                     <svg width="14" height="10" aria-hidden="true">
                       <use xlinkHref="#arrow-left"></use>
@@ -215,8 +229,15 @@ function CatalogUsersPage() {
 
                   </ul>
                   <div className="show-more users-catalog__show-more">
-                    <button className="btn show-more__button show-more__button--more" type="button">Показать еще</button>
-                    <button className="btn show-more__button show-more__button--to-top" type="button">Вернуться в начало</button>
+                    {totalPage !== query.page &&
+                  <button
+                    className="btn show-more__button show-more__button--more"
+                    type="button"
+                    onClick={() => setQuery({...query, page: query.page ? query.page + 1 : 1})}
+                  >Показать еще
+                  </button> }
+                    {totalPage === query.page && totalPage !== 1 &&
+                  <button className="btn show-more__button" type="button" onClick={scrollToTop}>Вернуться в начало</button>}
                   </div>
                 </div>
               </div>

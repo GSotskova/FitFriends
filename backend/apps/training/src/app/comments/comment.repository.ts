@@ -26,7 +26,6 @@ export class CommentRepository {
         return this.commentModel
           .find({trainingId: trainingId})
           .sort(objQuery.objSort)
-          .skip(objQuery.skip)
           .limit(objQuery.limitNumber + objQuery.limitNumber)
           .exec();
     }

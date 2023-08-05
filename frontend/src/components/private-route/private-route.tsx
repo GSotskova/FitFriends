@@ -10,7 +10,6 @@ type PrivateRouteProps = {
 }
 
 const PrivateRoute = ({ children, restrictedFor, redirectTo, verifyRole}: PrivateRouteProps): JSX.Element =>
-  /*console.log( 'PrivateRoute', restrictedFor , verifyRole, children);*/
   AuthorizationStatus.NoAuth !== restrictedFor && verifyRole
     ? children
     : <Navigate to={redirectTo} />;

@@ -69,7 +69,7 @@ const FriendItem = ({user, currentUserRole}: Props): JSX.Element => {
       {user.requestPersonal &&
         <div className={`thumbnail-friend__request-status thumbnail-friend__request-status--role-${isCoach ? 'user' : 'coach'}`}>
           <p className="thumbnail-friend__request-text">
-            Запрос на&nbsp;персональную тренировку {user.requestStatus !== StatusRequest.Pending ? user.requestStatus : ''}
+            Запрос на&nbsp;персональную тренировку {user.requestStatus}
           </p>
           {currentUserRole === UserRole.Coach &&
           <div className="thumbnail-friend__button-wrapper">

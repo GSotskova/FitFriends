@@ -65,7 +65,6 @@ export class FileController {
   @UseInterceptors(FileInterceptor('certificate', {fileFilter: pdfFileFilter}))
   public async coachCertificate(@UploadedFile() file: Express.Multer.File, @Param('coachId') coachId: string) {
     const newFile = await this.fileService.saveFile(file, 'certificate', coachId);
-    console.log('certificate', newFile)
     await this.avatarsService.coachCertificate(coachId, newFile.id);
     const path = `${this.applicationConfig.serveRoot}${newFile.path}`;
     return fillObject(UploadedFileRdo, Object.assign(newFile, { path }));
@@ -74,9 +73,7 @@ export class FileController {
   @Post('upload/certificate/update/:coachId')
   @UseInterceptors(FileInterceptor('certificate', {fileFilter: pdfFileFilter}))
   public async coachCertificateUpd(@UploadedFile() file: Express.Multer.File, @Param('coachId') coachId: string, @Body() body) {
-    console.log(file, body.certificateId)
     const updfile = await this.fileService.updateFile(file, 'certificate', coachId, body.certificateId);
-    console.log('certificate', updfile)
     await this.avatarsService.coachCertificate(coachId, updfile.id);
     const path = `${this.applicationConfig.serveRoot}${updfile.path}`;
     return fillObject(UploadedFileRdo, Object.assign(updfile, { path }));

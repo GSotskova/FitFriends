@@ -2,36 +2,52 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../components/header/header';
 import OrderItem from '../../components/order-item/order-item';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getOrders } from '../../store/orders-data/selectors';
-import { AppRoute } from '../../constants';
-import { useState } from 'react';
+import { getCountOrders, getOrders, getOrdersUserLoadingStatus } from '../../store/orders-data/selectors';
+import { AppRoute, ORDERS_LIMIT } from '../../constants';
+import { useEffect, useState } from 'react';
 import { fetchUserOrders } from '../../store/api-actions';
 import { UserRole } from '../../types/user';
+import { Query } from '../../types/training';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 function UserBuyPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const orders = useAppSelector(getOrders);
+  const isOrdersUserDataLoading = useAppSelector(getOrdersUserLoadingStatus);
+  const totalOrders = useAppSelector(getCountOrders);
+  const totalPage = Math.ceil(totalOrders / ORDERS_LIMIT);
 
+  const [query, setQuery] = useState<Query>({limit: ORDERS_LIMIT, page: 1});
   const navigate = useNavigate();
   const routeChange = () =>{
     const path = AppRoute.AccountUser;
     navigate(path);
   };
 
-  const [filterIsDone, setFilter] = useState<boolean | null >(null);
   const handleSetFilter = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (filterIsDone === false) {
+    if (query?.isDone === 'false') {
       evt.target.removeAttribute('checked');
-      setFilter(null);
-      dispatch(fetchUserOrders());
+      setQuery({limit: query.limit, page: query.page});
     } else {
       evt.target.setAttribute('checked', 'true');
-      setFilter(false);
-      dispatch(fetchUserOrders({isDone: 'false'}));
+      setQuery({...query, isDone: 'false'});
     }
+  };
+  useEffect(()=>{
+    dispatch(fetchUserOrders(query));
+  }, [dispatch, query]);
+
+  const scrollToTop = () =>{
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
 
 
+  if (isOrdersUserDataLoading) {
+    <LoadingScreen/>;
+  }
   return (
     <div className="wrapper">
       <Header />
@@ -78,8 +94,15 @@ function UserBuyPage(): JSX.Element {
                 )}
               </ul>
               <div className="show-more my-purchases__show-more">
-                <button className="btn show-more__button show-more__button--more" type="button">Показать еще</button>
-                <button className="btn show-more__button show-more__button--to-top" type="button">Вернуться в начало</button>
+                {totalPage !== query.page &&
+                  <button
+                    className="btn show-more__button show-more__button--more"
+                    type="button"
+                    onClick={() => setQuery({...query, page: query.page ? query.page + 1 : 1})}
+                  >Показать еще
+                  </button> }
+                {totalPage === query.page && totalPage !== 1 &&
+                  <button className="btn show-more__button" type="button" onClick={scrollToTop}>Вернуться в начало</button>}
               </div>
             </div>
           </div>

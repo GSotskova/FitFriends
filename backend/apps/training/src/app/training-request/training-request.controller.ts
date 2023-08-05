@@ -35,6 +35,15 @@ export class TrainingRequestController {
   @Post('update/:id')
   public async updateStatus(@Param('id', MongoidValidationPipe) id: string, @Body() body) {
     const updRequest = await this.requestService.updateStatus(id, body.statusRequest);
+    const requsetForNotify =  {
+      _id: updRequest._id,
+      initiatorId: updRequest.userId,
+      userId: updRequest.initiatorId,
+      statusRequest: updRequest.statusRequest,
+      typeRequest: updRequest.typeRequest
+    };
+
+    await this.notifyUserService.trainingNotifyUser(requsetForNotify)
     return fillObject(TrainingRequestRdo, updRequest);
   }
 

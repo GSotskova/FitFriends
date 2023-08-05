@@ -221,7 +221,6 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
                         value={currentInfo.descriptionTraining}
                         onChange={handleInfoChange}
                       >
-                        {training.descriptionTraining}
                       </textarea>
                       {isNotCorrectLength &&
                  <span className="custom-textarea__error">Минимальная длина 10 символ. Максимальная длина 140 символов</span>}

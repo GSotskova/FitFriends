@@ -17,7 +17,7 @@ export const getUsersQuery = (query: UsersQuery ) => {
 
     const objSort: SomeObject = {};
       if (query.sortDate) {objSort['createdAt'] =  sortDate}
-      else {objSort['createdAt'] = 1}
+      else {objSort['createdAt'] = -1}
 
   return {limitNumber, skip, objSort, objFiltr}
 };
@@ -33,7 +33,7 @@ export const getDefaultQuery = (query: DefaultQuery ) => {
     if (sortDate)
       {objSort['createdAt'] =  sortDate}
     else
-      {objSort['createdAt'] = 1}
+      {objSort['createdAt'] = -1}
 
   return {limitNumber, skip, objSort}
 };
@@ -65,7 +65,9 @@ export const getTrainingCatalogQuery = (query: TrainingCatalogQuery ) => {
 
   const objSort: SomeObject = {};
   const keys = Object.keys(query);
-  if (keys.length === 0) {objSort['createdAt'] = 1}
+
+  const isSort = keys.find((el) => el === 'sortPrice' || el === 'sortDate') ? true : false
+  if (!isSort) {objSort['createdAt'] = -1}
     keys.forEach(key => {
         key === 'sortPrice'? objSort['price'] = sortPrice : '';
         key === 'sortDate'? objSort['createdAt'] = sortDate : '';
@@ -87,10 +89,12 @@ export const getTrainingOrdersQuery = (query: TrainingOrdersQuery ) => {
 
   const objSort: SomeObject = {};
   const keys = Object.keys(query);
+  const isSort = keys.find((el) => el === 'sortCount' || el === 'sortPrice' || el === 'sortDate') ? true : false
+  if (!isSort) {objSort['createdAt'] = -1}
     keys.forEach(key => {
       key === 'sortCount'? objSort['trainingCount'] = sortCount : '';
       key === 'sortPrice'? objSort['totalPrice'] = sortPrice : '';
-      key === 'sortDate'? objSort['createdAt'] = sortDate : objSort['createdAt'] = 1;
+      key === 'sortDate'? objSort['createdAt'] = sortDate : '';
     });
 
 
@@ -108,7 +112,7 @@ export const getTrainingQuery = (query: TrainingQuery ) => {
       if (sortDate)
         {objSort['createdAt'] =  sortDate}
       else
-        {objSort['createdAt'] = 1}
+        {objSort['createdAt'] = -1}
 
     const objFiltr: SomeObject = {};
       if (price) {

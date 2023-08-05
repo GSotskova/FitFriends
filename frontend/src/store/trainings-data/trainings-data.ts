@@ -1,10 +1,14 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
 import {TrainingData} from '../../types/state';
-import {editTraining, fetchCoachTrainings, postTraining, fetchCoachTraining, fetchUserTrainings, fetchCatalogTrainings, fetchCoachOtherTrainings} from '../api-actions';
+import {editTraining, fetchCoachTrainings, postTraining, fetchCoachTraining, fetchUserTrainings, fetchCatalogTrainings, fetchCoachOtherTrainings, fetchCountTrainings} from '../api-actions';
 
 const initialState: TrainingData = {
   trainings: [],
+  countAllTrainings: {
+    totalTrainings: 0,
+    maxPrice: 0},
+  isLoadingCountAllTrainings: false,
   userTrainings: [],
   coachTrainings: [],
   isTrainingsDataLoading: false,
@@ -12,7 +16,8 @@ const initialState: TrainingData = {
   hasError: false,
   isTrainingLoading: false,
   training: null,
-  hasErrorPost: false
+  hasErrorPost: false,
+  isLoadingPostTraining: false
 };
 
 
@@ -32,6 +37,18 @@ export const trainingsData = createSlice({
       })
       .addCase(fetchCoachTrainings.rejected, (state) => {
         state.isTrainingsDataLoading = false;
+        state.hasError = true;
+      })
+      .addCase(fetchCountTrainings.pending, (state) => {
+        state.isLoadingCountAllTrainings = true;
+        state.hasError = false;
+      })
+      .addCase(fetchCountTrainings.fulfilled, (state, action) => {
+        state.countAllTrainings = action.payload;
+        state.isLoadingCountAllTrainings = false;
+      })
+      .addCase(fetchCountTrainings.rejected, (state) => {
+        state.isLoadingCountAllTrainings = false;
         state.hasError = true;
       })
       .addCase(fetchUserTrainings.pending, (state) => {
@@ -68,12 +85,18 @@ export const trainingsData = createSlice({
       .addCase(fetchCoachTraining.rejected, (state) => {
         state.isTrainingLoading = false;
       })
+      .addCase(postTraining.pending, (state, action) => {
+        state.hasErrorPost = false;
+        state.isLoadingPostTraining = true;
+      })
       .addCase(postTraining.fulfilled, (state, action) => {
         state.trainings.push(action.payload);
         state.hasErrorPost = false;
+        state.isLoadingPostTraining = false;
       })
       .addCase(postTraining.rejected, (state) => {
         state.hasErrorPost = true;
+        state.isLoadingPostTraining = false;
       })
       .addCase(editTraining.fulfilled, (state, action) => {
         const updatedTraining = action.payload;

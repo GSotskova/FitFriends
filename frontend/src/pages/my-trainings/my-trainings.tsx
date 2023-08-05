@@ -1,29 +1,33 @@
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import MultiRangeSlider, { ChangeResult } from 'multi-range-slider-react';
 import Header from '../../components/header/header';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getTrainings } from '../../store/trainings-data/selectors';
+import { getCountAllTrainings, getTrainings, getTrainingsDataLoadingStatus } from '../../store/trainings-data/selectors';
 import { fetchCoachTrainings } from '../../store/api-actions';
 import TrainingItem from '../../components/training-item/training-item';
 import { Query } from '../../types/training';
 import { TRAINING_TIME, TrainingTime } from '../../types/questionnaire';
 import { useNavigate } from 'react-router-dom';
-import { AppRoute } from '../../constants';
+import { AppRoute, DEFAULT_LIMIT } from '../../constants';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 
 function MyTrainingsPage() {
   const dispatch = useAppDispatch();
   const trainings = useAppSelector(getTrainings);
+  const isTrainingsDataLoading = useAppSelector(getTrainingsDataLoadingStatus);
+  const total = useAppSelector(getCountAllTrainings);
+  const totalPage = Math.ceil(total.totalTrainings / DEFAULT_LIMIT);
 
-  const [query, setQuery] = useState<Query | undefined>();
+  const [query, setQuery] = useState<Query>({limit: DEFAULT_LIMIT, page: 1});
   const [formValue, setValue] = useState({
-    minPrice: 0, maxPrice: 10000,
+    minPrice: 0, maxPrice: total.maxPrice,
     minCalories: 1000, maxCalories: 5000,
     minRating: 0, maxRating: 5
   });
 
   const [sliderValue, setSliderValue] = useState({
-    minPrice: 0, maxPrice: 10000,
+    minPrice: 0, maxPrice: total.maxPrice,
     minCalories: 1000, maxCalories: 5000,
     minRating: 0, maxRating: 5
   });
@@ -31,29 +35,30 @@ function MyTrainingsPage() {
   const handleFilterChange = (evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 
     const {value, name} = evt.target;
-    setValue({...formValue, [name]: value});
+    const valueNum = Math.max(0, Number(value));
+    setValue({...formValue, [name]: valueNum});
 
-    if (name === 'minPrice' && Number(value) <= formValue.maxPrice) {
-      setQuery({...query, price:[Number(value), formValue.maxPrice]});
+    if (name === 'minPrice' && Number(valueNum) <= formValue.maxPrice) {
+      setQuery({...query, price:[Number(valueNum), formValue.maxPrice]});
       // setSliderValue({...sliderValue, minPrice: Number(value), maxPrice: formValue.maxPrice});
     }
-    if (name === 'maxPrice' && Number(value) >= formValue.minPrice) {
-      setQuery({...query, price:[formValue.minPrice, Number(value)]});
+    if (name === 'maxPrice' && Number(valueNum) >= formValue.minPrice) {
+      setQuery({...query, price:[formValue.minPrice, Number(valueNum)]});
       //setSliderValue({...sliderValue, minPrice: formValue.minPrice, maxPrice: Number(value)});
     }
-    if ((name === 'maxPrice' && Number(value) === 0 && formValue.minPrice === 0)
-      || (name === 'minPrice' && Number(value) === 0 && formValue.maxPrice === 0)) {
+    if ((name === 'maxPrice' && Number(valueNum) === 0 && formValue.minPrice === 0)
+      || (name === 'minPrice' && Number(valueNum) === 0 && formValue.maxPrice === 0)) {
       setQuery({...query, price: undefined});
     }
 
-    if (name === 'minCalories' && Number(value) <= formValue.maxCalories) {
-      setQuery({...query, caloriesReset:[Number(value), formValue.minCalories]});
+    if (name === 'minCalories' && Number(valueNum) <= formValue.maxCalories) {
+      setQuery({...query, caloriesReset:[Number(value), formValue.maxCalories]});
     }
-    if (name === 'maxCalories' && Number(value) >= formValue.minCalories) {
-      setQuery({...query, caloriesReset:[formValue.minCalories, Number(value)]});
+    if (name === 'maxCalories' && Number(valueNum) >= formValue.minCalories) {
+      setQuery({...query, caloriesReset:[formValue.minCalories, Number(valueNum)]});
     }
-    if ((name === 'maxCalories' && Number(value) === 0 && formValue.minCalories === 0)
-      || (name === 'minCalories' && Number(value) === 0 && formValue.maxCalories === 0)) {
+    if ((name === 'maxCalories' && Number(valueNum) === 0 && formValue.minCalories === 0)
+      || (name === 'minCalories' && Number(valueNum) === 0 && formValue.maxCalories === 0)) {
       setQuery({...query, caloriesReset: undefined});
     }
 
@@ -72,6 +77,16 @@ function MyTrainingsPage() {
     }
   };
 
+  if (isTrainingsDataLoading) {
+    <LoadingScreen/>;
+  }
+
+  const scrollToTop = () =>{
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
 
   useEffect(()=>{
     dispatch(fetchCoachTrainings(query));
@@ -135,7 +150,7 @@ function MyTrainingsPage() {
                       <div className="filter-range">
                         <MultiRangeSlider
                           min={0}
-                          max={10000}
+                          max={total.maxPrice}
                           step={100}
                           style={{border: 'none', boxShadow: 'none', padding: '15px 10px'}}
                           ruler='false'
@@ -263,8 +278,15 @@ function MyTrainingsPage() {
                     )}
                   </ul>
                   <div className="show-more my-trainings__show-more">
-                    <button className="btn show-more__button show-more__button--more" type="button">Показать еще</button>
-                    <button className="btn show-more__button show-more__button--to-top" type="button">Вернуться в начало</button>
+                    {totalPage !== query.page &&
+                  <button
+                    className="btn show-more__button show-more__button--more"
+                    type="button"
+                    onClick={() => setQuery({...query, page: query.page ? query.page + 1 : 1})}
+                  >Показать еще
+                  </button> }
+                    {totalPage === query.page && totalPage !== 1 &&
+                  <button className="btn show-more__button" type="button" onClick={scrollToTop}>Вернуться в начало</button>}
                   </div>
                 </div>
               </div>

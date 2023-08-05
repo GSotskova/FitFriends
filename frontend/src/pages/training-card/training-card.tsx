@@ -1,7 +1,6 @@
 import Header from '../../components/header/header';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { UserRole } from '../../types/user';
-import { AppRoute } from '../../constants';
 import CommentItem from '../../components/comment-item/comment-item';
 import { getSignUserLoading, getUserFullInfo } from '../../store/user-process/selectors';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { fetchCoachTraining, fetchComments } from '../../store/api-actions';
 
 function TrainingCardPage() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(getUserFullInfo);
   const isUserLoading = useAppSelector(getSignUserLoading);
@@ -22,14 +22,8 @@ function TrainingCardPage() {
   const isCommentsLoading = useAppSelector(getSignCommentsLoading);
   const isCoach = user.role === UserRole.Coach;
 
-
   const training = useAppSelector(getTraining);
   const isTrainLoading = useAppSelector(getIsTrainingLoading);
-  const navigate = useNavigate();
-  const routeChange = () =>{
-    const path = `${AppRoute.AccountCoach}/trainings`;
-    navigate(path);
-  };
 
   const [showModal, setShowModal] = useState(false);
   const togglePopup = () => {
@@ -65,7 +59,7 @@ function TrainingCardPage() {
                 <button
                   className="btn-flat btn-flat--underlined reviews-side-bar__back"
                   type="button"
-                  onClick={routeChange}
+                  onClick={() => navigate(-1)}
                 >
                   <svg width="14" height="10" aria-hidden="true">
                     <use xlinkHref="#arrow-left"></use>

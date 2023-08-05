@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getErrorPost } from '../../store/orders-data/selectors';
 import { getLoadingPost } from '../../store/orders-data/selectors';
 import { COUNT_ORDER_DEFAULT } from '../../constants';
+import { toast } from 'react-toastify';
 
 type Prop ={
   handleClose?: () => void;
@@ -53,7 +54,9 @@ const CreateOrder = ({training, handleClose}: Prop): JSX.Element => {
     }
   };
 
-
+  if (isErrorPost) {
+    toast.warn('Сервер не доступен. Попробуйте зайти позднее');
+  }
   return (
     <div className="popup__wrapper">
       <div className="popup-head">
@@ -73,7 +76,7 @@ const CreateOrder = ({training, handleClose}: Prop): JSX.Element => {
         <div className="popup__product">
           <div className="popup__product-image">
             <picture>
-              <img src={training.photoTraningPath} width="98" height="80" alt=""/>
+              <img src={training.photoTraning} width="98" height="80" alt=""/>
             </picture>
           </div>
           <div className="popup__product-info">

@@ -1,12 +1,11 @@
 import { LevelTraining, TrainingTime, TrainingType } from './questionnaire';
-import { StationMetro } from './station-metro.enum';
+import { StationMetro } from './station-metro';
 import { UserRole, UserSex } from './user';
 
 export type Training = {
   id: string;
   nameTraining?: string;
   photoTraning?: string;
-  photoTraningPath?: string;
   levelTraining?: LevelTraining;
   trainingType?: TrainingType;
   trainingTime?: TrainingTime;
@@ -28,7 +27,6 @@ export type Training = {
 export type NewTraining = {
   nameTraining: string;
   photoTraning?: string;
-  photoTraningPath?: string;
   levelTraining: LevelTraining;
   trainingType: TrainingType;
   trainingTime: TrainingTime;
@@ -42,9 +40,13 @@ export type NewTraining = {
   isSpecialOffer?: boolean;
 }
 
+export type TotalTrainInfo = {
+  totalTrainings: number;
+  maxPrice: number;
+}
 
 export type Query = {
-  limit?: string;
+  limit?: number;
   price?: number[];
   caloriesReset?: number[];
   rating?: number[];

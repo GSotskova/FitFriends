@@ -38,7 +38,6 @@ type PropBtn ={
   isPopup?: boolean;
 }
 
-
 const ButtonGroup = ({next, previous, isPopup}: PropBtn ) => {
   const dispatch = useAppDispatch();
   const handlePDFUpload = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -48,8 +47,6 @@ const ButtonGroup = ({next, previous, isPopup}: PropBtn ) => {
     dispatch(postCertificate({fileCertificate: evt.target.files[0]} as FileType));
   };
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-
   return (
     <div className="personal-account-coach__label-wrapper">
       <h2 className="personal-account-coach__label">Дипломы и сертификаты</h2>
@@ -94,9 +91,9 @@ const ButtonGroup = ({next, previous, isPopup}: PropBtn ) => {
   );
 };
 
-const CertificateSlider = ({coachInfo, isPopup}: Prop): JSX.Element => {
+const CertificateSlider = ({coachInfo, isPopup}: Prop) => {
   const resp = isPopup ? responsivePopup : responsive;
-
+  const certificateArr = coachInfo.certificatesPath ? coachInfo.certificatesPath : [];
   return (
     <div className="personal-account-coach__additional-info conteiner-revers">
       <Carousel
@@ -111,11 +108,10 @@ const CertificateSlider = ({coachInfo, isPopup}: Prop): JSX.Element => {
           <ButtonGroup isPopup={isPopup}/>
         }
       >
-        {
-          coachInfo.certificatesPath.map((el)=>
+        {certificateArr.length !== 0 &&
+          certificateArr.map((el)=>
             <CertificateItem certificatePath={el.certificatePath} certificateId={el.certificateId} key={el.certificateId}/>
-          )
-        }
+          )}
       </Carousel>
     </div>
   );

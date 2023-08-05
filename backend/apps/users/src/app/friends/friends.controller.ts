@@ -77,8 +77,7 @@ export class FriendController {
   })
   @Get('find/:friendId')
   public async findFriend(@Req() { user: payload }: RequestWithTokenPayload, @Param('friendId') friendId: string) {
-    const friends = await this.friendService.findFriend(payload.sub, friendId);
-    console.log(friends)
+    const friends = await this.friendService.findFriend(payload.sub, friendId, payload.role);
     return friends;
   }
 

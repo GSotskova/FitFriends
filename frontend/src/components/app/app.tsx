@@ -12,7 +12,7 @@ import MyTrainingsPage from '../../pages/my-trainings/my-trainings';
 import CreateTrainingPage from '../../pages/create-training/create-training';
 import FriendsListPage from '../../pages/friends-list-coach/friends-list-coach';
 import { getAuthCheckedStatus, getAuthInfo, getAuthInfoDataLoadingStatus, getAuthorizationStatus, getSignUserLoading, getUserFullInfo } from '../../store/user-process/selectors';
-import { fetchCatalogTrainings, fetchCoachFriends, fetchCoachOrders, fetchCoachTrainings, fetchUser, fetchUserCatalog, fetchUserFriends, fetchUserOrders, fetchUserTrainings } from '../../store/api-actions';
+import { fetchCatalogTrainings,fetchCountTrainings, fetchCoachFriends, fetchCoachOrders, fetchCoachTrainings, fetchUser, fetchUserCatalog, fetchUserFriends, fetchUserOrders, fetchUserTrainings, fetchCountFriends, fetchCountUsers, fetchCountOrders, fetchNotify } from '../../store/api-actions';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import MyOrdersPage from '../../pages/my-orders/my-orders';
 import MainPage from '../../pages/main-page/main-page';
@@ -44,9 +44,16 @@ function App(): JSX.Element {
 
 
   useEffect(() => {
+    if (userData) {
+      dispatch(fetchCountTrainings(userData.role));
+      dispatch(fetchCountFriends(userData.role));
+      dispatch(fetchCountOrders(userData.role));
+      dispatch(fetchNotify());
+    }
     if (userData?.role === UserRole.User) {
       dispatch(fetchUserTrainings(userFullInfo));
       dispatch(fetchCatalogTrainings());
+      dispatch(fetchCountUsers());
       dispatch(fetchUserCatalog());
       dispatch(fetchUserOrders());
       dispatch(fetchUserFriends());
@@ -56,7 +63,7 @@ function App(): JSX.Element {
       dispatch(fetchCoachFriends());
       dispatch(fetchCoachOrders());
     }
-  }, [dispatch, userData?.id, userData?.role, userFullInfo]);
+  }, [dispatch, userData, userData?.id, userData?.role, userFullInfo]);
 
   if (!isAuthChecked || isAuthInfoLoading || isUserLoading) {
     return (

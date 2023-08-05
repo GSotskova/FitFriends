@@ -1,9 +1,8 @@
 import Header from '../../components/header/header';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { StatusRequest, UserRole } from '../../types/user';
-import { AppRoute } from '../../constants';
 import { getSignUserLoading, getSignUserOtherLoading, getUserFullInfo, getUserOther } from '../../store/user-process/selectors';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { useEffect, useState } from 'react';
 import { createRequest, createSubscribe, deleteCoachFriend, deleteFriend, deleteSubscribe, fetchCoachOtherTrainings, fetchUserOther, postFriend } from '../../store/api-actions';
@@ -18,6 +17,7 @@ import { getSignLoadPost } from '../../store/request-data/selectors';
 import { getSignFriendLoadDelete, getSignFriendLoadPost } from '../../store/friends-data/selectors';
 import PopupWindow from '../../components/popup-window/popup-window';
 import PopupCertificates from '../../components/popup-certificates/popup-certificates';
+import PopupMap from '../../components/popup-map/popup-map';
 
 
 const responsive = {
@@ -33,13 +33,14 @@ const responsive = {
 
 function UserCardPage() {
   const params = useParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(getUserFullInfo);
   const isUserLoading = useAppSelector(getSignUserLoading);
   const currentIsCoach = user.role === UserRole.Coach;
 
   const userOther = useAppSelector(getUserOther);
-  console.log(userOther)
+
   const isUserOtherLoading = useAppSelector(getSignUserOtherLoading);
   const isCoach = userOther && userOther.role === UserRole.Coach;
   const coachTrainings = useAppSelector(getCoachTrainings);
@@ -59,13 +60,6 @@ function UserCardPage() {
       setSubscribe(userOther?.isSubscribe);
     }
   }, [dispatch, params.id, userOther?.isSubscribe]);
-
-
-  const navigate = useNavigate();
-  const routeChange = () =>{
-    const path = `${AppRoute.Main}`;
-    navigate(path);
-  };
 
   const handleDeleteFriend = () => {
     if(params.id) {
@@ -134,6 +128,10 @@ function UserCardPage() {
   const togglePopup = () => {
     setShowModal(!showModal);
   };
+  const [showModalMap, setShowModalMap] = useState(false);
+  const togglePopupMap = () => {
+    setShowModalMap(!showModalMap);
+  };
   if (!userOther) {
     return null;
   }
@@ -148,7 +146,7 @@ function UserCardPage() {
         <div className="inner-page inner-page--no-sidebar">
           <div className="container">
             <div className="inner-page__wrapper">
-              <button className="btn-flat inner-page__back" type="button" onClick={routeChange}>
+              <button className="btn-flat inner-page__back" type="button" onClick={() => navigate(-1)}>
                 <svg width="14" height="10" aria-hidden="true">
                   <use xlinkHref="#arrow-left"></use>
                 </svg><span>Назад</span>
@@ -163,12 +161,16 @@ function UserCardPage() {
                           <h2 className="user-card-coach__title">{userOther.userName}</h2>
                         </div>
                         <div className="user-card-coach__label">
-                          <a href="popup-user-map.html">
+                          <Link to='/' onClick={(evt)=> {evt.preventDefault(); setShowModalMap(!showModalMap);}}>
                             <svg className="user-card-coach__icon-location" width="12" height="14" aria-hidden="true">
                               <use xlinkHref="#icon-location"></use>
                             </svg>
                             <span>{userOther.location}</span>
-                          </a>
+                          </Link>
+                          {showModalMap &&
+                            <PopupWindow handleClose={togglePopupMap}>
+                              <PopupMap userName={userOther.userName} metro={userOther.location} handleClose={togglePopupMap} />
+                            </PopupWindow>}
                         </div>
                         <div className="user-card-coach__status-container">
                           {isCoach &&

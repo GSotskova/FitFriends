@@ -3,6 +3,7 @@ import {  USER_EQ_FRIEND, USER_IS_FRIEND, FRIENDS_NOT_FOUND } from './friends.co
 import { FriendRepository } from './friends.repository';
 import { FriendEntity } from './friends.entity';
 import { DefaultQuery } from '@project/shared/shared-query';
+import { UserRole } from '@project/shared/shared-types';
 
 
 @Injectable()
@@ -42,13 +43,19 @@ export class FriendService {
     return this.friendRepository.destroy(idFriends._id);
   }
 
-  public async findFriend(userId: string, friendId: string) {
-    const friendUser = await this.friendRepository.findId(friendId, userId)
+  public async findFriend(userId: string, friendId: string, role: UserRole) {
+    if (role === UserRole.User) {
+      const friendUser = await this.friendRepository.findId(friendId, userId)
+      if (!friendUser) {
+        return {error: FRIENDS_NOT_FOUND}
+      }
+      return friendUser;
+    }
+    
     const friendCoach = await this.friendRepository.findId(userId, friendId)
-    console.log(friendUser , friendCoach)
-    if (!friendUser && !friendCoach) {
+    if (!friendCoach) {
       return {error: FRIENDS_NOT_FOUND}
     }
-    return friendUser ? friendUser : friendCoach;
+    return friendCoach;
   }
 }

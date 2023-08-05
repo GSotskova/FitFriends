@@ -2,15 +2,20 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../components/header/header';
 import OrderItem from '../../components/order-item/order-item';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getOrders } from '../../store/orders-data/selectors';
-import { AppRoute } from '../../constants';
-import { useState } from 'react';
+import { getCountOrders, getOrders, getOrdersDataLoadingStatus } from '../../store/orders-data/selectors';
+import { AppRoute, ORDERS_LIMIT } from '../../constants';
+import { useEffect, useState } from 'react';
 import { fetchCoachOrders } from '../../store/api-actions';
 import { UserRole } from '../../types/user';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 function MyOrdersPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const orders = useAppSelector(getOrders);
+  const isOrdersDataLoading = useAppSelector(getOrdersDataLoadingStatus);
+  const totalOrders = useAppSelector(getCountOrders);
+  const totalPage = Math.ceil(totalOrders / ORDERS_LIMIT);
+
   const navigate = useNavigate();
   const routeChange = () =>{
     const path = AppRoute.AccountCoach;
@@ -24,7 +29,9 @@ function MyOrdersPage(): JSX.Element {
     currentSortCount:'',
     iconPrice:'up',
     iconCount:'up',
-    sortStr:' '
+    sortStr: `limit=${ORDERS_LIMIT}&page=1&sortCount=desc`,
+    limit: ORDERS_LIMIT,
+    page: 1
   });
   const handleSortPrice = () => {
     const sortCount = sortData.currentSortCount ? `&sortCount=${sortData.currentSortCount}` : '';
@@ -32,10 +39,9 @@ function MyOrdersPage(): JSX.Element {
       ...sortData,
       nextSortPrice: sortData.nextSortPrice === 'desc' ? 'asc' : 'desc',
       currentSortPrice: sortData.nextSortPrice,
-      sortStr: `sortPrice=${sortData.nextSortPrice}${sortCount}`,
+      sortStr: `limit=${sortData.limit}&page=${sortData.page}&sortPrice=${sortData.nextSortPrice}${sortCount}`,
       iconPrice: sortData.nextSortPrice === 'desc' ? 'down' : 'up'
     });
-    dispatch(fetchCoachOrders(sortData.sortStr));
   };
   const handleSortCount = () => {
     const sortPrice = sortData.currentSortPrice ? `&sortPrice=${sortData.currentSortPrice}` : '';
@@ -43,12 +49,36 @@ function MyOrdersPage(): JSX.Element {
       ...sortData,
       nextSortCount: sortData.nextSortCount === 'desc' ? 'asc' : 'desc',
       currentSortCount: sortData.nextSortCount,
-      sortStr: `sortCount=${sortData.nextSortCount}${sortPrice}`,
+      sortStr: `limit=${sortData.limit}&page=${sortData.page}&sortCount=${sortData.nextSortCount}${sortPrice}`,
       iconCount: sortData.nextSortCount === 'desc' ? 'down' : 'up'
     });
-    dispatch(fetchCoachOrders(sortData.sortStr));
   };
 
+  const handleMoreCount = () => {
+    const sortCount = sortData.currentSortCount ? `&sortCount=${sortData.currentSortCount}` : '';
+    const sortPrice = sortData.currentSortPrice ? `&sortPrice=${sortData.currentSortPrice}` : '';
+    setSort({
+      ...sortData,
+      sortStr: `limit=${sortData.limit}&page=${sortData.page + 1}${sortPrice}${sortCount}`,
+      page: sortData.page + 1
+    });
+  };
+
+  useEffect(()=>{
+    dispatch(fetchCoachOrders(sortData.sortStr));
+  }, [dispatch, sortData]);
+
+
+  const scrollToTop = () =>{
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  if (isOrdersDataLoading) {
+    <LoadingScreen/>;
+  }
   return (
 
     <div className="wrapper">
@@ -101,8 +131,15 @@ function MyOrdersPage(): JSX.Element {
                 )}
               </ul>
               <div className="show-more my-orders__show-more">
-                <button className="btn show-more__button show-more__button--more" type="button">Показать еще</button>
-                <button className="btn show-more__button show-more__button--to-top" type="button">Вернуться в начало</button>
+                {totalPage !== sortData.page &&
+                  <button
+                    className="btn show-more__button show-more__button--more"
+                    type="button"
+                    onClick={handleMoreCount}
+                  >Показать еще
+                  </button> }
+                {totalPage === sortData.page && totalPage !== 1 &&
+                  <button className="btn show-more__button" type="button" onClick={scrollToTop}>Вернуться в начало</button>}
               </div>
             </div>
           </div>

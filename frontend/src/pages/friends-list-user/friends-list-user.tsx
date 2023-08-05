@@ -1,20 +1,42 @@
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import Header from '../../components/header/header';
-import { getFriends } from '../../store/friends-data/selectors';
-import { AppRoute } from '../../constants';
+import { getCountFiends, getFriends, getFriendsDataLoadingStatus } from '../../store/friends-data/selectors';
+import { DEFAULT_LIMIT } from '../../constants';
 import FriendItem from '../../components/friend-item/friend-item';
 import { UserRole } from '../../types/user';
+import useScrollToUp from '../../hooks/use-scroll-to-up/use-scroll-to-up';
+import { useEffect, useState } from 'react';
+import { Query } from '../../types/training';
+import { fetchUserFriends } from '../../store/api-actions';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 
 function FriendsListUserPage(): JSX.Element {
-  const friends = useAppSelector(getFriends);
-
+  useScrollToUp();
   const navigate = useNavigate();
-  const routeChange = () =>{
-    const path = AppRoute.AccountUser;
-    navigate(path);
+  const dispatch = useAppDispatch();
+  const friends = useAppSelector(getFriends);
+  const isFriendsDataLoading = useAppSelector(getFriendsDataLoadingStatus);
+  const totalFriends = useAppSelector(getCountFiends);
+  const totalPage = Math.ceil(totalFriends / DEFAULT_LIMIT);
+
+  const [query, setQuery] = useState<Query>({limit: DEFAULT_LIMIT, page: 1});
+  useEffect(()=>{
+    dispatch(fetchUserFriends(query));
+  }, [dispatch, query]);
+
+  const scrollToTop = () =>{
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
+
+  if (isFriendsDataLoading) {
+    <LoadingScreen/>;
+  }
+
   return (
     <div className="wrapper">
       <Header />
@@ -25,7 +47,7 @@ function FriendsListUserPage(): JSX.Element {
               <button
                 className="btn-flat friends-list__back"
                 type="button"
-                onClick={routeChange}
+                onClick={() => navigate(-1)}
               >
                 <svg width="14" height="10" aria-hidden="true">
                   <use xlinkHref="#arrow-left"></use>
@@ -43,8 +65,15 @@ function FriendsListUserPage(): JSX.Element {
                 )}
               </ul>
               <div className="show-more friends-list__show-more">
-                <button className="btn show-more__button show-more__button--more" type="button">Показать еще</button>
-                <button className="btn show-more__button show-more__button--to-top" type="button">Вернуться в начало</button>
+                {totalPage !== query.page &&
+                  <button
+                    className="btn show-more__button show-more__button--more"
+                    type="button"
+                    onClick={() => setQuery({...query, page: query.page ? query.page + 1 : 1})}
+                  >Показать еще
+                  </button> }
+                {totalPage === query.page && totalPage !== 1 &&
+                  <button className="btn show-more__button" type="button" onClick={scrollToTop}>Вернуться в начало</button>}
               </div>
             </div>
           </div>

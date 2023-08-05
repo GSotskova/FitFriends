@@ -1,8 +1,9 @@
 import {store} from '../store/index';
 import {AuthorizationStatus, FormRegistration} from '../constants';
 import {User, UserFullInfo, UserGeneral, Friend} from './user';
-import { Comment, Training } from './training';
+import { Comment, TotalTrainInfo, Training } from './training';
 import { Order } from './order';
+import { Notify } from './notify';
 
 export type UserProcess = {
   authorizationStatus: AuthorizationStatus;
@@ -19,10 +20,13 @@ export type UserProcess = {
   users: UserFullInfo[];
   userOther: UserFullInfo | null;
   isUserOtherLoading: boolean;
+  countUsers: number;
 };
 
 export type TrainingData = {
   trainings: Training[];
+  countAllTrainings: TotalTrainInfo;
+  isLoadingCountAllTrainings: boolean;
   userTrainings: Training[];
   isTrainingsDataLoading: boolean;
   hasError: boolean;
@@ -31,6 +35,7 @@ export type TrainingData = {
   hasErrorPost: boolean;
   coachTrainings: Training[];
   isCoachTrainingsLoading: boolean;
+  isLoadingPostTraining: boolean;
 };
 
 export type CommentData = {
@@ -42,6 +47,8 @@ export type CommentData = {
 
 export type FriendData = {
   friends: Friend[];
+  countFiends: number;
+  isCountDataLoading: boolean;
   isFriendsDataLoading: boolean;
   hasError: boolean;
   hasErrorPost: boolean;
@@ -59,6 +66,7 @@ export type OrderData = {
   hasErrorReduce: boolean;
   order: Order | null;
   isOrderDataLoading: boolean;
+  countOrders: number;
 };
 
 export type RequestData = {
@@ -73,6 +81,13 @@ export type SubscribeData = {
   hasErrorDelete: boolean;
   isSubscrLoadPost: boolean;
   isSubscrLoadDelete: boolean;
+};
+
+export type NotifyData = {
+  notifications: Notify[];
+  hasErrorDeleteNotify: boolean;
+  isNotifyLoad: boolean;
+  isNotifyLoadDelete: boolean;
 };
 
 

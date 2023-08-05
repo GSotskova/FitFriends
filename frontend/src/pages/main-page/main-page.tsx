@@ -9,10 +9,11 @@ import FakeImg from '../../components/fake-img/fake-img';
 import { AppRoute, COUNT_TRAINING_FOR_YOU, COUNT_TRAINING_SPECIAL, COUNT_USERS_READY } from '../../constants';
 import TrainingItem from '../../components/training-item/training-item';
 import { useNavigate } from 'react-router-dom';
-import { getUsers } from '../../store/user-process/selectors';
+import { getUsers, getSignUserCatalogLoading } from '../../store/user-process/selectors';
 import UserItem from '../../components/user-item/user-item';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { fetchCatalogTrainings, fetchCoachTraining, fetchComments, fetchUserCatalog, fetchUserOrder } from '../../store/api-actions';
+import { fetchCatalogTrainings, fetchCoachTraining, fetchComments, fetchCountTrainings, fetchCountUsers, fetchUserCatalog, fetchUserOrder } from '../../store/api-actions';
+import { UserRole } from '../../types/user';
 
 const responsive = {
   desktop: {
@@ -47,8 +48,6 @@ const responsiveFour = {
 type Prop ={
   next?: () => void;
   previous?: () => void;
-  routeChangeTraining?: () => void;
-  routeChangeUsers?: () => void;
 }
 
 const ButtonGroup = ({next, previous}: Prop ) => (
@@ -79,83 +78,105 @@ const ButtonGroup = ({next, previous}: Prop ) => (
   </div>
 );
 
-const ButtonGroupPopular = ({next, previous, routeChangeTraining}: Prop ) => (
-  <div className="popular-trainings__title-wrapper">
-    <h2 className="popular-trainings__title">Популярные тренировки</h2>
-    <button
-      className="btn-flat popular-trainings__button"
-      type="button"
-      onClick={routeChangeTraining}
-    ><span>Смотреть все</span>
-      <svg width="14" height="10" aria-hidden="true">
-        <use xlinkHref="#arrow-right"></use>
-      </svg>
-    </button>
-    <div className="popular-trainings__controls">
+const ButtonGroupPopular = ({next, previous}: Prop ) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const routeChangeTraining = () =>{
+    dispatch(fetchCountTrainings(UserRole.User));
+    dispatch(fetchCatalogTrainings());
+    const path = `${AppRoute.Training}/catalog`;
+    navigate(path);
+  };
+  return (
+    <div className="popular-trainings__title-wrapper">
+      <h2 className="popular-trainings__title">Популярные тренировки</h2>
       <button
-        className="btn-icon popular-trainings__control"
+        className="btn-flat popular-trainings__button"
         type="button"
-        aria-label="previous"
-        onClick={() => previous?.()}
-      >
-        <svg width="16" height="14" aria-hidden="true">
-          <use xlinkHref="#arrow-left"></use>
-        </svg>
-      </button>
-      <button
-        className="btn-icon popular-trainings__control"
-        type="button"
-        aria-label="next"
-        onClick={() => next?.()}
-      >
-        <svg width="16" height="14" aria-hidden="true">
+        onClick={routeChangeTraining}
+      ><span>Смотреть все</span>
+        <svg width="14" height="10" aria-hidden="true">
           <use xlinkHref="#arrow-right"></use>
         </svg>
       </button>
+      <div className="popular-trainings__controls">
+        <button
+          className="btn-icon popular-trainings__control"
+          type="button"
+          aria-label="previous"
+          onClick={() => previous?.()}
+        >
+          <svg width="16" height="14" aria-hidden="true">
+            <use xlinkHref="#arrow-left"></use>
+          </svg>
+        </button>
+        <button
+          className="btn-icon popular-trainings__control"
+          type="button"
+          aria-label="next"
+          onClick={() => next?.()}
+        >
+          <svg width="16" height="14" aria-hidden="true">
+            <use xlinkHref="#arrow-right"></use>
+          </svg>
+        </button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
-const ButtonGroupDark = ({next, previous, routeChangeUsers}: Prop ) => (
-  <div className="look-for-company__title-wrapper">
-    <h2 className="look-for-company__title">Ищут компанию для тренировки</h2>
-    <button
-      className="btn-flat btn-flat--light look-for-company__button"
-      type="button"
-      onClick={routeChangeUsers}
-    >
-      <span>Смотреть все</span>
-      <svg width="14" height="10" aria-hidden="true">
-        <use xlinkHref="#arrow-right"></use>
-      </svg>
-    </button>
-    <div className="look-for-company__controls">
+const ButtonGroupDark = ({next, previous}: Prop ) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const routeChangeUsers = () =>{
+    dispatch(fetchCountUsers());
+    dispatch(fetchUserCatalog());
+    const path = AppRoute.Users;
+    navigate(path);
+  };
+
+  return (
+    <div className="look-for-company__title-wrapper">
+      <h2 className="look-for-company__title">Ищут компанию для тренировки</h2>
       <button
-        className="btn-icon btn-icon--outlined look-for-company__control"
-        type="button" aria-label="previous"
-        onClick={() => previous?.()}
+        className="btn-flat btn-flat--light look-for-company__button"
+        type="button"
+        onClick={routeChangeUsers}
       >
-        <svg width="16" height="14" aria-hidden="true">
-          <use xlinkHref="#arrow-left"></use>
-        </svg>
-      </button>
-      <button
-        className="btn-icon btn-icon--outlined look-for-company__control"
-        type="button" aria-label="next"
-        onClick={() => next?.()}
-      >
-        <svg width="16" height="14" aria-hidden="true">
+        <span>Смотреть все</span>
+        <svg width="14" height="10" aria-hidden="true">
           <use xlinkHref="#arrow-right"></use>
         </svg>
       </button>
+      <div className="look-for-company__controls">
+        <button
+          className="btn-icon btn-icon--outlined look-for-company__control"
+          type="button" aria-label="previous"
+          onClick={() => previous?.()}
+        >
+          <svg width="16" height="14" aria-hidden="true">
+            <use xlinkHref="#arrow-left"></use>
+          </svg>
+        </button>
+        <button
+          className="btn-icon btn-icon--outlined look-for-company__control"
+          type="button" aria-label="next"
+          onClick={() => next?.()}
+        >
+          <svg width="16" height="14" aria-hidden="true">
+            <use xlinkHref="#arrow-right"></use>
+          </svg>
+        </button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 
 function MainPage() {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
+  const isUserCatalogLoading = useAppSelector(getSignUserCatalogLoading);
   const userTrainings = useAppSelector(getUserTrainings);
   const isTrainingsDataLoading = useAppSelector(getTrainingsDataLoadingStatus);
   const trainingsNotSort = useAppSelector(getTrainings);
@@ -163,19 +184,6 @@ function MainPage() {
   const specialTrainings = trainings.filter((el)=>el.isSpecialOffer === true);
 
   const navigate = useNavigate();
-  const routeChangeUsers = () =>{
-    dispatch(fetchUserCatalog());
-    const path = AppRoute.Users;
-    navigate(path);
-  };
-
-
-  const routeChangeTraining = () =>{
-    dispatch(fetchCatalogTrainings());
-    const path = `${AppRoute.Training}/catalog`;
-    navigate(path);
-  };
-
   const routeChangeCard = (id: string) =>{
     dispatch(fetchCoachTraining(id));
     dispatch(fetchUserOrder(id));
@@ -184,7 +192,7 @@ function MainPage() {
     navigate(path);
   };
 
-  if (isTrainingsDataLoading) {
+  if (isTrainingsDataLoading || isUserCatalogLoading) {
     return (<LoadingScreen />);
   }
 
@@ -315,7 +323,7 @@ function MainPage() {
             slidesToSlide={1}
             renderButtonGroupOutside
             customButtonGroup={
-              <ButtonGroupPopular routeChangeTraining={routeChangeTraining}/>
+              <ButtonGroupPopular/>
             }
           >
             {
@@ -347,7 +355,7 @@ function MainPage() {
                   pauseOnHover
                   slidesToSlide={1}
                   renderButtonGroupOutside
-                  customButtonGroup={<ButtonGroupDark routeChangeUsers={routeChangeUsers}/>}
+                  customButtonGroup={<ButtonGroupDark/>}
                 >
                   {users.slice(0, COUNT_USERS_READY).map((el)=>
                     (

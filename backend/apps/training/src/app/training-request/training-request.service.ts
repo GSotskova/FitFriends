@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException} from '@nestjs/common';
-import {  USER_IS_INITIATOR, REQUEST_NOT_FOUND } from './training-request.constant';
+import {  USER_IS_INITIATOR, REQUEST_NOT_FOUND, REQUEST_EXISTS } from './training-request.constant';
 import { TrainingRequestRepository } from './training-request.repository';
 import { TrainingRequestEntity } from './training-request.entity';
 import { CreateRequestDto } from '@project/shared/shared-dto';
@@ -15,8 +15,12 @@ export class TrainingRequestService {
 
   public async create(dto: CreateRequestDto) {
     if (dto.userId === dto.initiatorId) {
-     // return {error: USER_IS_INITIATOR}
      throw new NotFoundException(USER_IS_INITIATOR);
+    }
+    const reqTrain = await this.requestRepository.findId(dto.initiatorId, dto.userId)
+    const isExists = reqTrain.find((el) => el.typeRequest === dto.typeRequest && el.statusRequest === dto.statusRequest);
+    if (isExists) {
+     throw new NotFoundException(REQUEST_EXISTS);
     }
 
     const requestEntity = new TrainingRequestEntity(dto);
@@ -26,7 +30,7 @@ export class TrainingRequestService {
   public async updateStatus(id: string, newStatus: StatusRequest) {
     const existsRequests = await this.requestRepository.findById(id)
     if (!existsRequests) {
-      return {error: REQUEST_NOT_FOUND}
+     throw new NotFoundException(REQUEST_NOT_FOUND);
     }
     if (existsRequests.statusRequest === newStatus) {
       return existsRequests
@@ -39,7 +43,7 @@ export class TrainingRequestService {
     if (!existsRequests) {
       return {error: REQUEST_NOT_FOUND}
     }
-    return this.requestRepository.findById(existsRequests._id);
+    return this.requestRepository.findId(initiatorId, coachId);
   }
 
   public async delete(id: string) {

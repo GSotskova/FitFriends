@@ -129,11 +129,12 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
     return userInfo[0];
   }
 
-  public async findAll(query: UsersQuery): Promise<User[]> {
+  public async findAll(query: UsersQuery, userId: string): Promise<User[]> {
    const objQuery = getUsersQuery(query);
 
       const usersInfo =  await this.userModel
      .aggregate([
+      { $match: { $expr : { $ne: [ '$_id' , { $toObjectId: userId } ] } } },
       {
         $lookup: {
           from: 'questionnairesUser',
@@ -204,8 +205,7 @@ export class UserRepository implements CRUDRepository<UserEntity, string, User> 
 },
      { $match: objQuery.objFiltr},
      { $sort: objQuery.objSort},
-     { $limit: objQuery.limitNumber},
-     { $skip:  objQuery.skip }
+     { $limit: objQuery.limitNumber}
      ])
     .exec();
 
