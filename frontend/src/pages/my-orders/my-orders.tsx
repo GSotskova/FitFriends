@@ -13,7 +13,7 @@ function MyOrdersPage(): JSX.Element {
   const orders = useAppSelector(getOrders);
   const totalOrders = useAppSelector(getCountOrders);
   const totalPage = Math.ceil(totalOrders / ORDERS_LIMIT);
-  console.log(orders, totalOrders, totalPage);
+
   const navigate = useNavigate();
   const routeChange = () =>{
     const path = AppRoute.AccountCoach;
@@ -63,7 +63,6 @@ function MyOrdersPage(): JSX.Element {
   };
 
   useEffect(()=>{
-    console.log(sortData);
     dispatch(fetchCoachOrders(sortData.sortStr));
   }, [dispatch, sortData]);
 

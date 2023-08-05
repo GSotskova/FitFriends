@@ -1,5 +1,5 @@
 import { LevelTraining, TrainingTime, TrainingType } from '../../types/questionnaire';
-import { StationMetro } from '../../types/station-metro.enum';
+import { StationMetro } from '../../types/station-metro';
 import { UserSex } from '../../types/user';
 
 

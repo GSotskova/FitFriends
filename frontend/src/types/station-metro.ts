@@ -1,3 +1,5 @@
+import { LatLngExpression } from 'leaflet';
+
 export enum StationMetro {
   Pionerskaya = 'Пионерская',
   Petrogradskaya = 'Петроградская',
@@ -13,3 +15,9 @@ export const STATION_METRO = [
   StationMetro.Udelnaya,
   StationMetro.Zvyozdnaya
 ];
+
+export type Metro = {
+  name: StationMetro;
+  location: LatLngExpression;
+};
+

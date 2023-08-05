@@ -13,6 +13,7 @@ import { adaptUserToClient } from '../utils/adapters/adaptersToClient';
 import { setAuthInfo, setUserFullInfo } from './user-process/user-process';
 import { Comment, NewComment, NewTraining, Query, StatusRequest, Training, TrainingRequest } from '../types/training';
 import { NewOrder, Order } from '../types/order';
+import { Notify } from '../types/notify';
 
 export const Action = {
   CHEK_USER: 'user/checkAuthAction',
@@ -55,6 +56,8 @@ export const Action = {
   POST_COMMENT:  'comment/postComment',
   CREATE_SUBSCRIBE:  'user/createSubscribe',
   DELETE_SUBSCRIBE:  'user/deleteSubscribe',
+  FETCH_NOTIFY: 'notify/fetchNotify',
+  DELETE_NOTIFY:  'notify/deleteNotify',
 };
 
 export const checkAuthAction = createAsyncThunk<User, undefined, {
@@ -729,3 +732,31 @@ export const deleteSubscribe = createAsyncThunk<void, string, {
                         return Promise.reject(error);
                       }
                     });
+
+export const fetchNotify = createAsyncThunk<Notify[], undefined, {
+         dispatch: AppDispatch;
+         state: State;
+         extra: AxiosInstance; }>(
+           Action.FETCH_NOTIFY,
+           async (_arg, {dispatch, extra: api}) => {
+             try {
+               const {data} = await api.get<Notify[]>(`${APIRoute.Users}/notify/show`);
+               return data;
+             } catch (error) {
+               return Promise.reject(error);
+             }
+           });
+
+export const deleteNotify = createAsyncThunk<void, string, {
+            dispatch: AppDispatch;
+            state: State;
+            extra: AxiosInstance; }>(
+              Action.DELETE_NOTIFY,
+              async (id, {dispatch, extra: api}) => {
+                try {
+                  await api.delete(`${APIRoute.Users}/notify/delete/${id}`);
+
+                } catch (error) {
+                  return Promise.reject(error);
+                }
+              });

@@ -3,7 +3,7 @@ import {NameSpace, AuthorizationStatus, FormRegistration} from '../../constants'
 import {UserProcess} from '../../types/state';
 import {checkAuthAction, loginUser, checkEmail, fetchUser, updateCertificate, postCertificate, deleteCertificate, fetchUserCatalog, fetchUserOther, fetchCountUsers} from '../api-actions';
 import { User, UserFullInfo, UserGeneral, UserRole, UserSex } from '../../types/user';
-import { StationMetro } from '../../types/station-metro.enum';
+import { StationMetro } from '../../types/station-metro';
 import { LevelTraining, TrainingTime } from '../../types/questionnaire';
 
 const initialState: UserProcess = {

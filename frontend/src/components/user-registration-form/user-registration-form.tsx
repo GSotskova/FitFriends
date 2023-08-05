@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { USER_ROLE_ARR, USER_SEX_ARR, UserGeneral, UserRole, UserRoleTxt, UserSex } from '../../types/user';
-import { STATION_METRO, StationMetro } from '../../types/station-metro.enum';
+import { STATION_METRO, StationMetro } from '../../types/station-metro';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { checkEmail } from '../../store/api-actions';
 import { getcheckEmail } from '../../store/user-process/selectors';

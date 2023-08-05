@@ -7,6 +7,8 @@ import {store} from './store';
 import HistoryRouter from '../src/components/history-route/history-route';
 import browserHistory from './browser-history';
 import { checkAuthAction } from './store/api-actions';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 store.dispatch(checkAuthAction());
 

@@ -1,14 +1,34 @@
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getUserFullInfo } from '../../store/user-process/selectors';
 import { AppRoute } from '../../constants';
 import { UserRole } from '../../types/user';
+import { getNotifications, getSignNotifyLoadDelete, getErrorDeleteNotify } from '../../store/notify-data/selectors';
+import { deleteNotify, fetchNotify } from '../../store/api-actions';
+import { useEffect, useState } from 'react';
 
 
 const Header = (): JSX.Element => {
+  const dispatch = useAppDispatch();
   const userInfo = useAppSelector(getUserFullInfo);
+  const notifications = useAppSelector(getNotifications);
+  const isNotifyLoadDelete = useAppSelector(getSignNotifyLoadDelete);
+  const hasErrorDeleteNotify = useAppSelector(getErrorDeleteNotify);
   const pathType = userInfo.role === UserRole.Coach ? AppRoute.AccountCoach : AppRoute.AccountUser;
   const pathTypeMain = userInfo.role === UserRole.Coach ? AppRoute.AccountCoach : AppRoute.Main;
+
+  const [countDelete, setCountDelete] = useState(0);
+  const handleNotify = (evt: React.MouseEvent<HTMLElement, MouseEvent>, id: string) => {
+    setCountDelete(countDelete + 1);
+    dispatch(deleteNotify(id));
+  };
+
+  useEffect(()=>{
+    if (!hasErrorDeleteNotify && !isNotifyLoadDelete) {
+      dispatch(fetchNotify());
+    }
+  }, [countDelete, dispatch, hasErrorDeleteNotify, isNotifyLoadDelete]);
+
 
   return (
     <header className="header">
@@ -50,24 +70,21 @@ const Header = (): JSX.Element => {
               <div className="main-nav__dropdown">
                 <p className="main-nav__label">Оповещения</p>
                 <ul className="main-nav__sublist">
-                  <li className="main-nav__subitem">
-                    <a className="notification is-active" href="/">
-                      <p className="notification__text">Катерина пригласила вас на&nbsp;тренировку</p>
-                      <time className="notification__time" dateTime="2023-12-23 12:35">23 декабря, 12:35</time>
-                    </a>
-                  </li>
-                  <li className="main-nav__subitem">
-                    <a className="notification is-active" href="/">
-                      <p className="notification__text">Никита отклонил приглашение на&nbsp;совместную тренировку</p>
-                      <time className="notification__time" dateTime="2023-12-22 09:22">22 декабря, 09:22</time>
-                    </a>
-                  </li>
-                  <li className="main-nav__subitem">
-                    <a className="notification is-active" href="/">
-                      <p className="notification__text">Татьяна добавила вас в&nbsp;друзья</p>
-                      <time className="notification__time" dateTime="2023-12-18 18:50">18 декабря, 18:50</time>
-                    </a>
-                  </li>
+                  {notifications.map((el)=>(
+                    <li className="main-nav__subitem" key={el.id} >
+                      <div className="notification is-active" onClick={(e)=>{handleNotify(e, el.id);}}>
+                        <p className="notification__text">{`${el.text} ${el.initiatorName}`}</p>
+                        <time className="notification__time" dateTime="2023-12-23 12:35">{
+                          new Date(el.dateNotify).toLocaleDateString('ru', {
+                            day: '2-digit',
+                            year: 'numeric',
+                            month: 'long',
+                          })
+                        }
+                        </time>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </li>

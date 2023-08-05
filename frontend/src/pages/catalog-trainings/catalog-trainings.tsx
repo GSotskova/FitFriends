@@ -20,7 +20,6 @@ function CatalogTrainingsPage() {
   const isTrainingsDataLoading = useAppSelector(getTrainingsDataLoadingStatus);
   const totalTrainings = useAppSelector(getCountAllTrainings);
   const totalPage = Math.ceil(totalTrainings / DEFAULT_LIMIT);
-console.log(totalTrainings, totalPage)
   const [query, setQuery] = useState<Query>({limit: DEFAULT_LIMIT, page: 1});
   const [formValue, setValue] = useState({
     minPrice: 0, maxPrice: 10000,

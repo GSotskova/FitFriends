@@ -1,3 +1,5 @@
+import { Metro, StationMetro } from './types/station-metro';
+
 export enum AppRoute {
   Login = '/login',
   Intro = '/',
@@ -42,7 +44,8 @@ export enum NameSpace {
   DataOrders = 'DATA_ORDERS',
   DataRequest = 'DATA_REQUEST',
   DataComments = 'DATA_COMMENT',
-  DataSubscribe = 'DATA_SUBSCRIBE'
+  DataSubscribe = 'DATA_SUBSCRIBE',
+  DataNotify = 'DATA_NOTIFY'
 }
 
 export enum HttpCode {
@@ -87,3 +90,23 @@ export const COUNT_ORDER_DEFAULT = 5;
 export const DEFAULT_RATING = 5;
 export const DEFAULT_LIMIT = 6;
 export const ORDERS_LIMIT = 4;
+
+export const POINT_ARR: Metro[] = [
+  {name: StationMetro.Petrogradskaya,
+    location: [59.966399, 30.311511]
+  },
+  {name: StationMetro.Pionerskaya,
+    location: [59.950190, 30.288335]
+  },
+  {name: StationMetro.Sportivnaya,
+    location: [60.002517, 30.296671]
+  },
+  {name: StationMetro.Udelnaya,
+    location: [60.016681, 30.315617]
+  },
+  {name: StationMetro.Zvyozdnaya,
+    location: [59.833233, 30.349492]
+  },
+];
+
+export const ZOOM = 12;

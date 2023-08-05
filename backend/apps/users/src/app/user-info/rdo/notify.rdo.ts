@@ -27,7 +27,7 @@ export class NotifyRdo {
     description: 'Date notify',
   })
   @Expose()
-  public dateNotify: string;
+  public dateNotify: Date;
 
 
 }

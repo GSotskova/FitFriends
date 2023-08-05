@@ -1,5 +1,5 @@
 import { LevelTraining, TrainingTime, TrainingType } from './questionnaire';
-import { StationMetro } from './station-metro.enum';
+import { StationMetro } from './station-metro';
 import { UserRole, UserSex } from './user';
 
 export type Training = {

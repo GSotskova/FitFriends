@@ -47,7 +47,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "email": "coach1@notfound.local",
+  "email": "user2@notfound.local",
   "password": "1234567"
 }
 ###
@@ -130,7 +130,7 @@ Content-Type: application/json
 
 
 #  Добавить друга
-POST http://localhost:4000/api/user/friends/add/6497fd0eaaa5a02715264c9b HTTP/1.1
+POST http://localhost:4000/api/user/friends/add/649809159b59277aa0c615a7 HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 ###

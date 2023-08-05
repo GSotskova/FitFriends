@@ -83,12 +83,12 @@ export class UserInfoController {
     const notify = await this.notifyUserService.getNotifyUsers(payload.sub);
     await Promise.all(notify.map(async (el) => {
       el.initiatorName = (await this.userService.getUser(el.initiatorId)).userName
-      return {...el, dateNotify: el.dateNotify.toDateString()}
+      return el //{...el, dateNotify: el.dateNotify.toDateString()}
        }));
-       notify.map(async (el) => { return {...el,
+       /*notify.map(async (el) => { return {...el,
         dateNotify: el.dateNotify.toDateString()
          }
-         })
+         })*/
     return fillObject(NotifyRdo, notify);
   }
 

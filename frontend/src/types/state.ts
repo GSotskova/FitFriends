@@ -3,6 +3,7 @@ import {AuthorizationStatus, FormRegistration} from '../constants';
 import {User, UserFullInfo, UserGeneral, Friend} from './user';
 import { Comment, Training } from './training';
 import { Order } from './order';
+import { Notify } from './notify';
 
 export type UserProcess = {
   authorizationStatus: AuthorizationStatus;
@@ -80,6 +81,13 @@ export type SubscribeData = {
   hasErrorDelete: boolean;
   isSubscrLoadPost: boolean;
   isSubscrLoadDelete: boolean;
+};
+
+export type NotifyData = {
+  notifications: Notify[];
+  hasErrorDeleteNotify: boolean;
+  isNotifyLoad: boolean;
+  isNotifyLoadDelete: boolean;
 };
 
 

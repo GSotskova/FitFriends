@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { LEVEL_TRAIN_ARR, LevelTraining, TRAINING_ARR, TrainingType } from '../../types/questionnaire';
 import { USER_SEX_ARR, UserFullInfo, UserRole, UserSex } from '../../types/user';
-import { STATION_METRO, StationMetro } from '../../types/station-metro.enum';
+import { STATION_METRO, StationMetro } from '../../types/station-metro';
 import { DescriptionLn } from '../../constants';
 import { editUser } from '../../store/api-actions';
 import { useAppDispatch } from '../../hooks';

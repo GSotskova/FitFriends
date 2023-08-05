@@ -6,7 +6,7 @@ import { LEVEL_TRAIN_ARR, LevelTraining, TRAINING_ARR, TrainingType } from '../.
 import { useNavigate } from 'react-router-dom';
 import { AppRoute, SHOW_TRAINING_TYPE, DEFAULT_LIMIT } from '../../constants';
 import { getUsers, getCountUsers } from '../../store/user-process/selectors';
-import { STATION_METRO, StationMetro } from '../../types/station-metro.enum';
+import { STATION_METRO, StationMetro } from '../../types/station-metro';
 import { USER_ROLE_ARR_TYPE, UserRole } from '../../types/user';
 import UserItem from '../../components/user-item/user-item';
 import { fetchUserCatalog } from '../../store/api-actions';
