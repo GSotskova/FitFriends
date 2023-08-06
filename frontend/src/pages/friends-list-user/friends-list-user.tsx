@@ -57,7 +57,7 @@ function FriendsListUserPage(): JSX.Element {
                 <h1 className="friends-list__title">Мои друзья</h1>
               </div>
               <ul className="friends-list__list">
-                {friends.map((el) =>
+                {friends && friends.map((el) =>
                   (
                     <li className="friends-list__item" key={el.id}>
                       <FriendItem user={el} currentUserRole={UserRole.User}/>
