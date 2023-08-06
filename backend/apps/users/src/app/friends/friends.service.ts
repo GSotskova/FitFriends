@@ -51,11 +51,18 @@ export class FriendService {
       }
       return friendUser;
     }
-    
+
     const friendCoach = await this.friendRepository.findId(userId, friendId)
     if (!friendCoach) {
       return {error: FRIENDS_NOT_FOUND}
     }
     return friendCoach;
+  }
+
+
+  public async createTestData(test_user) {
+    const entityTest = new FriendEntity(test_user)
+    const newFriend = await this.friendRepository.create(entityTest);
+    return newFriend
   }
 }

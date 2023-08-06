@@ -62,11 +62,11 @@ const Header = (): JSX.Element => {
               </Link>
             </li>
             <li className="main-nav__item main-nav__item--notifications">
-              <a className="main-nav__link" href="/" aria-label="Уведомления">
+              <Link to='/' onClick={(evt)=> evt.preventDefault()} className="main-nav__link" aria-label="Уведомления">
                 <svg width="14" height="18" aria-hidden="true">
                   <use xlinkHref="#icon-notification"></use>
                 </svg>
-              </a>
+              </Link>
               <div className="main-nav__dropdown">
                 <p className="main-nav__label">Оповещения</p>
                 <ul className="main-nav__sublist">
@@ -102,16 +102,6 @@ const Header = (): JSX.Element => {
               <li className="search__item"><a className="search__link" href="/">Бокс</a></li>
               <li className="search__item"><a className="search__link is-active" href="/">Бег</a></li>
               <li className="search__item"><a className="search__link" href="/">Аэробика</a></li>
-              <li className="search__item"><a className="search__link" href="/">Text</a></li>
-              <li className="search__item"><a className="search__link" href="/">Text</a></li>
-              <li className="search__item"><a className="search__link" href="/">Text</a></li>
-              <li className="search__item"><a className="search__link" href="/">Text</a></li>
-              <li className="search__item"><a className="search__link" href="/">Text</a></li>
-              <li className="search__item"><a className="search__link" href="/">Text</a></li>
-              <li className="search__item"><a className="search__link" href="/">Text</a></li>
-              <li className="search__item"><a className="search__link" href="/">Text</a></li>
-              <li className="search__item"><a className="search__link" href="/">Text</a></li>
-              <li className="search__item"><a className="search__link" href="/">Text</a></li>
             </ul>
           </form>
         </div>

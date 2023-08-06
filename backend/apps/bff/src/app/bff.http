@@ -39,7 +39,7 @@ Content-Type: application/json
   "caloriesSpend": 1500,
   "isReady": true
   }
-statusRequestдру
+
 ###
 # @name login
 POST http://localhost:4000/api/users/login HTTP/1.1
@@ -47,7 +47,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "email": "user1@notfound.local",
+  "email": "coach1@mail.ru",
   "password": "1234567"
 }
 ###
@@ -231,14 +231,14 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "nameTraining": "Тренировка 1",
+  "nameTraining": "Тренировка 12",
   "levelTraining": "профессионал",
   "trainingType": "кроссфит",
   "trainingTime": "30-50 мин",
   "price": 2400,
   "caloriesReset": 3000,
   "descriptionTraining": "Тренировка кроссфит",
-  "sex": "female",
+  "sex": "Женский",
   "isSpecialOffer": true
 }
 ###
@@ -256,7 +256,7 @@ Content-Type: application/json
 ###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F image="@/C:/fit_img/avatar-angelina.jpg" http://localhost:4000/api/files/image/training/64a447e28cc4fa6456f411fa
 
 ### Загрузка видео тренировки
-###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F video="@/C:/fit_img/Video_HTML_Academy_1.mp4" http://localhost:4000/api/files/video/training/649afe8c1b6c87810dbb07bf
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F video="@/C:/fit_img/Video_HTML_Academy_1.mp4" http://localhost:4000/api/files/video/training/64cf4af43ae72d1075b19056
 
 ###Загрузка сертификатов
 ###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F certificate="@/C:/fit_img/1.pdf" http://localhost:4000/api/files/coach/certificate

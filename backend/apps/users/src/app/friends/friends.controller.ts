@@ -1,4 +1,4 @@
-import {  Controller, Get, HttpStatus, Param, Post, Query, Req, UseGuards  } from '@nestjs/common';
+import {  Body, Controller, Get, HttpStatus, Param, Post, Query, Req, UseGuards  } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillObject } from '@project/util/util-core';
 import { FriendInfoRdo } from '../friends/rdo/friends.rdo';
@@ -101,5 +101,17 @@ export class FriendController {
   public async deleteFriend(@Req() { user: payload }: RequestWithTokenPayload, @Param('friendId') friendId: string) {
     const newFriends = await this.friendService.delete(friendId, payload.sub );
     return newFriends;
+  }
+
+  @Post('test')
+  public async createTestData(@Body() test_user) {
+    const dataArr = [];
+    for (const key in test_user) {
+      const user = await this.friendService.createTestData(test_user[key]);
+      await this.notifyUserService.create(test_user[key].userId, test_user[key].friendId, NotifyMessage.Friend)
+
+    dataArr.push(user);
+  }
+    return dataArr;
   }
 }

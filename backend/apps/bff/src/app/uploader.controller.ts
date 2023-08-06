@@ -114,7 +114,6 @@ export class UploaderController {
   @UseInterceptors(UseridTrainingInterceptor)
   @UseInterceptors(FileInterceptor('video'))
   public async postVideo(@UploadedFile() file: Express.Multer.File,@Param('id') id: string) {
-
     const formData = new FormData();
      formData.append('video', Buffer.from(file.buffer), {filename: file.originalname,contentType: file.mimetype});
 

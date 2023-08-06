@@ -377,7 +377,6 @@ export const postTraining = createAsyncThunk<Training, NewTraining & FileType, {
              Action.POST_TRAINING,
              async (newtraining: NewTraining & FileType, { dispatch, extra: api }) => {
                const { data } = await api.post<Training>(`${APIRoute.CoachTraining}/create`, newtraining);
-
                if (data && newtraining.fileVideoTraning?.name) {
                  const postCertificateApiRoute = `${APIRoute.Files}/video/training/${data.id}`;
                  await api.post(postCertificateApiRoute, adaptVideoToServer(newtraining.fileVideoTraning));
