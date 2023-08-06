@@ -145,7 +145,10 @@ export const registerCoach = createAsyncThunk<void, UserGeneral & QuestionnaireC
        const postCertificateApiRoute = `${APIRoute.Files}/coach/certificate`;
        await api.post(postCertificateApiRoute, adaptCertificateToServer(newCoach.fileCertificate));
      }
-     dispatch(redirectToRoute(AppRoute.Intro));
+     const userFullInfo = await api.get<UserFullInfo>(APIRoute.CheckUser);
+     dispatch(setAuthInfo({authInfo: {id: data.id, userName: userFullInfo.data.userName, role: userFullInfo.data.role, email: userFullInfo.data.email , accessToken: accessToken}}));
+     dispatch(setUserFullInfo({userFullInfo: userFullInfo.data}));
+     dispatch(redirectToRoute(AppRoute.AccountCoach));
    });
 
 export const updateCertificate = createAsyncThunk<void, FileType, {
@@ -205,6 +208,9 @@ export const registerUser = createAsyncThunk<void, UserGeneral & QuestionnaireUs
        const postAvatarApiRoute = `${APIRoute.Files}/avatar`;
        await api.post(postAvatarApiRoute, adaptAvatarToServer(newUser.avatarImg));
      }
+     const userFullInfo = await api.get<UserFullInfo>(APIRoute.CheckUser);
+     dispatch(setAuthInfo({authInfo: {id: data.id, userName: userFullInfo.data.userName, role: userFullInfo.data.role, email: userFullInfo.data.email , accessToken: accessToken}}));
+     dispatch(setUserFullInfo({userFullInfo: userFullInfo.data}));
      dispatch(redirectToRoute(AppRoute.Main));
    });
 
