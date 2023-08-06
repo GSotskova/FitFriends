@@ -67,10 +67,12 @@ export class UserAccountController {
         let initiatorId = el.userId;
         const userId = body.userId;
         const requestTraining  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Request}/show`,{data: {initiatorId, userId}} );
+        const reqTogether = requestTraining.data.length !== 0 ?
+        requestTraining.data.reduce((prev, current) => (prev.dateUpd > current.dateUpd) ? prev : current) : {typeRequest: null};
         if (requestTraining.data.typeRequest === TypeRequest.Together){
           el.requestTogether = true
-          el.requestStatus = requestTraining.data.statusRequest
-          el.requestId = requestTraining.data.id
+          el.requestStatus = reqTogether.statusRequest
+          el.requestId = reqTogether.id
         }
           initiatorId = body.userId;
           const coachId = el.userId;
@@ -78,7 +80,7 @@ export class UserAccountController {
           const requestTrainingCoach  = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Request}/show`,{data: {initiatorId, coachId}} );
 
           const reqTrain = requestTrainingCoach.data.length !== 0 ?
-          requestTrainingCoach.data.reduce((prev, current) => (prev.dateUpd > current.dateUpd) ? prev : current) : null;
+          requestTrainingCoach.data.reduce((prev, current) => (prev.dateUpd > current.dateUpd) ? prev : current) : {typeRequest: null};
           if (reqTrain.typeRequest === TypeRequest.Personal) {
             el.requestPersonal = true
             el.requestStatus = reqTrain.statusRequest

@@ -53,7 +53,7 @@ const FriendItem = ({user, currentUserRole}: Props): JSX.Element => {
           </div>
         </div>
         <ul className="thumbnail-friend__training-types-list">
-          {user.trainingType.map((el)=>
+          {user.trainingType && user.trainingType.map((el)=>
             (
               <li key={el}>
                 <div className="hashtag thumbnail-friend__hashtag"><span>#{el}</span></div>

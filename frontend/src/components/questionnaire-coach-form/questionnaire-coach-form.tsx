@@ -36,8 +36,6 @@ function QuestionnaireCoachForm({userData, avatarImg}: UserData): JSX.Element {
       fileCertificate: fileCertificate,
     };
 
-    // eslint-disable-next-line no-console
-    console.log(data);
     if (!isNotTrainingType) {
       dispatch(registerCoach(data));
     }

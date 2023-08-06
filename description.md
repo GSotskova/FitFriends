@@ -2,12 +2,16 @@
 FitFriends
 
 Запуск приложения:
+cd backend:
 nx run notify:serve (Оповещения)
 nx run bff:serve (Все запросы)
 nx run seed:serve (Первоначальное заполнение БД)
 nx run uploader:serve (Загрузка файлов: аватар, сертификаты и т.д.)
 nx run training:serve (Тренировки, заказы, заявки на персональные/совместные, комментарии)
 nx run users:serve (Пользователи: регистрация, авторизация, просмотр, друзья и т.д.)
+
+cd frontend:
+npm run start
 
 
 
@@ -21,6 +25,8 @@ docker compose --file ./apps/training/docker-compose.dev.yml --project-name "fit
 Заполнение БД:
     каталог seed:
             - seed.http (заполняются таблицы users, questionnairesCoach, questionnairesUser в бд fitfriends-users
+                         заполняются таблицу friends в бд fitfriends-users
+                         заполняются таблицу orders в бд fitfriends-training
                          заполняются таблицу training в бд fitfriends-training
                          заполняются таблицу comments в бд fitfriends-training)
 

@@ -136,7 +136,7 @@ function UserCardPage() {
     return null;
   }
 
-  if (isUserLoading || (isCoach && isCoachTrainingsLoading) || isUserOtherLoading) {
+  if (isUserLoading || (isCoach && isCoachTrainingsLoading) || isUserOtherLoading || isFriendLoadPost || isFriendLoadDelete) {
     return (<LoadingScreen />);
   }
   return (
