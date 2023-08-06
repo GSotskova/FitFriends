@@ -10,7 +10,7 @@ import { CheckAuthGuard } from './guards/check-auth.guard';
 import { RoleCoachInterceptor } from './interceptors/role-coach.interceptor';
 import { UseridTrainingInterceptor } from './interceptors/userid-tarining.interceptor';
 import { CoachIdInterceptor } from './interceptors/coachId.interceptor';
-import { StatusRequest, TypeRequest } from '@project/shared/shared-types';
+import { StatusRequest, Training, TypeRequest } from '@project/shared/shared-types';
 
 
 
@@ -26,8 +26,15 @@ export class CoachAccountController {
   @UseInterceptors(RoleCoachInterceptor)
   @UseInterceptors(CoachIdInterceptor)
   @Post('/training/create')
-  public async create(@Body() dto: CreateTrainingDTO) {
+  public async create(@Req() req: Request, @Body() dto: CreateTrainingDTO) {
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Training}/create`, dto);
+    const training = data as Training;
+    await this.httpService.axiosRef.get(`${ApplicationServiceURL.Auth}/notify/users/newtraining`, {
+      data: training,
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    });
    return data;
   }
 

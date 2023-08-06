@@ -96,4 +96,10 @@ export class TrainingOrdersService {
     return existOrder;
   }
 
+  public async createTestData(order) {
+    const orderEntity = new TrainingOrdersEntity(order);
+    return this.ordersRepository.create(orderEntity);
+
+  }
+
 }

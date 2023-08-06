@@ -323,9 +323,9 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
               disabled={!isEditForm}
             />
             {fileVideoTraning &&
-              <video src={URL.createObjectURL(fileVideoTraning)} width="922" height="566" controls></video>}
+              <video src={URL.createObjectURL(fileVideoTraning)} width="922" height="566" controls={isHiddenStop}></video>}
             {!fileVideoTraning && currentInfo.videoTraningPath &&
-                <video src={currentInfo.videoTraningPath} width="922" height="566" controls></video>}
+                <video src={currentInfo.videoTraningPath} width="922" height="566" controls={isHiddenStop}></video>}
           </div>
         </div>
         {!isCoach &&
