@@ -7,7 +7,6 @@ import { UsersSubscriptionsController } from './users-subscriptions.controller';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { getRabbitMQOptions } from '@project/util/util-core';
 import { NotifyModule } from '../notify/notify.module';
-import { UserInfoModule } from '../user-info/user-info.module';
 
 @Module({
   imports: [MongooseModule.forFeature([
@@ -18,8 +17,7 @@ import { UserInfoModule } from '../user-info/user-info.module';
     RabbitMQModule,
     getRabbitMQOptions('rabbit')
   ),
-  NotifyModule,
-  UserInfoModule],
+  NotifyModule],
   controllers: [UsersSubscriptionsController],
   providers: [UsersSubscriptionsService, UsersSubscriptionsRepository],
   exports: [UsersSubscriptionsService]

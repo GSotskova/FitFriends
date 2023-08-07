@@ -22,9 +22,7 @@ export class NotifyUserModel extends Document implements NotifyUser {
     })
   public text: NotifyMessage;
 
-  @Prop({
-    required: true,
-  })
+  @Prop()
   public dateNotify: Date;
 
 }

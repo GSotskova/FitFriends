@@ -178,19 +178,6 @@ public async deleteSubscription( @Body() dto: UserSubscriptionDto) {
 
 
 @UseGuards(CheckAuthGuard)
-@UseInterceptors(UseridInterceptor)
-@Get('notify/newtraining')
-public async getTrainingAndNotify(@Req() req: Request) {
-
-  const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Auth}/notify/newtraining`, {
-    headers: {
-      'Authorization': req.headers['authorization']
-    }
-  });
-  return data;
-}
-
-@UseGuards(CheckAuthGuard)
 @UseInterceptors(InintiatoridInterceptor)
 @UseInterceptors(RoleUserInterceptor)
 @UseInterceptors(UseridExistsInterceptor)

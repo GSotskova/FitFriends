@@ -47,7 +47,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "email": "user1@mail.ru",
+  "email": "coach1@mail.ru",
   "password": "1234567"
 }
 ###
@@ -215,12 +215,6 @@ Content-Type: application/json
   "coachId": "6497fd0eaaa5a02715264c9b"
 }
 ###
-# Рассылка почтовых уведомлений на email о новых тренировках
-GET http://localhost:4000/api/user/notify/newtraining HTTP/1.1
-Authorization: Bearer {{authToken}}
-Content-Type: application/json
-
-###
 
 ##################     ЛИЧНЫЙ КАБИНЕТ ТРЕНЕРА    ###################
 
@@ -231,7 +225,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "nameTraining": "Тренировка 12",
+  "nameTraining": "Трен188888",
   "levelTraining": "профессионал",
   "trainingType": "кроссфит",
   "trainingTime": "30-50 мин",
@@ -242,6 +236,21 @@ Content-Type: application/json
   "isSpecialOffer": true
 }
 ###
+
+# Рассылка почтовых уведомлений на email о новых тренировках
+GET http://localhost:4000/api/coach/notify/newtraining HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+# Кол-во не разосланных тренировок
+GET http://localhost:4000/api/coach/notify/training/count HTTP/1.1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
 # Редактирование  тренировки
 POST http://localhost:4000/api/coach/training/edit/64a406e9c4d605ea3e822df6 HTTP/1.1
 Authorization: Bearer {{authToken}}

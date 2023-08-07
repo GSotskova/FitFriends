@@ -8,6 +8,8 @@ import { QuestionnaireCoachModule } from '../questionnaire-coach/questionnaire-c
 import { QuestionnaireUserModule } from '../questionnaire-user/questionnaire-user.module';
 import { NotifyUserModule } from '../user-notify/user-notify.module';
 import { NotifyModule } from '../notify/notify.module';
+import { NotifyDateModule } from '../date-notify/date-notify.module';
+import { UsersSubscriptionsModule } from '../users-subscriptions/users-subscriptions.module';
 
 @Module({
   imports: [MongooseModule.forFeature([
@@ -17,6 +19,8 @@ import { NotifyModule } from '../notify/notify.module';
   QuestionnaireUserModule,
   NotifyUserModule,
   NotifyModule,
+  NotifyDateModule,
+  UsersSubscriptionsModule,
   ],
   controllers: [UserInfoController],
   providers: [UserService, UserRepository],

@@ -110,3 +110,4 @@ export const POINT_ARR: Metro[] = [
 ];
 
 export const ZOOM = 12;
+export const COUNT_TRAINING_FOR_SEND = 4;

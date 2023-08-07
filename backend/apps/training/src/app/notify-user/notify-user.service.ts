@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { trainingConfig } from '@project/config/config-training';
 import { ConfigType } from '@nestjs/config';
-import { RabbitExchange, RabbitRouting, TrainingRequest } from '@project/shared/shared-types';
+import { RabbitExchange, RabbitRouting, Training, TrainingRequest } from '@project/shared/shared-types';
 
 @Injectable()
 export class NotifyUserService {
@@ -20,5 +20,12 @@ export class NotifyUserService {
     );
   }
 
+  public async trainingNotify(training: Training) {
+    return this.rabbitClient.request<Training>(
+      {exchange: RabbitExchange.Training,
+      routingKey: RabbitRouting.TrainingNotify,
+      payload: training}
+    );
+  }
 
 }
