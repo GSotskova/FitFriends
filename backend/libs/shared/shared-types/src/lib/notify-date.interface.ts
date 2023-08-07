@@ -1,5 +1,10 @@
+import { TrainingForSend } from "./training-for-send.interface";
+
 export interface NotifyDate {
-  id?: string;
+  _id?: string;
   userId: string;
-  dateNotify: Date;
+  trainingForSend: TrainingForSend;
+  countNewTraining: number;
+  dateNotify?: Date;
+  isDone: boolean;
 }

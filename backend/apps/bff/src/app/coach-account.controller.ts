@@ -10,7 +10,7 @@ import { CheckAuthGuard } from './guards/check-auth.guard';
 import { RoleCoachInterceptor } from './interceptors/role-coach.interceptor';
 import { UseridTrainingInterceptor } from './interceptors/userid-tarining.interceptor';
 import { CoachIdInterceptor } from './interceptors/coachId.interceptor';
-import { StatusRequest, Training, TypeRequest } from '@project/shared/shared-types';
+import { StatusRequest, TypeRequest } from '@project/shared/shared-types';
 
 
 
@@ -28,13 +28,6 @@ export class CoachAccountController {
   @Post('/training/create')
   public async create(@Req() req: Request, @Body() dto: CreateTrainingDTO) {
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Training}/create`, dto);
-    const training = data as Training;
-    await this.httpService.axiosRef.get(`${ApplicationServiceURL.Auth}/notify/users/newtraining`, {
-      data: training,
-      headers: {
-        'Authorization': req.headers['authorization']
-      }
-    });
    return data;
   }
 
@@ -175,6 +168,31 @@ export class CoachAccountController {
       }
     });
    return data;
+  }
+
+  @UseGuards(CheckAuthGuard)
+  @Get('notify/newtraining')
+  public async getTrainingAndNotify(@Req() req: Request) {
+
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/notify/newtraining`, {
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    });
+    return data;
+  }
+
+
+  @UseGuards(CheckAuthGuard)
+  @Get('notify/training/count')
+  public async getCountTraining(@Req() req: Request) {
+
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/notify/training/count`, {
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    });
+    return data;
   }
 
 }

@@ -8,13 +8,14 @@ import { JwtAuthGuard } from '../authentication/guards/jwt-auth.guard';
 import { UserRoleInterceptor } from './interceptors/user-role.interceptor';
 import { MongoidValidationPipe } from '@project/shared/shared-pipes';
 import { EditUserDto } from '@project/shared/shared-dto';
-import { NotifyMessage, RabbitExchange, RabbitQueue, RabbitRouting, RequestWithTokenPayload, TrainingRequest, TypeRequest, UserRole } from '@project/shared/shared-types';
+import { NotifyDate, NotifyMessage, RabbitExchange, RabbitQueue, RabbitRouting, RequestWithTokenPayload, Training, TrainingRequest, TypeRequest, UserRole } from '@project/shared/shared-types';
 import { NewCoachRdo } from '../authentication/rdo/new-coach.rdo';
 import { NewUserRdo } from '../authentication/rdo/new-user.rdo';
 import { NotifyUserService } from '../user-notify/user-notify.service';
 import { NotifyRdo } from './rdo/notify.rdo';
 import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import { NotifyService } from '../notify/notify.service';
+import { UsersSubscriptionsService } from '../users-subscriptions/users-subscriptions.service';
 
 
 @ApiTags('user-info')
@@ -24,6 +25,7 @@ export class UserInfoController {
     private readonly userService: UserService,
     private readonly notifyUserService: NotifyUserService,
     private readonly notifyService: NotifyService,
+    private readonly usersSubscriptionsService: UsersSubscriptionsService,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -162,6 +164,87 @@ export class UserInfoController {
     return newNotify
   }
 
+
+  @RabbitRPC({
+    exchange: RabbitExchange.Training,
+    routingKey: RabbitRouting.TrainingNotify,
+    queue: RabbitQueue.Request,
+  })
+  public async trainingNotify(@Body() request: Training) {
+  const users = await this.usersSubscriptionsService.getByCoachId(request.coachId);
+  if (!users) {
+    return null;
+  }
+  const coachName = (await this.userService.getUser(request.coachId)).userName;
+  const trainingForSend = {
+  _id: request._id,
+  nameTraining: request.nameTraining,
+  descriptionTraining: request.descriptionTraining,
+  coachId: request.coachId,
+  coachName: coachName,
+  createDate: request.createdAt
+}
+const traininNotNotify = await this.userService.findNotDone();
+const maxCount = traininNotNotify.length !== 0 ? Math.max(...traininNotNotify.map(function(el: NotifyDate) { return el.countNewTraining })) : 0;
+const dateNotify = new Date(Date.UTC(1900, 0, 1));
+await Promise.all(users.map(async (user, i) => {
+  const dataForNatify = {
+    userId: user.userId,
+    trainingForSend,
+    countNewTraining: maxCount + (i+1),
+    isDone: false,
+    dateNotify
+  }
+await this.userService.createOrUpdateNotify(dataForNatify)
+}));
+
+return traininNotNotify;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Start sending notifications at the users request.'
+  })
+  @Get('notify/newtraining')
+  public async getNewTraining() {
+
+    const traininNotNotify = await this.userService.findNotDone();
+      const currentDate = new Date();
+      await Promise.all(traininNotNotify.map(async (el) => {
+      const email = (await this.userService.getUser(el.userId)).email;
+      await this.notifyService.notifyNewTraining({
+            userId: el.userId,
+            email,
+            training: [el.trainingForSend],
+            dateSend: currentDate.toDateString() });
+      const dataForNatify = {
+        _id: el._id,
+        userId: el.userId,
+        trainingForSend: el.trainingForSend,
+        countNewTraining: el.countNewTraining,
+        isDone: true,
+        dateNotify:  currentDate
+      }
+        await this.userService.createOrUpdateNotify(dataForNatify)
+      }));
+    return traininNotNotify;
+
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Start sending notifications at the users request.'
+  })
+  @Get('notify/training/count')
+  public async getCountNewTraining() {
+
+    const traininNotNotify = await this.userService.findNotDone();
+    const maxCount = Math.max(...traininNotNotify.map(function(el: NotifyDate) { return el.countNewTraining }));
+
+return maxCount
+  }
 
   @Post('test')
   public async createTestData(@Body() test_user) {

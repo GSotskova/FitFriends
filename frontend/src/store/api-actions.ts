@@ -3,7 +3,7 @@ import {AxiosError, AxiosInstance} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state';
 import {AuthData} from '../types/auth-data';
-import {APIRoute, AppRoute, DEFAULT_LIMIT, HttpCode, MAX_CALORIES_VALUE, ORDERS_LIMIT} from '../constants';
+import {APIRoute, AppRoute, COUNT_TRAINING_FOR_SEND, DEFAULT_LIMIT, HttpCode, MAX_CALORIES_VALUE, ORDERS_LIMIT} from '../constants';
 import {saveToken, dropToken} from '../services/token';
 import {redirectToRoute} from './action';
 import { User, UserGeneral, FileType, UserFullInfo, UserRole, UserEdit, Friend } from '../types/user';
@@ -382,14 +382,24 @@ export const postTraining = createAsyncThunk<Training, NewTraining & FileType, {
            }>(
              Action.POST_TRAINING,
              async (newtraining: NewTraining & FileType, { dispatch, extra: api }) => {
-               const { data } = await api.post<Training>(`${APIRoute.CoachTraining}/create`, newtraining);
-               if (data && newtraining.fileVideoTraning?.name) {
-                 const postCertificateApiRoute = `${APIRoute.Files}/video/training/${data.id}`;
-                 await api.post(postCertificateApiRoute, adaptVideoToServer(newtraining.fileVideoTraning));
-               }
-               dispatch(redirectToRoute(`${AppRoute.AccountCoach}/trainings`));
+               try {
+                 const { data } = await api.post<Training>(`${APIRoute.CoachTraining}/create`, newtraining);
+                 if (data && newtraining.fileVideoTraning?.name) {
+                   const postCertificateApiRoute = `${APIRoute.Files}/video/training/${data.id}`;
+                   await api.post(postCertificateApiRoute, adaptVideoToServer(newtraining.fileVideoTraning));
+                 }
+                 const countTrainInQueue = await api.get<number>(`${APIRoute.Coach}/notify/training/count`);
 
-               return data;
+                 if (countTrainInQueue.data >= COUNT_TRAINING_FOR_SEND) {
+                   await api.get<Training>(`${APIRoute.Coach}/notify/newtraining`);
+                 }
+
+                 dispatch(redirectToRoute(`${AppRoute.AccountCoach}/trainings`));
+
+                 return data;
+               } catch (error) {
+                 return Promise.reject(error);
+               }
              });
 
 export const editTraining = createAsyncThunk<Training, Training, {

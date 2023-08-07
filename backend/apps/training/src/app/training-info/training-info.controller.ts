@@ -8,6 +8,7 @@ import { CreateTrainingDTO, EditTrainingDTO } from '@project/shared/shared-dto';
 import { TrainingRdo } from './rdo/training-info.rdo';
 import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import { DataNotifyTraining, RabbitExchange, RabbitQueue, RabbitRouting, TrainingForSend } from '@project/shared/shared-types';
+import { NotifyUserService } from '../notify-user/notify-user.service';
 
 
 
@@ -16,6 +17,7 @@ import { DataNotifyTraining, RabbitExchange, RabbitQueue, RabbitRouting, Trainin
 export class TrainingInfoController {
   constructor(
     private readonly trainingService: TrainingService,
+    private readonly notifyUserService: NotifyUserService
   ) {}
 
   @ApiResponse({
@@ -25,8 +27,9 @@ export class TrainingInfoController {
   })
   @Post('create')
   public async create(@Body() dto: CreateTrainingDTO) {
-    const newTrainig = await this.trainingService.create(dto);
-    return fillObject(TrainingRdo, newTrainig);
+    const newTraining = await this.trainingService.create(dto);
+    await this.notifyUserService.trainingNotify(newTraining)
+    return fillObject(TrainingRdo, newTraining);
   }
 
   @Post('edit/:id')

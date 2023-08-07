@@ -35,8 +35,14 @@ export class NotifyDateRepository implements CRUDRepository<NotifyDateEntity, st
      .exec();
  }
 
+ public async findNotDone(): Promise<NotifyDate[]> {
+  return this.notifyDateModel
+   .find({isDone: false})
+   .exec();
+}
+
   public async createOrUpdate(item: NotifyDateEntity): Promise<NotifyDate> {
-    const existsNotify = await this.notifyDateModel.findOne({userId: item.userId}).exec();
+    const existsNotify = await this.notifyDateModel.findOne({_id: item._id}).exec();
 
     if (existsNotify) {
       return this.notifyDateModel.findByIdAndUpdate(existsNotify.id, item.toObject(), {new: true}).exec();

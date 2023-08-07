@@ -13,7 +13,6 @@ import { QuestionnaireCoachRepository } from '../questionnaire-coach/questionnai
 import { QuestionnaireUserRepository } from '../questionnaire-user/questionnaire-user.repository';
 import { RefreshTokenService } from '../refresh-token/refresh-token.service';
 import { UserService } from '../user-info/user-info.service';
-import { NotifyDateEntity } from '../date-notify/date-notify.entity';
 import { NotifyDateRepository } from '../date-notify/date-notify.repository';
 
 @Injectable()
@@ -109,17 +108,6 @@ export class AuthenticationService {
     }
   }
 
-
-
-
-  public async createOrUpdateNotify(userId: string, dateNotify: Date) {
-    const notifyEntity = await new NotifyDateEntity({userId, dateNotify})
-    return this.notifyDateRepository.createOrUpdate(notifyEntity);
-  }
-
-  public async findNotifyByUser(userId: string) {
-    return this.notifyDateRepository.findByUserId(userId);
-  }
 
   public async changeAvatar(userId: string, fileId: string) {
     const existUser = await this.userRepository.findById(userId);

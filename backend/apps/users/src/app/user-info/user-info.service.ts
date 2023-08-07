@@ -4,12 +4,14 @@ import { UsersQuery } from '@project/shared/shared-query';
 import { USERS_NOT_FOUND, USER_NOT_FOUND } from './user-info.constant';
 import { UserEntity } from './user-info.entity';
 import { CreateUserDto, EditUserDto } from '@project/shared/shared-dto';
-import { User, UserRole } from '@project/shared/shared-types';
+import { NotifyDate, User, UserRole } from '@project/shared/shared-types';
 import dayjs from 'dayjs';
 import { QuestionnaireUserEntity } from '../questionnaire-user/questionnaire-user.entity';
 import { QuestionnaireCoachEntity } from '../questionnaire-coach/questionnaire-coach.entity';
 import { QuestionnaireCoachRepository } from '../questionnaire-coach/questionnaire-coach.repository';
 import { QuestionnaireUserRepository } from '../questionnaire-user/questionnaire-user.repository';
+import { NotifyDateEntity } from '../date-notify/date-notify.entity';
+import { NotifyDateRepository } from '../date-notify/date-notify.repository';
 
 
 @Injectable()
@@ -18,10 +20,12 @@ export class UserService {
     private readonly userRepository: UserRepository,
     private readonly questionnaireCoachRepository: QuestionnaireCoachRepository,
     private readonly questionnaireUserRepository: QuestionnaireUserRepository,
+    private readonly notifyDateRepository: NotifyDateRepository,
   ) {}
 
     public async getUser(id: string) {
      const existUser = await  this.userRepository.findById(id);
+     console.log(existUser.role)
     if (existUser.role === UserRole.Coach) {
        return this.userRepository.getInfoCoach(existUser._id);
       }
@@ -121,5 +125,13 @@ export class UserService {
     return new QuestionnaireCoachEntity(item)
   }
 
+  public async createOrUpdateNotify(dataForNatify: NotifyDate) {
+  const notifyEntity = new NotifyDateEntity(dataForNatify)
 
+    return this.notifyDateRepository.createOrUpdate(notifyEntity);
+  }
+
+  public async findNotDone() {
+    return this.notifyDateRepository.findNotDone();
+  }
 }
