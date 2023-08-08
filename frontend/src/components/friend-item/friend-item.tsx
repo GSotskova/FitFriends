@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
-import { acceptRequest, deleteRequest } from '../../store/api-actions';
+import { acceptRequest, deleteRequest } from '../../store/api-actions-request';
 import { Friend, StatusRequest, UserRole } from '../../types/user';
 import { AppRoute } from '../../constants';
 

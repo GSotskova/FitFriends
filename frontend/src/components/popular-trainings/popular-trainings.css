@@ -1,0 +1,11 @@
+ .conteiner-main-revers {
+  display: flex;
+  flex-direction: column;
+}
+
+.conteiner_order {
+  order: 2;
+}
+.popular-trainings__title-wrapper {
+  order: 0
+}

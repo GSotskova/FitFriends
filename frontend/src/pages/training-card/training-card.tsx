@@ -11,7 +11,7 @@ import LoadingScreen from '../loading-screen/loading-screen';
 import PopupWindow from '../../components/popup-window/popup-window';
 import CreateComment from '../../components/create-comment/create-comment';
 import { useEffect, useState } from 'react';
-import { fetchCoachTraining, fetchComments } from '../../store/api-actions';
+import { fetchCoachTraining, fetchComments } from '../../store/api-actions-trainings';
 
 function TrainingCardPage() {
   const navigate = useNavigate();
@@ -29,7 +29,6 @@ function TrainingCardPage() {
   const togglePopup = () => {
     if (showModal && training) {
       dispatch(fetchComments(training.id));
-      // dispatch(fetchCoachTraining(training.id));
     }
     setShowModal(!showModal);
   };

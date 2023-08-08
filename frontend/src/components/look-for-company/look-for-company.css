@@ -1,0 +1,13 @@
+ .conteiner-main-revers {
+  display: flex;
+  flex-direction: column;
+}
+
+.conteiner_order {
+  order: 2;
+}
+
+.look-for-company__title-wrapper
+ {
+  order:0;
+ }

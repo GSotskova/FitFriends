@@ -62,15 +62,13 @@ export type Query = {
   isDone?: string;
 }
 
-export enum StatusRequest
- {
+export enum StatusRequest {
   Pending = 'на рассмотрении',
   Rejected = 'отклонён',
   Accepted = 'принят',
 }
 
-export enum TypeRequest
- {
+export enum TypeRequest {
   Personal = 'персональная тренировка',
   Together = 'совместная тренировка'
 }

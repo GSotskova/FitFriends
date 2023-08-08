@@ -3,7 +3,7 @@ import { LEVEL_TRAIN_ARR, LevelTraining, TRAINING_ARR, TrainingType } from '../.
 import { USER_SEX_ARR, UserFullInfo, UserRole, UserSex } from '../../types/user';
 import { STATION_METRO, StationMetro } from '../../types/station-metro';
 import { DescriptionLn } from '../../constants';
-import { editUser } from '../../store/api-actions';
+import { editUser } from '../../store/api-actions-user';
 import { useAppDispatch } from '../../hooks';
 
 type Props = {

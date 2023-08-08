@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { LEVEL_TRAIN_ARR, LevelTraining, TRAINING_ARR, TrainingTime, TrainingType, TRAINING_TIME } from '../../types/questionnaire';
 import { useAppDispatch } from '../../hooks';
-import { registerUser } from '../../store/api-actions';
+import { registerUser } from '../../store/api-actions-user';
 import { UserGeneral } from '../../types/user';
 
 enum FormFieldName {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { postComment } from '../../store/api-actions';
+import { postComment } from '../../store/api-actions-trainings';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getErrorPost } from '../../store/comment-data/selectors';
 import { CommentLn, DEFAULT_RATING, RATING_TRAINING_ARR } from '../../constants';

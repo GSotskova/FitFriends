@@ -8,7 +8,7 @@ import { UserRole } from '../../types/user';
 import useScrollToUp from '../../hooks/use-scroll-to-up/use-scroll-to-up';
 import { useEffect, useState } from 'react';
 import { Query } from '../../types/training';
-import { fetchUserFriends } from '../../store/api-actions';
+import { fetchUserFriends } from '../../store/api-actions-friends';
 import LoadingScreen from '../loading-screen/loading-screen';
 
 

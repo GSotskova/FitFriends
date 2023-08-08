@@ -1,12 +1,13 @@
 import { DescriptionLn } from '../../constants';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { editTraining, fetchCoachTraining, fetchUserOrder, reduceOrder } from '../../store/api-actions';
+import { editTraining, fetchCoachTraining } from '../../store/api-actions-trainings';
 import { Training } from '../../types/training';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { UserRole, UserSex } from '../../types/user';
 import { getOrder } from '../../store/orders-data/selectors';
 import CreateOrder from '../create-order/create-order';
 import PopupWindow from '../popup-window/popup-window';
+import { fetchUserOrder, reduceOrder } from '../../store/api-actions-order';
 
 type Props = {
   training: Training;

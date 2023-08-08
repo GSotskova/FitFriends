@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
 import {CommentData} from '../../types/state';
-import {fetchComments, postComment} from '../api-actions';
+import {fetchComments, postComment} from '../api-actions-trainings';
 
 const initialState: CommentData = {
   comments: [],
@@ -29,7 +29,7 @@ export const commentsData = createSlice({
         state.isCommentsDataLoading = false;
         state.hasError = true;
       })
-      .addCase(postComment.pending, (state, action) => {
+      .addCase(postComment.pending, (state) => {
         state.hasErrorPostComment = false;
       })
       .addCase(postComment.fulfilled, (state, action) => {

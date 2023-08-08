@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
-import {fetchNotify, deleteNotify} from '../api-actions';
+import {fetchNotify, deleteNotify} from '../api-actions-request';
 import { NotifyData } from '../../types/state';
 
 const initialState: NotifyData = {

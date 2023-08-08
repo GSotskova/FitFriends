@@ -9,7 +9,7 @@ import { getUsers, getCountUsers, getSignUserCatalogLoading } from '../../store/
 import { STATION_METRO, StationMetro } from '../../types/station-metro';
 import { USER_ROLE_ARR_TYPE, UserRole } from '../../types/user';
 import UserItem from '../../components/user-item/user-item';
-import { fetchUserCatalog } from '../../store/api-actions';
+import { fetchUserCatalog } from '../../store/api-actions-user';
 import useScrollToUp from '../../hooks/use-scroll-to-up/use-scroll-to-up';
 import LoadingScreen from '../loading-screen/loading-screen';
 

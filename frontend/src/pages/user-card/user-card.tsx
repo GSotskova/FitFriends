@@ -5,7 +5,10 @@ import { getSignUserLoading, getSignUserOtherLoading, getUserFullInfo, getUserOt
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { useEffect, useState } from 'react';
-import { createRequest, createSubscribe, deleteCoachFriend, deleteFriend, deleteSubscribe, fetchCoachOtherTrainings, fetchUserOther, postFriend } from '../../store/api-actions';
+import { fetchCoachOtherTrainings } from '../../store/api-actions-trainings';
+import { deleteCoachFriend, deleteFriend, postFriend } from '../../store/api-actions-friends';
+import { createSubscribe, deleteSubscribe, fetchUserOther } from '../../store/api-actions-user';
+import { createRequest} from '../../store/api-actions-request';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import './user-card.css';

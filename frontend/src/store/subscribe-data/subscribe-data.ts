@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
 import {SubscribeData} from '../../types/state';
-import {createSubscribe, deleteSubscribe} from '../api-actions';
+import {createSubscribe, deleteSubscribe} from '../api-actions-user';
 
 const initialState: SubscribeData = {
   hasErrorPost: false,

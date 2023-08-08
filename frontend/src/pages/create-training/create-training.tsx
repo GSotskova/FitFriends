@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import Header from '../../components/header/header';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { postTraining } from '../../store/api-actions';
+import { postTraining } from '../../store/api-actions-trainings';
 import { LEVEL_TRAIN_ARR, LevelTraining, TRAINING_ARR, TRAINING_TIME, TrainingTime, TrainingType } from '../../types/questionnaire';
 import { USER_SEX_ARR, UserSex } from '../../types/user';
 import { DescriptionLn } from '../../constants';

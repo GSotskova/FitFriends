@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { LEVEL_TRAIN_ARR, LevelTraining, TRAINING_ARR, TrainingType } from '../../types/questionnaire';
 import { useAppDispatch } from '../../hooks';
-import { registerCoach } from '../../store/api-actions';
+import { registerCoach } from '../../store/api-actions-coach';
 import { UserGeneral } from '../../types/user';
 import { SuccessCoach } from '../../constants';
 

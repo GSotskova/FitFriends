@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
 import {FriendData} from '../../types/state';
-import {deleteFriend, fetchCoachFriends, postFriend, fetchUserFriends, fetchCountFriends, deleteCoachFriend} from '../api-actions';
+import {deleteFriend, fetchCoachFriends, postFriend, fetchUserFriends, fetchCountFriends, deleteCoachFriend} from '../api-actions-friends';
 
 const initialState: FriendData = {
   friends: [],
@@ -57,7 +57,7 @@ export const friendsData = createSlice({
         state.isCountDataLoading = false;
         state.hasError = true;
       })
-      .addCase(postFriend.pending, (state, action) => {
+      .addCase(postFriend.pending, (state) => {
         state.isFriendLoadPost = true;
       })
       .addCase(postFriend.fulfilled, (state, action) => {

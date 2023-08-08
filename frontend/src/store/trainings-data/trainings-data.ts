@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
 import {TrainingData} from '../../types/state';
-import {editTraining, fetchCoachTrainings, postTraining, fetchCoachTraining, fetchUserTrainings, fetchCatalogTrainings, fetchCoachOtherTrainings, fetchCountTrainings} from '../api-actions';
+import {editTraining, fetchCoachTrainings, postTraining, fetchCoachTraining, fetchUserTrainings, fetchCatalogTrainings, fetchCoachOtherTrainings, fetchCountTrainings} from '../api-actions-trainings';
 
 const initialState: TrainingData = {
   trainings: [],
@@ -85,7 +85,7 @@ export const trainingsData = createSlice({
       .addCase(fetchCoachTraining.rejected, (state) => {
         state.isTrainingLoading = false;
       })
-      .addCase(postTraining.pending, (state, action) => {
+      .addCase(postTraining.pending, (state) => {
         state.hasErrorPost = false;
         state.isLoadingPostTraining = true;
       })
