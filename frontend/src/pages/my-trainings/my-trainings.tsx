@@ -3,7 +3,7 @@ import MultiRangeSlider, { ChangeResult } from 'multi-range-slider-react';
 import Header from '../../components/header/header';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getCountAllTrainings, getTrainings, getTrainingsDataLoadingStatus } from '../../store/trainings-data/selectors';
-import { fetchCoachTrainings } from '../../store/api-actions';
+import { fetchCoachTrainings } from '../../store/api-actions-trainings';
 import TrainingItem from '../../components/training-item/training-item';
 import { Query } from '../../types/training';
 import { TRAINING_TIME, TrainingTime } from '../../types/questionnaire';
@@ -40,11 +40,9 @@ function MyTrainingsPage() {
 
     if (name === 'minPrice' && Number(valueNum) <= formValue.maxPrice) {
       setQuery({...query, price:[Number(valueNum), formValue.maxPrice]});
-      // setSliderValue({...sliderValue, minPrice: Number(value), maxPrice: formValue.maxPrice});
     }
     if (name === 'maxPrice' && Number(valueNum) >= formValue.minPrice) {
       setQuery({...query, price:[formValue.minPrice, Number(valueNum)]});
-      //setSliderValue({...sliderValue, minPrice: formValue.minPrice, maxPrice: Number(value)});
     }
     if ((name === 'maxPrice' && Number(valueNum) === 0 && formValue.minPrice === 0)
       || (name === 'minPrice' && Number(valueNum) === 0 && formValue.maxPrice === 0)) {

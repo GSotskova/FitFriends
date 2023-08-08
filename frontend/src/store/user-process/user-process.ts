@@ -1,7 +1,8 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {NameSpace, AuthorizationStatus, FormRegistration} from '../../constants';
 import {UserProcess} from '../../types/state';
-import {checkAuthAction, loginUser, checkEmail, fetchUser, updateCertificate, postCertificate, deleteCertificate, fetchUserCatalog, fetchUserOther, fetchCountUsers} from '../api-actions';
+import {checkAuthAction, loginUser, checkEmail, fetchUser, fetchUserCatalog, fetchUserOther, fetchCountUsers} from '../api-actions-user';
+import {updateCertificate, postCertificate, deleteCertificate} from '../api-actions-coach';
 import { User, UserFullInfo, UserGeneral, UserRole, UserSex } from '../../types/user';
 import { StationMetro } from '../../types/station-metro';
 import { LevelTraining, TrainingTime } from '../../types/questionnaire';
@@ -62,7 +63,7 @@ export const userProcess = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(checkAuthAction.pending, (state, action) => {
+      .addCase(checkAuthAction.pending, (state) => {
         state.isAuthInfoLoading = true;
       })
       .addCase(checkAuthAction.fulfilled, (state, action) => {
@@ -82,7 +83,7 @@ export const userProcess = createSlice({
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.hasErrorLogin = true;
       })
-      .addCase(checkEmail.fulfilled, (state, action) => {
+      .addCase(checkEmail.fulfilled, (state) => {
         state.existsEmail = false;
       })
       .addCase(checkEmail.rejected, (state) => {
@@ -111,7 +112,7 @@ export const userProcess = createSlice({
       .addCase(fetchCountUsers.fulfilled, (state, action) => {
         state.countUsers = action.payload;
       })
-      .addCase(updateCertificate.fulfilled, (state, action) => {
+      .addCase(updateCertificate.fulfilled, (state) => {
         state.hasErrorPostCertificate = false;
       })
       .addCase(updateCertificate.rejected, (state) => {

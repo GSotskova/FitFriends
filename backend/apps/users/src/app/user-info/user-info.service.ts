@@ -25,7 +25,6 @@ export class UserService {
 
     public async getUser(id: string) {
      const existUser = await  this.userRepository.findById(id);
-     console.log(existUser.role)
     if (existUser.role === UserRole.Coach) {
        return this.userRepository.getInfoCoach(existUser._id);
       }

@@ -2,7 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
 import { UserFullInfo, UserRole } from '../../types/user';
 import { AppRoute } from '../../constants';
-import { fetchCoachOtherTrainings, fetchUserOther } from '../../store/api-actions';
+import { fetchCoachOtherTrainings } from '../../store/api-actions-trainings';
+import { fetchUserOther } from '../../store/api-actions-user';
 
 type Props = {
   user: UserFullInfo;

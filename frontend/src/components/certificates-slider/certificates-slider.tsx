@@ -3,7 +3,7 @@ import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import CertificateItem from '../../components/certificate-item/certificate-item';
 import { ChangeEvent, useRef } from 'react';
-import { postCertificate } from '../../store/api-actions';
+import { postCertificate } from '../../store/api-actions-coach';
 import { FileType, UserFullInfo } from '../../types/user';
 import './certificates-slider.css';
 

@@ -1,5 +1,5 @@
 import { ChangeEvent, Fragment, useRef, useState } from 'react';
-import { deleteCertificate, updateCertificate } from '../../store/api-actions';
+import { deleteCertificate, updateCertificate } from '../../store/api-actions-coach';
 import { useAppDispatch } from '../../hooks';
 import { FileType } from '../../types/user';
 

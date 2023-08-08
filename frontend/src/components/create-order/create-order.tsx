@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Training } from '../../types/training';
 import { PAY_OPTION, PaymentOption } from '../../types/order';
-import { postOrder } from '../../store/api-actions';
+import { postOrder } from '../../store/api-actions-order';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getErrorPost } from '../../store/orders-data/selectors';
 import { getLoadingPost } from '../../store/orders-data/selectors';

@@ -4,7 +4,7 @@ import { getUserFullInfo } from '../../store/user-process/selectors';
 import { AppRoute } from '../../constants';
 import { UserRole } from '../../types/user';
 import { getNotifications, getSignNotifyLoadDelete, getErrorDeleteNotify } from '../../store/notify-data/selectors';
-import { deleteNotify, fetchNotify } from '../../store/api-actions';
+import { deleteNotify, fetchNotify } from '../../store/api-actions-request';
 import { useEffect, useState } from 'react';
 
 

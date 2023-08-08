@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
 import {OrderData} from '../../types/state';
-import {fetchCoachOrders, postOrder, fetchUserOrders, reduceOrder, fetchUserOrder, fetchCountOrders} from '../api-actions';
+import {fetchCoachOrders, postOrder, fetchUserOrders, reduceOrder, fetchUserOrder, fetchCountOrders} from '../api-actions-order';
 
 const initialState: OrderData = {
   orders: [],
@@ -62,7 +62,7 @@ export const ordersData = createSlice({
         state.isOrderDataLoading = false;
         state.hasError = true;
       })
-      .addCase(postOrder.pending, (state, action) => {
+      .addCase(postOrder.pending, (state) => {
         state.hasErrorPost = false;
         state.isPostLoading = true;
       })

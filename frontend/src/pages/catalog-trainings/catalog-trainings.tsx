@@ -3,7 +3,7 @@ import MultiRangeSlider, { ChangeResult } from 'multi-range-slider-react';
 import Header from '../../components/header/header';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getCountAllTrainings, getTrainings, getTrainingsDataLoadingStatus } from '../../store/trainings-data/selectors';
-import { fetchCatalogTrainings } from '../../store/api-actions';
+import { fetchCatalogTrainings } from '../../store/api-actions-trainings';
 import TrainingItem from '../../components/training-item/training-item';
 import { Query } from '../../types/training';
 import { TRAINING_ARR, TrainingType } from '../../types/questionnaire';

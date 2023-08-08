@@ -5,7 +5,7 @@ import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getCountOrders, getOrders, getOrdersDataLoadingStatus } from '../../store/orders-data/selectors';
 import { AppRoute, ORDERS_LIMIT } from '../../constants';
 import { useEffect, useState } from 'react';
-import { fetchCoachOrders } from '../../store/api-actions';
+import { fetchCoachOrders } from '../../store/api-actions-order';
 import { UserRole } from '../../types/user';
 import LoadingScreen from '../loading-screen/loading-screen';
 

@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../constants';
 import {RequestData} from '../../types/state';
-import {acceptRequest, deleteRequest, createRequest} from '../api-actions';
+import {acceptRequest, deleteRequest, createRequest} from '../api-actions-request';
 
 const initialState: RequestData = {
   hasErrorPost: false,

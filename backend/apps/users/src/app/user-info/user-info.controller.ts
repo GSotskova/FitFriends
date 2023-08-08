@@ -85,12 +85,8 @@ export class UserInfoController {
     const notify = await this.notifyUserService.getNotifyUsers(payload.sub);
     await Promise.all(notify.map(async (el) => {
       el.initiatorName = (await this.userService.getUser(el.initiatorId)).userName
-      return el //{...el, dateNotify: el.dateNotify.toDateString()}
+      return el
        }));
-       /*notify.map(async (el) => { return {...el,
-        dateNotify: el.dateNotify.toDateString()
-         }
-         })*/
     return fillObject(NotifyRdo, notify);
   }
 
@@ -168,7 +164,7 @@ export class UserInfoController {
   @RabbitRPC({
     exchange: RabbitExchange.Training,
     routingKey: RabbitRouting.TrainingNotify,
-    queue: RabbitQueue.Request,
+    queue: RabbitQueue.Newtraining,
   })
   public async trainingNotify(@Body() request: Training) {
   const users = await this.usersSubscriptionsService.getByCoachId(request.coachId);
@@ -198,7 +194,7 @@ await Promise.all(users.map(async (user, i) => {
 await this.userService.createOrUpdateNotify(dataForNatify)
 }));
 
-return traininNotNotify;
+return traininNotNotify;;
   }
 
   @UseGuards(JwtAuthGuard)

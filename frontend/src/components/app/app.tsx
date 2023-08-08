@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Route, Routes } from 'react-router-dom';
 import {useEffect} from 'react';
 import {useAppSelector, useAppDispatch} from '../../hooks';
@@ -12,7 +11,7 @@ import MyTrainingsPage from '../../pages/my-trainings/my-trainings';
 import CreateTrainingPage from '../../pages/create-training/create-training';
 import FriendsListPage from '../../pages/friends-list-coach/friends-list-coach';
 import { getAuthCheckedStatus, getAuthInfo, getAuthInfoDataLoadingStatus, getAuthorizationStatus, getSignUserLoading, getUserFullInfo } from '../../store/user-process/selectors';
-import { fetchCatalogTrainings,fetchCountTrainings, fetchCoachFriends, fetchCoachOrders, fetchCoachTrainings, fetchUser, fetchUserCatalog, fetchUserFriends, fetchUserOrders, fetchUserTrainings, fetchCountFriends, fetchCountUsers, fetchCountOrders, fetchNotify } from '../../store/api-actions';
+import { fetchCatalogTrainings,fetchCountTrainings, fetchCoachTrainings, fetchUserTrainings} from '../../store/api-actions-trainings';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import MyOrdersPage from '../../pages/my-orders/my-orders';
 import MainPage from '../../pages/main-page/main-page';
@@ -26,6 +25,10 @@ import FriendsListUserPage from '../../pages/friends-list-user/friends-list-user
 import UserBuyPage from '../../pages/user-buy/user-buy';
 import AccountUserPage from '../../pages/personal-account-user/personal-account-user';
 import UserCardPage from '../../pages/user-card/user-card';
+import { fetchCountUsers, fetchUser, fetchUserCatalog } from '../../store/api-actions-user';
+import { fetchCoachFriends, fetchCountFriends, fetchUserFriends } from '../../store/api-actions-friends';
+import { fetchCoachOrders, fetchCountOrders, fetchUserOrders } from '../../store/api-actions-order';
+import { fetchNotify } from '../../store/api-actions-request';
 
 
 function App(): JSX.Element {
