@@ -12,12 +12,13 @@ import { AvatarsModule } from '../avatars/avatars.module';
 import { ImgTrainingModule } from '../img-training/img-training.module';
 import { join } from 'path';
 
+console.log(join(__dirname, '../../..', 'apps/uploader/uploads'))
 @Module({
   imports: [
     ServeStaticModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const rootPath =  configService.get<string>('application.uploadDirectory');
+        const rootPath =  join(__dirname, '../../..', 'apps/uploader/uploads');
         const serveRoot = configService.get<string>('application.serveRoot');
         return [{
           rootPath,
