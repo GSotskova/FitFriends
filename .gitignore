@@ -45,5 +45,4 @@ Thumbs.db
 **/uploads/*
 !.gitkeep
 
-**/public/js/*
-**/public/css/*
+*.min*
