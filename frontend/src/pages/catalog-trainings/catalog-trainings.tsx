@@ -293,7 +293,7 @@ function CatalogTrainingsPage() {
                   </form>
                 </div>
               </div>
-              <div className="training-catalog">
+              <div className="training-catalog" data-testid="trainings">
                 <ul className="training-catalog__list">
                   {trainings.map((el) =>
                     (

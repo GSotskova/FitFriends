@@ -33,7 +33,7 @@ const Header = (): JSX.Element => {
   return (
     <header className="header">
       <div className="container">
-        <Link className="header__logo" aria-label="Переход на главную" to={pathTypeMain}>
+        <Link className="header__logo" aria-label="Переход на главную" to={pathTypeMain} data-testid="handleMainClick">
           <svg width="187" height="70" aria-hidden="true">
             <use xlinkHref="#logo"></use>
           </svg>

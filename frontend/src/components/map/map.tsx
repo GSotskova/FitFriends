@@ -8,7 +8,7 @@ type MapProps = {
 
 
 const MapView = ({position}: MapProps) => (
-  <div className="popup__map">
+  <div className="popup__map" data-testid="map">
     <MapContainer
       className="markercluster-map"
       center={position}

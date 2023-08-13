@@ -122,7 +122,7 @@ function MyOrdersPage(): JSX.Element {
                   </div>
                 </div>
               </div>
-              <ul className="my-orders__list">
+              <ul className="my-orders__list" data-testid="orders">
                 {orders.map((el) =>
                   (
                     <li className="my-orders__item" key={el.id}>

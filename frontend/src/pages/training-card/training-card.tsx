@@ -23,6 +23,7 @@ function TrainingCardPage() {
   const isCoach = user.role === UserRole.Coach;
 
   const training = useAppSelector(getTraining);
+
   const isTrainLoading = useAppSelector(getIsTrainingLoading);
 
   const [showModal, setShowModal] = useState(false);

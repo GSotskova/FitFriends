@@ -16,7 +16,8 @@
         "tsConfig": "apps/training/tsconfig.app.json",
         "assets": ["apps/training/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/training/webpack.config.js"
+        "webpackConfig": "apps/training/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},

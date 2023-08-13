@@ -15,7 +15,6 @@ type FileCertificate = {
 
 const CertificateItem = ({certificateId, certificatePath}: Props): JSX.Element => {
   const dispatch = useAppDispatch();
-
   const [isEditForm, setSignEditForm] = useState<boolean>(false);
   const handleEditButtonClick = () => {
     setSignEditForm((prevIsEditForm) => !prevIsEditForm);
@@ -49,10 +48,10 @@ const CertificateItem = ({certificateId, certificatePath}: Props): JSX.Element =
   return (
     <div className={`certificate-card certificate-card${isEditForm ? '--edit' : ''}`}>
       <div className="certificate-card__image">
-        {/*<embed src={`${certificatePath}#toolbar=0`} width="294" height="360" type="application/pdf" />*/}
         <object data={`${fileCertificate.certificatePath}#toolbar=0`}
           type="application/pdf"
           width="294" height="360"
+          data-testid="object"
         >не удалось показать документ
         </object>
       </div>

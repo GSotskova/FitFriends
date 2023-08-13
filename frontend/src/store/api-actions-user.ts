@@ -8,7 +8,7 @@ import {redirectToRoute} from './action';
 import { User, UserGeneral, FileType, UserFullInfo, UserRole, UserEdit } from '../types/user';
 import { QuestionnaireUser } from '../types/questionnaire';
 import { adaptAvatarToServer, adaptUserEditToServer, adaptUserToServer } from '../utils/adapters/adaptersToServer';
-import { adaptUserToClient } from '../utils/adapters/adaptersToClient';
+import { adaptUserToClient, adaptUsersToClient } from '../utils/adapters/adaptersToClient';
 import { setAuthInfo, setUserFullInfo } from './user-process/user-process';
 import { Query } from '../types/training';
 
@@ -185,7 +185,7 @@ export const fetchUserCatalog = createAsyncThunk<UserFullInfo[], Query | undefin
           const levelTrainingQuery = query && query.levelTraining ? `levelTraining=${query.levelTraining}&` : '';
           const trainingTypeQuery = query && query.trainingType ? `trainingType=${query.trainingType.join(',').trim()}` : '';
           const {data} = await api.get<UserFullInfo[]>(`${APIRoute.Users}?${limit}${page}${userRoleQuery}${levelTrainingQuery}${locationQuery}${trainingTypeQuery}`);
-          return data;
+          return adaptUsersToClient(data);
 
         } catch (error) {
 

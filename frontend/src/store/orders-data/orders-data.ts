@@ -76,7 +76,9 @@ export const ordersData = createSlice({
         state.isPostLoading = false;
       })
       .addCase(reduceOrder.fulfilled, (state, action) => {
-        state.orders.push(action.payload);
+        //state.orders.push(action.payload);
+        const updatedOrder = action.payload;
+        state.orders = state.orders.map((order) => order.id === updatedOrder.id ? updatedOrder : order);
         state.hasErrorReduce = false;
       })
       .addCase(reduceOrder.rejected, (state) => {

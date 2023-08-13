@@ -38,3 +38,31 @@ export const adaptUserToClient =
     isSubscribe: user.isSubscribe
   });
 
+
+export const adaptUsersToClient =
+  (users: UserFullInfo[]): UserFullInfo[] =>
+    users
+      .map((user: UserFullInfo) => ({
+        id: user.id,
+        userName: user.userName,
+        email: user.email,
+        avatar: user.avatar,
+        avatarPath: user.avatarPath,
+        sex: user.sex,
+        dateBirth: user.dateBirth,
+        role: user.role,
+        description: user.description,
+        location: user.location,
+        levelTraining: user.levelTraining,
+        trainingType: user.trainingType,
+        certificate: user.certificate,
+        certificatesPath: user.certificatesPath,
+        successCoach: user.successCoach,
+        isPersonal: user.isPersonal,
+        trainingTime: user.trainingTime,
+        caloriesReset: user.caloriesReset,
+        caloriesSpend: user.caloriesSpend,
+        isReady: user.isReady,
+        isFriend: user.isFriend,
+        isSubscribe: user.isSubscribe
+      }));

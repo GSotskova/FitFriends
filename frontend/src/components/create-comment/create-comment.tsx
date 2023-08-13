@@ -77,7 +77,7 @@ const CreateComment = ({trainingId, userId, handleClose}: Prop): JSX.Element => 
             </svg>
           </button>
         </div>
-        <div className="popup__content popup__content--feedback">
+        <div className="popup__content popup__content--feedback" data-testid="RatingInputs">
           <h3 className="popup__feedback-title">Оцените тренировку</h3>
           <ul className="popup__rate-list">
             {RATING_TRAINING_ARR.map((el) => (
@@ -106,7 +106,7 @@ const CreateComment = ({trainingId, userId, handleClose}: Prop): JSX.Element => 
               <div className="custom-textarea">
                 <label>
                   <span className="custom-input--error">
-                    <textarea name="description" placeholder=" " onChange={handleMessageChange}></textarea>
+                    <textarea name="description" placeholder=" " onChange={handleMessageChange} data-testid="textarea"></textarea>
                     {isNotCorrectLength &&
                           <span className="custom-textarea__error">Минимальная длина 100 символ. Максимальная длина 1024 символов</span>}
                   </span>
@@ -120,6 +120,7 @@ const CreateComment = ({trainingId, userId, handleClose}: Prop): JSX.Element => 
               type="button"
               disabled={isErrorPost || isDone}
               onClick={handleCreateComment}
+              data-testid="next"
             >Продолжить
             </button>
           </div>

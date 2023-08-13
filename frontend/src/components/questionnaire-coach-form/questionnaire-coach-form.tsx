@@ -193,6 +193,7 @@ function QuestionnaireCoachForm({userData, avatarImg}: UserData): JSX.Element {
                             name={FormFieldName.successCoach}
                             placeholder=" "
                             onChange={handleSuccessChange}
+                            data-testid="textarea"
                           >
                           </textarea>
                           {isNotCorrectLength &&
