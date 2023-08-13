@@ -265,7 +265,7 @@ function MyTrainingsPage() {
               </div>
               <div className="inner-page__content">
                 <div className="my-trainings">
-                  <ul className="my-trainings__list">
+                  <ul className="my-trainings__list" data-testid="trainings">
                     {trainings.map((el) =>
                       (
                         <li className="my-trainings__item" key={el.id}>

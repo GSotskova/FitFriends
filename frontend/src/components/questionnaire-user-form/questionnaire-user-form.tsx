@@ -188,6 +188,7 @@ function QuestionnaireUserForm({userData, avatarImg}: UserData): JSX.Element {
                               required
                               min="1000"
                               max="5000"
+                              data-testid="caloriesReset"
                             />
                             <span className="custom-input__text">ккал</span>
                           </span>

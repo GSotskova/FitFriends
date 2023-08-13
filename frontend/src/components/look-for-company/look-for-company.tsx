@@ -80,7 +80,7 @@ const ButtonGroupDark = ({next, previous}: Prop ) => {
 const LookForCompany = ({users}: Props): JSX.Element => (
   <section className="look-for-company">
     <div className="container">
-      <div className="look-for-company__wrapper conteiner-main-revers">
+      <div className="look-for-company__wrapper conteiner-main-revers" data-testid="look">
         {users.length !== 0 &&
                 <Carousel
                   responsive={responsiveFour}

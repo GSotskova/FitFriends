@@ -20,7 +20,7 @@ const responsiveSpecial = {
 const SpecialOffers = ({specialTrainings}: Props): JSX.Element => (
   <section className="special-offers">
     <div className="container">
-      <div className="special-offers__wrapper">
+      <div className="special-offers__wrapper" data-testid="special">
         <h2 className="visually-hidden">Специальные предложения</h2>
         {specialTrainings.length !== 0 &&
         (

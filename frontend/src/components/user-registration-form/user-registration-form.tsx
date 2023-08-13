@@ -156,6 +156,7 @@ const UserRegistrationForm = ({onSubmit}: UserRegistrationFormProps): JSX.Elemen
                           pattern="^[A-Za-zА-Яа-яЁё\s]+$"
                           title="Только буквы русского/английского алфавита"
                           required
+                          data-testid="userName"
                         />
                       </span>
                     </label>
@@ -167,6 +168,7 @@ const UserRegistrationForm = ({onSubmit}: UserRegistrationFormProps): JSX.Elemen
                           type="email"
                           name={FormFieldName.email}
                           onChange={handleInputEmail}
+                          data-testid="mail"
                           required
                         />
                         {isEmailExists &&
@@ -222,6 +224,7 @@ const UserRegistrationForm = ({onSubmit}: UserRegistrationFormProps): JSX.Elemen
                           required
                           minLength={6}
                           maxLength={12}
+                          data-testid="password"
                         />
                       </span>
                     </label>

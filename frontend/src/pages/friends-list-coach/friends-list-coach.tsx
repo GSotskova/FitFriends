@@ -55,7 +55,7 @@ function FriendsListPage(): JSX.Element {
               <div className="friends-list__title-wrapper">
                 <h1 className="friends-list__title">Мои друзья</h1>
               </div>
-              <ul className="friends-list__list">
+              <ul className="friends-list__list" data-testid="list">
                 {friends.map((el) =>
                   (
                     <li className="friends-list__item" key={el.id}>

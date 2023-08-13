@@ -16,7 +16,8 @@
         "tsConfig": "apps/seed/tsconfig.app.json",
         "assets": ["apps/seed/src/assets"],
         "isolatedConfig": true,
-        "webpackConfig": "apps/seed/webpack.config.js"
+        "webpackConfig": "apps/seed/webpack.config.js",
+        "generatePackageJson": true
       },
       "configurations": {
         "development": {},

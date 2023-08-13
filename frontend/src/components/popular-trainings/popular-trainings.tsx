@@ -78,7 +78,7 @@ const ButtonGroupPopular = ({next, previous}: Prop ) => {
 const PopularTrainings = ({trainings}: Props): JSX.Element => (
   <section className="popular-trainings">
     <div className="container">
-      <div className="popular-trainings__wrapper conteiner-main-revers">
+      <div className="popular-trainings__wrapper conteiner-main-revers" data-testid="popular">
         {trainings.length !== 0 &&
     (
       <Carousel

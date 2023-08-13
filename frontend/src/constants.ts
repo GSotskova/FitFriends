@@ -32,13 +32,12 @@ export enum APIRoute {
   Users = '/users',
   User = '/user',
   Coach = 'coach',
-  CoachTraining = 'coach/training',
+  CoachTraining = '/coach/training',
   Training = 'training',
 }
 
 export enum NameSpace {
   DataTrainings = 'DATA_TRAININGS',
-  Sort = 'SORT',
   User = 'USER',
   DataFriends = 'DATA_FRIENDS',
   DataOrders = 'DATA_ORDERS',

@@ -208,6 +208,7 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
                       disabled={!isEditForm}
                       value={currentInfo.nameTraining}
                       onChange={handleInfoChange}
+                      data-testid="nameTraining"
                     />
                   </label>
                 </div>
@@ -274,6 +275,7 @@ const TrainingForm = ({training, role}: Props): JSX.Element => {
                         disabled={!isEditForm}
                         value={currentInfo.price}
                         onChange={handleInfoChange}
+                        data-testid="price"
                       />
                       <span className="custom-input__text">₽</span>
                     </span>

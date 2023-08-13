@@ -218,7 +218,7 @@ function CatalogUsersPage() {
                 </div>
               </div>
               <div className="inner-page__content">
-                <div className="users-catalog">
+                <div className="users-catalog" data-testid="users">
                   <ul className="users-catalog__list">
                     {users.map((el)=>
                       (

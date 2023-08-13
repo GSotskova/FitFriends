@@ -68,7 +68,7 @@ const TrainingForUser = ({userTrainings}: Props): JSX.Element => {
       {userTrainings.length !== 0 &&
       (
         <div className="container">
-          <div className="special-for-you__wrapper conteiner-main-revers">
+          <div className="special-for-you__wrapper conteiner-main-revers" data-testid="for_you">
             <Carousel
               responsive={responsive}
               arrows={false}

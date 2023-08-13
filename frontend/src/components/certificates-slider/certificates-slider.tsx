@@ -94,6 +94,7 @@ const ButtonGroup = ({next, previous, isPopup}: PropBtn ) => {
 const CertificateSlider = ({coachInfo, isPopup}: Prop) => {
   const resp = isPopup ? responsivePopup : responsive;
   const certificateArr = coachInfo.certificatesPath ? coachInfo.certificatesPath : [];
+
   return (
     <div className="personal-account-coach__additional-info conteiner-revers">
       <Carousel

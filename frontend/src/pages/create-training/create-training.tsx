@@ -127,6 +127,7 @@ function CreateTrainingPage(): JSX.Element {
                                 required
                                 minLength={1}
                                 maxLength={15}
+                                data-testid="nametraining"
                               />
                             </span>
                           </label>
@@ -221,6 +222,7 @@ function CreateTrainingPage(): JSX.Element {
                                   name={FormFieldName.price}
                                   required
                                   min="0"
+                                  data-testid="price"
                                 />
                                 <span className="custom-input__text">₽</span>
                               </span>
