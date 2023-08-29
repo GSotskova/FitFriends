@@ -6,7 +6,7 @@ import {createAPI} from '../services/api';
 import {fetchCoachTrainings} from './api-actions-trainings';
 import {APIRoute} from '../constants';
 import {State} from '../types/state';
-import { makeFakeTraining, makeFakeUser, makeFakeUserFullInfo } from '../utils/mocks';
+import { makeFakeTraining} from '../utils/mocks';
 
 describe('Async actions', () => {
   const api = createAPI();
@@ -19,10 +19,10 @@ describe('Async actions', () => {
       ThunkDispatch<State, typeof api, Action>
     >(middlewares);
 
-  it('should dispatch Load_Users when GET /trainings', async () => {
+  it('should dispatch fetchCoachTrainings', async () => {
     const makeFakeTrainings = Array.from({length: 5}, () => makeFakeTraining());
     mockAPI
-      .onGet(APIRoute.CoachTraining)
+      .onGet(`${APIRoute.CoachTraining}/show/list?limit=6&page=1&`)
       .reply(200, makeFakeTrainings);
 
     const store = mockStore();
