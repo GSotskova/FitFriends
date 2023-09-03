@@ -18,7 +18,7 @@ console.log(join(__dirname, '../../..', 'apps/uploader/uploads'))
     ServeStaticModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const rootPath =  join(__dirname, '../../..', 'apps/uploader/uploads');
+        const rootPath =  'uploads';
         const serveRoot = configService.get<string>('application.serveRoot');
         return [{
           rootPath,
