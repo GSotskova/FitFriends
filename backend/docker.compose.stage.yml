@@ -166,7 +166,7 @@ services:
       - 3336:3336
     hostname: fitfriends
     volumes:
-      - html_files:/C/git/FitFriends/backend/apps/uploader/uploads
+      - /C/git/FitFriends/backend/apps/uploader/uploads:/opt/fitfriends-uploader/uploads
     networks:
       - fitfriends
 
@@ -255,4 +255,4 @@ volumes:
   fitfriends.volume:
   fitfriends.uploader.volume:
   fitfriends.notify.volume:
-  html_files:
+  geeksforgeeks:
