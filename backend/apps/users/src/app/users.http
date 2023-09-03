@@ -1,9 +1,9 @@
 # Регистрация новых пользователей. Тренер
-POST http://localhost:3333/api/auth/register HTTP/1.1
+POST http://localhost:3339/api/auth/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "userNew1@notfound.local",
+  "email": "userNew7@notfound.local",
   "userName": "Степанов Степан",
   "password": "1234567",
   "sex": "Мужской",
@@ -20,7 +20,7 @@ Content-Type: application/json
 ###
 
 # Регистрация новых пользователей. Пользователь
-POST http://localhost:3333/api/auth/register HTTP/1.1
+POST http://localhost:3339/api/auth/register HTTP/1.1
 Content-Type: application/json
 
 {
@@ -43,56 +43,56 @@ Content-Type: application/json
 ###
 
 # @name login
-POST http://localhost:3333/api/auth/login HTTP/1.1
+POST http://localhost:3339/api/auth/login HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "email": "coach1@notfound.local",
+  "email": "coach4@notfound.local",
   "password": "1234567"
 }
 ###
 @authToken = {{login.response.body.accessToken}}
 @refrhToken = {{login.response.body.refreshToken}}
 # Проверка токена
-POST http://localhost:3333/api/auth/check HTTP/1.1
+POST http://localhost:3339/api/auth/check HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 
 # Проверка токена
-POST http://localhost:3333/api/auth/isauth HTTP/1.1
+POST http://localhost:3339/api/auth/isauth HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 
 # Обновление токенов
-POST http://localhost:3333/api/auth/refresh HTTP/1.1
+POST http://localhost:3339/api/auth/refresh HTTP/1.1
 Authorization: Bearer {{refrhToken}}
 
 ###
 # Удаление refresh token
-POST http://localhost:3333/api/auth/refresh/delete HTTP/1.1
+POST http://localhost:3339/api/auth/refresh/delete HTTP/1.1
 Authorization: Bearer {{refrhToken}}
 
 ###
 # Рассылка почтовых уведомлений на email о появлении новых тренировок.
-GET http://localhost:3333/api/auth/notify/newtraining HTTP/1.1
+GET http://localhost:3339/api/auth/notify/newtraining HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 ###
 # Список (каталог) пользователей
-GET http://localhost:3333/api/users?location=Петроградская&trainingType=йога&levelTraining=новичок&limit=15&page=1 HTTP/1.1
+GET http://localhost:3339/api/users?location=Петроградская&trainingType=йога&levelTraining=новичок&limit=15&page=1 HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 
 #  Детальная информация о пользователе (Карточка пользователя)
-GET http://localhost:3333/api/users/6497fd0eaaa5a02715264c9b HTTP/1.1
+GET http://localhost:3339/api/users/64f31b34b2b643931eb82d58 HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 ###
 
 #  Редактирование информации о пользователе (тренера)
-POST http://localhost:3333/api/users/edit HTTP/1.1
+POST http://localhost:3339/api/users/edit HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
@@ -103,7 +103,7 @@ Content-Type: application/json
 ###
 
 #  Редактирование информации о пользователе
-POST http://localhost:3333/api/users/edit HTTP/1.1
+POST http://localhost:3339/api/users/edit HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
@@ -125,51 +125,51 @@ Content-Type: application/json
 ###
 
 #  Список оповещений пользователя (последние 5)
-GET http://localhost:3333/api/users/notify/show HTTP/1.1
+GET http://localhost:3339/api/users/notify/show HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 ###
 
 #  Удаление оповещения по ИД
-DELETE http://localhost:3333/api/users/notify/delete/64a19dadd522ea56f37d5ea6 HTTP/1.1
+DELETE http://localhost:3339/api/users/notify/delete/64a19dadd522ea56f37d5ea6 HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 ###
 
 # Добавить друга
-POST http://localhost:3333/api/friends/add/6497fd0eaaa5a02715264c9b HTTP/1.1
+POST http://localhost:3339/api/friends/add/6497fd0eaaa5a02715264c9b HTTP/1.1
 Authorization: Bearer {{authToken}}
 
 ###
 
 # Список друзей пользователя
-GET http://localhost:3333/api/friends/user HTTP/1.1
+GET http://localhost:3339/api/friends/user HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 
 
 
 #  Список друзей тренера
-GET http://localhost:3333/api/friends/coach?sortDate=desc HTTP/1.1
+GET http://localhost:3339/api/friends/coach?sortDate=desc HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 ###
 
 #  Удаление из списка друзей для тренера
-POST http://localhost:3333/api/friends/delete/coach/649da3764f4fc537d512a65e HTTP/1.1
+POST http://localhost:3339/api/friends/delete/coach/649da3764f4fc537d512a65e HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 ###
 
 #  Удаление из списка друзей для пользователя
-POST http://localhost:3333/api/friends/delete/649da3764f4fc537d512a65e HTTP/1.1
+POST http://localhost:3339/api/friends/delete/649da3764f4fc537d512a65e HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 ###
 # Create a new subscription
-POST http://localhost:3333/api/subscription/create HTTP/1.1
+POST http://localhost:3339/api/subscription/create HTTP/1.1
 Content-Type: application/json
 
 {
@@ -180,21 +180,21 @@ Content-Type: application/json
 ###
 
 # Get subscription by UserID
-GET http://localhost:3333/api/subscription/user/649809159b59277aa0c615a7 HTTP/1.1
+GET http://localhost:3339/api/subscription/user/649809159b59277aa0c615a7 HTTP/1.1
 Content-Type: application/json
 
 
 ###
 
 # Get subscription by coachId
-GET http://localhost:3333/api/subscription/usersubscription/6497fd0eaaa5a02715264c9b HTTP/1.1
+GET http://localhost:3339/api/subscription/usersubscription/6497fd0eaaa5a02715264c9b HTTP/1.1
 Content-Type: application/json
 
 
 ###
 
 # Delete subscription by UserID
-POST  http://localhost:3333/api/subscription/delete HTTP/1.1
+POST  http://localhost:3339/api/subscription/delete HTTP/1.1
 Content-Type: application/json
 
 {

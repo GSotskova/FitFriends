@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { rabbitConfig } from '@project/config/config-users';
+import { appConfig } from '@project/config/config-users';
 import { ConfigType } from '@nestjs/config';
 import { TrainingForSend, RabbitRouting, RabbitExchange } from '@project/shared/shared-types';
 
@@ -8,8 +8,8 @@ import { TrainingForSend, RabbitRouting, RabbitExchange } from '@project/shared/
 export class TrainingService {
   constructor(
     private readonly rabbitClient: AmqpConnection,
-    @Inject(rabbitConfig.KEY)
-    private readonly rabbiOptions: ConfigType<typeof rabbitConfig>,
+    @Inject(appConfig.KEY)
+    private readonly rabbiOptions: ConfigType<typeof appConfig>,
   ) {}
 
   public async getOrders(userId: string) {

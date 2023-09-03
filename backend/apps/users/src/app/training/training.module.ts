@@ -7,7 +7,7 @@ import { TrainingService } from './training.service';
   imports: [
     RabbitMQModule.forRootAsync(
       RabbitMQModule,
-      getRabbitMQOptions('rabbit')
+      getRabbitMQOptions('application.rabbit')
     )
   ],
   providers: [TrainingService],

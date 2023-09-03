@@ -1,0 +1,27 @@
+1. Перейти в каталог backend, выполнить build'ы и docker compose (образы содаются в docker compose)
+    cd backend 
+    
+    nx run users:build
+    nx run notify:build
+    nx run uploader:build
+    nx run seed:build
+    nx run bff:build
+    nx run training:build
+    
+    docker compose -f ./docker.compose.stage.yml up -d
+
+2. Перейти в каталог cd frontend, выполнить build и docker compose (образ содаются в docker compose)
+    cd frontend
+    npm run build 
+    docker compose -f ./docker.compose.stage.yml up -d
+
+
+3. Заполнение БД (выполнить запросы из каталога seed):
+    каталог seed:
+    - seed.http (заполняются таблицы users, questionnairesCoach, questionnairesUser в бд fitfriends-users
+                 заполняются таблицу friends в бд fitfriends-users
+                 заполняются таблицу orders в бд fitfriends-training
+                 заполняются таблицу training в бд fitfriends-training
+                 заполняются таблицу comments в бд fitfriends-training)
+
+4. Перейти по ссылке http://localhost:3000/

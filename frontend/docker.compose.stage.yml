@@ -1,0 +1,21 @@
+version: '3'
+services:
+  fitfriends.frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fitfriends.frontend.app
+    restart: always
+    environment:
+      - NODE_ENV=production
+    ports:
+      - 3000:3000
+    networks:
+      - fitfriends
+
+networks:
+  fitfriends:
+    driver: bridge
+
+volumes:
+  fitfriends.frontend.volume:
