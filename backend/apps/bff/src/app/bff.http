@@ -24,7 +24,7 @@ POST http://localhost:4000/api/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "user3@notfound.local",
+  "email": "user38@notfound.local",
   "userName": "Кузнецов Александр",
   "password": "1234567",
   "sex": "Мужской",
@@ -47,7 +47,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "email": "coach1@mail.ru",
+  "email": "user1@mail.ru",
   "password": "1234567"
 }
 ###
@@ -86,7 +86,7 @@ Authorization: Bearer {{refrhToken}}
 ###
 
 # Детальная информация о пользователе (Карточка пользователя)
-GET http://localhost:4000/api/users/649809159b59277aa0c615a7 HTTP/1.1
+GET http://localhost:4000/api/users/64f31b98b2b643931eb82d71 HTTP/1.1
 Authorization: Bearer {{authToken}}
 ###
 
@@ -225,7 +225,7 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "nameTraining": "Трен188888",
+  "nameTraining": "Training",
   "levelTraining": "профессионал",
   "trainingType": "кроссфит",
   "trainingTime": "30-50 мин",
@@ -252,7 +252,7 @@ Content-Type: application/json
 ###
 
 # Редактирование  тренировки
-POST http://localhost:4000/api/coach/training/edit/64a406e9c4d605ea3e822df6 HTTP/1.1
+POST http://localhost:4000/api/coach/training/edit/64f31a7e0ce08d398741e3aa HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
@@ -265,7 +265,7 @@ Content-Type: application/json
 ###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F image="@/C:/fit_img/avatar-angelina.jpg" http://localhost:4000/api/files/image/training/64a447e28cc4fa6456f411fa
 
 ### Загрузка видео тренировки
-###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F video="@/C:/fit_img/Video_HTML_Academy_1.mp4" http://localhost:4000/api/files/video/training/64cf4af43ae72d1075b19056
+###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F video="@/C:/fit_img/Video_HTML_Academy_1.mp4" http://localhost:4000/api/files/video/training/64f2e6be5d50cc487cfc92fb
 
 ###Загрузка сертификатов
 ###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F certificate="@/C:/fit_img/1.pdf" http://localhost:4000/api/files/coach/certificate
@@ -274,7 +274,7 @@ Content-Type: application/json
 ###curl -i -H 'Accept: application/json' -H "Authorization: Bearer TOKEN" -F "fileId"="64c253392fccace97ce6cc06" -F certificate="@/C:/fit_img/1.pdf" http://localhost:4000/api/files/coach/certificate/update
 
 # Детальная информация о тренировке
-GET http://localhost:4000/api/coach/training/64a406e9c4d605ea3e822dfa HTTP/1.1
+GET http://localhost:4000/api/coach/training/64f34097624a3c183d1b7e43 HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 ###

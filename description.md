@@ -13,15 +13,6 @@ nx run users:serve (Пользователи: регистрация, автор
 cd frontend:
 npm run start
 
-
-
-docker
-docker compose --file ./apps/users/docker-compose.dev.yml --project-name "fitfriends-users" up -d
-docker compose --file ./apps/uploader/docker-compose.dev.yml --project-name "fitfriends-uploader" up -d
-docker compose --file ./apps/notify/docker-compose.dev.yml --project-name "fitfriends-notify" up -d
-docker compose --file ./apps/training/docker-compose.dev.yml --project-name "fitfriends-training" up -d
-
-
 Заполнение БД:
     каталог seed:
             - seed.http (заполняются таблицы users, questionnairesCoach, questionnairesUser в бд fitfriends-users

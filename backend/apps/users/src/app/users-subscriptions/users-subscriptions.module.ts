@@ -15,7 +15,7 @@ import { NotifyModule } from '../notify/notify.module';
 
   RabbitMQModule.forRootAsync(
     RabbitMQModule,
-    getRabbitMQOptions('rabbit')
+    getRabbitMQOptions('application.rabbit')
   ),
   NotifyModule],
   controllers: [UsersSubscriptionsController],

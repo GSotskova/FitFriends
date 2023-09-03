@@ -4,9 +4,10 @@ import MockAdapter from 'axios-mock-adapter';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import {createAPI} from '../services/api';
 import {checkAuthAction, fetchUser, fetchUserCatalog} from './api-actions-user';
-import {APIRoute, AppRoute} from '../constants';
+import {APIRoute} from '../constants';
 import {State} from '../types/state';
 import { makeFakeUser, makeFakeUserFullInfo } from '../utils/mocks';
+import { setAuthInfo } from './user-process/user-process';
 
 describe('Async actions', () => {
   const api = createAPI();
@@ -22,17 +23,17 @@ describe('Async actions', () => {
   it('should authorization status is «auth» when server return 200', async () => {
     const store = mockStore();
     mockAPI
-      .onGet(APIRoute.Login)
+      .onGet(APIRoute.CheckUser)
       .reply(200, []);
 
     expect(store.getActions()).toEqual([]);
-
     await store.dispatch(checkAuthAction());
 
     const actions = store.getActions().map(({type}) => type);
 
     expect(actions).toEqual([
       checkAuthAction.pending.type,
+      setAuthInfo.type,
       checkAuthAction.fulfilled.type
     ]);
   });
@@ -59,13 +60,12 @@ describe('Async actions', () => {
   it('should dispatch Load_Users when GET /users', async () => {
     const fakeUsers = Array.from({length: 5}, () => makeFakeUserFullInfo());
     mockAPI
-      .onGet(APIRoute.Users)
+      .onGet(`${APIRoute.Users}?limit=6&page=1&`)
       .reply(200, fakeUsers);
 
     const store = mockStore();
 
     await store.dispatch(fetchUserCatalog());
-    console.log(store)
     const actions = store.getActions().map(({type}) => type);
 
     expect(actions).toEqual([

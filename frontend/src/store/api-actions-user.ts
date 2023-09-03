@@ -194,28 +194,28 @@ export const fetchUserCatalog = createAsyncThunk<UserFullInfo[], Query | undefin
       });
 
 export const createSubscribe = createAsyncThunk<void, string, {
-                  dispatch: AppDispatch;
-                  state: State;
-                  extra: AxiosInstance; }>(
-                    Action.CREATE_SUBSCRIBE,
-                    async (coachId, {extra: api}) => {
-                      try {
-                        await api.post(`${APIRoute.User}/subscription/create`,{'coachId': coachId} );
-                      } catch (error) {
-                        return Promise.reject(error);
-                      }
-                    });
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance; }>(
+      Action.CREATE_SUBSCRIBE,
+      async (coachId, {extra: api}) => {
+        try {
+          await api.post(`${APIRoute.User}/subscription/create`,{'coachId': coachId} );
+        } catch (error) {
+          return Promise.reject(error);
+        }
+      });
 
 export const deleteSubscribe = createAsyncThunk<void, string, {
-                  dispatch: AppDispatch;
-                  state: State;
-                  extra: AxiosInstance; }>(
-                    Action.DELETE_SUBSCRIBE,
-                    async (coachId, {extra: api}) => {
-                      try {
-                        await api.delete(`${APIRoute.User}/subscription/delete`,{data: {'coachId': coachId}});
-                      } catch (error) {
-                        return Promise.reject(error);
-                      }
-                    });
+   dispatch: AppDispatch;
+   state: State;
+   extra: AxiosInstance; }>(
+     Action.DELETE_SUBSCRIBE,
+     async (coachId, {extra: api}) => {
+       try {
+         await api.delete(`${APIRoute.User}/subscription/delete`,{data: {'coachId': coachId}});
+       } catch (error) {
+         return Promise.reject(error);
+       }
+     });
 

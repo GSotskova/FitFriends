@@ -10,9 +10,9 @@ Content-Type: application/json
   "price": 2000,
   "caloriesReset": 3000,
   "descriptionTraining": "йога просто супер",
-  "sex": "male",
+  "sex": "Мужской",
   "isSpecialOffer": true,
-  "coachId": "649866f6dac052e861589f59"
+  "coachId": "64f2182f362d139a83624575"
 }
 ###
 # Редактирование  тренировки

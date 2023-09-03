@@ -3,7 +3,7 @@ GET http://localhost:3336/api/files/64b818f0b76a0e1ec22c8264 HTTP/1.1
 
 ###
 
-### curl -i -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:3336/api/files/upload/avatar/6497fd0eaaa5a02715264c9b
+### curl -i -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:3336/api/files/upload/avatar/64f2182f362d139a83624575
 ### curl -i -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:3336/api/files/upload/image/649afd18e0be2c6e2c674fbe
 ### curl -i -F file="@/C:/fit_img/avatar-angelina.jpg" http://localhost:3336/api/files/upload/background/649866f6dac052e861589f59
 ### curl -i -F file="@/C:/fit_img/1.pdf" http://localhost:3336/api/files/upload/certificate/6497fd0eaaa5a02715264c9b

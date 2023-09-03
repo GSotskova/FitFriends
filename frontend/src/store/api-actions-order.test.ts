@@ -3,10 +3,11 @@ import thunk, {ThunkDispatch} from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import {createAPI} from '../services/api';
-import {deleteCoachFriend} from './api-actions-coach';
 import {APIRoute} from '../constants';
 import {State} from '../types/state';
-import { makeFakeFriend } from '../utils/mocks';
+import { makeFakeOrder} from '../utils/mocks';
+import { UserRole } from '../types/user';
+import { fetchCountOrders } from './api-actions-order';
 
 describe('Async actions', () => {
   const api = createAPI();
@@ -19,21 +20,20 @@ describe('Async actions', () => {
       ThunkDispatch<State, typeof api, Action>
     >(middlewares);
 
-  it('should dispatch deleteCoachFriend', async () => {
-    const fakeFriend = makeFakeFriend();
-    const store = mockStore();
+  it('should dispatch fetchCountOrders', async () => {
+    const makeFakeOrders = Array.from({length: 5}, () => makeFakeOrder());
     mockAPI
-      .onPost(`${APIRoute.Coach}/friends/delete/${fakeFriend.id}`)
-      .reply(200, fakeFriend);
+      .onGet(`${APIRoute.Coach}/orders/count`)
+      .reply(200, makeFakeOrders);
 
-    await store.dispatch(deleteCoachFriend(fakeFriend.id));
+    const store = mockStore();
 
+    await store.dispatch(fetchCountOrders(UserRole.Coach));
     const actions = store.getActions().map(({type}) => type);
 
     expect(actions).toEqual([
-      deleteCoachFriend.pending.type,
-      deleteCoachFriend.fulfilled.type
+      fetchCountOrders.pending.type,
+      fetchCountOrders.fulfilled.type
     ]);
   });
-
 });
